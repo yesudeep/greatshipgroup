@@ -1,0 +1,62 @@
+/* Library of common utility routines.
+
+@import font-stacks.sass
+@import border-radius.sass
+
+=transform(!value)
+  :transform= !value
+  :-webkit-transform= !value
+  :-moz-transform= !value
+
+=box-shadow(!value)
+  :box-shadow= !value
+  :-moz-box-shadow= !value
+  :-webkit-box-shadow= !value
+
+// http://foohack.com/2007/11/cross-browser-support-for-inline-block-styling/
+=display-inline-block()
+  :display -moz-inline-block
+  :display inline-block
+  *display: inline
+  :zoom 1
+
+=image-link(!width, !height, !background)
+  :display block
+  :background= !background
+  :width= !width
+  :height= !height
+
+=transition(!value)
+  -webkit-transition= !value
+
+=opacity(!value)
+  :filter= "alpha(opacity=" !value * 100 ")"
+  :opacity= !value
+  :-moz-opacity= !value
+  :-html-opacity= !value
+
+=min-height(!value)
+  :min-height= !value
+  :height "auto !important"
+  :height= !value
+
+=column-count(!value)
+  :-moz-column-count= !value
+  :-webkit-column-count= !value
+  :column-count= !value
+    
+=column-width(!value)
+  :-moz-column-width= !value
+  :-webkit-column-width= !value
+  :column-width= !value
+
+=column-gap(!value)
+  :-moz-column-gap= !value
+  :-webkit-column-gap= !value
+  :column-gap= !value
+    
+=column-rule(!value)
+  :-moz-column-rule= !value
+  :-webkit-column-rule= !value
+  :column-rule= !value
+
