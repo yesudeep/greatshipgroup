@@ -24,6 +24,7 @@ SCRIPT_FILES = Split("""
 IMAGE_FILES = Split("""
     image/icon/favicon.png
     image/bg/water.jpg
+    image/bg/footer-shadow.png
 """)
 
 CSS_FILES = Split("""
@@ -56,6 +57,7 @@ STITCHED_IMAGES = (
             image/icon/nav/drilling.png
             image/icon/nav/qhse.png
             image/icon/nav/contact.png
+            image/icon/we-are-hiring.png
         """),
         orientation='horizontal',
         ),
