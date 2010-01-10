@@ -72,20 +72,22 @@ if SERVER_PORT and SERVER_PORT != '80':
     HOST_NAME = '%s:%s' % (SERVER_NAME, SERVER_PORT,)
     LOCAL = True
     DEBUG = True
-    MEDIA_URL = 'http://%s/s/' % (HOST_NAME, )
+    #MEDIA_URL = 'http://%s/s/' % (HOST_NAME, )
+    MEDIA_URL = "/s/"
+    TEXT_MEDIA_URL = MEDIA_URL
 else:
     # We are using the production server.
     DEPLOYMENT_MODE = MODE_PRODUCTION
     HOST_NAME = SERVER_NAME
     LOCAL = False
     DEBUG = False
-    MEDIA_URL = "http://dl.dropbox.com/u/2713328/public/"
-    #MEDIA_URL = "http://static.%s/u/2713328/public/" % (NAKED_DOMAIN, )
+    TEXT_MEDIA_URL = "http://assets.%s/" % (NAKED_DOMAIN, )
+    MEDIA_URL = TEXT_MEDIA_URL
 
 if DEBUG:
     # Minification suffixes to use for CSS and JS files.
-    CSS_MINIFIED = ''
-    JS_MINIFIED = ''
+    CSS_MINIFIED = '-min'
+    JS_MINIFIED = '-min'
 else:
     CSS_MINIFIED = '-min'
     JS_MINIFIED = '-min'
@@ -96,12 +98,42 @@ else:
 #     http://localhost:8000/
 ROOT_URL = 'http://%s/' % (HOST_NAME,)
 
+# ---------------------------------------------------------------------------
+# Stuff that should be different in production.
+cdn_urls = {
+    'microsoft.jquery-1.3.2': "http://ajax.microsoft.com/ajax/jQuery/jquery-1.3.2.min.js",
+    'google.jquery-1.3.2': "http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js",
+    'jquery.jquery-1.4': "http://code.jquery.com/jquery-1.4a1.min.js",
+    'local.jquery-1.4': "%sscript/lib/chickoojs/src/jquery/jquery-1.4a1.min.js" % (MEDIA_URL,),
+    'local.jquery-1.3.2': "%sscript/lib/chickoojs/src/jquery/jquery-1.3.2.min.js" % (MEDIA_URL,),
+}
+
+if LOCAL:
+    JQUERY_URL = cdn_urls.get('local.jquery-1.4')
+    ANALYTICS_CODE = ""
+else:
+    JQUERY_URL = cdn_urls.get('jquery.jquery-1.4')
+    ANALYTICS_CODE = """
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', '%(GOOGLE_ANALYTICS_ID)s']);
+_gaq.push(['_trackPageview']);
+(function() {
+  var doc=document, ga = doc.createElement('script');
+  ga.src = ('https:' == doc.location.protocol ? 'https://ssl' :
+      'http://www') + '.google-analytics.com/ga.js';
+  ga.setAttribute('async', 'true');
+  doc.documentElement.firstChild.appendChild(ga);
+})();
+</script>
+""" % dict(GOOGLE_ANALYTICS_ID=GOOGLE_ANALYTICS_ID)
+
+
 # The builtin variables that are available to all templates.
 TEMPLATE_BUILTINS = {
     'ADMIN_EMAIL': ADMIN_EMAIL,
     'APPLICATION_TITLE': APPLICATION_TITLE,
     'APPLICATION_NAME': APPLICATION_TITLE,
-    'CLICKY_ANALYTICS_ID': CLICKY_ANALYTICS_ID,
     'CSS_MINIFIED': CSS_MINIFIED,
     'CONTACT_EMAIL': CONTACT_EMAIL,
     'DEBUG': DEBUG,
@@ -118,6 +150,9 @@ TEMPLATE_BUILTINS = {
     'OWNER_ADDRESS': OWNER_ADDRESS,
     'OWNER_COMPANY': OWNER_COMPANY,
     'COPYRIGHT_YEARS': COPYRIGHT_YEARS,
+    'JQUERY_URL': JQUERY_URL,
+    'ANALYTICS_CODE': ANALYTICS_CODE,
+    'TEXT_MEDIA_URL': TEXT_MEDIA_URL,
 }
 
 # Directories in which to search for templates.
