@@ -13,7 +13,7 @@ SRC_DIR = './'
 DEST_DIR = '../' + env['MEDIA_DEST_DIR'] + '/'
 
 LOADER_SCRIPT = SRC_DIR + "script/lib/chickoojs/src/loader.js"
-DEFAULT_MEDIA_URL_SCRIPT_GLOBAL = "window.__hc_text_media_url"
+DEFAULT_MEDIA_URL = "{{ TEXT_MEDIA_URL }}"
 JS_MINIFIED = "-min"
 
 SCRIPT_FILES = Split("""
@@ -167,7 +167,7 @@ def generate_perfectly_cacheable_scripts(sources, selector, media_url, page_dir,
             print "Error: could not open file `%s' for writing -- permission denied or input/output error" % (output_filename,)    
     
     selector_script_contents = """
-        var js = {'all': %(media_url)s + '%(page_dir)s%(digest)s%(minified)s.js'};getScripts([js['all']]);%(loader_script)s
+        var js = {'all': '%(media_url)s%(page_dir)s%(digest)s%(minified)s.js'};getScripts([js['all']]);%(loader_script)s
         """.strip()
         
     selector_script_contents = selector_script_contents % dict(
@@ -197,7 +197,7 @@ for bundle in SCRIPT_BUNDLES:
     output_filename = generate_perfectly_cacheable_scripts(
         sources=[SRC_DIR + f for f in bundle['sources']],
         selector=selector,
-        media_url=DEFAULT_MEDIA_URL_SCRIPT_GLOBAL,
+        media_url=DEFAULT_MEDIA_URL,
         page_dir=page_dir,
         dest_dir=dest_dir,
         loader_script=LOADER_SCRIPT,
