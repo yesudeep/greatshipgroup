@@ -1,0 +1,3 @@
+[submodule "app/gaeutilities"]
+	path = app/gaeutilities
+	url = git://github.com/joerussbowman/gaeutilities.git
