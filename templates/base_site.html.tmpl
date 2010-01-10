@@ -26,7 +26,9 @@ window.location.href="/unsupported/browser/";
 {% endblock %}
 {% block tag_body %}{% endblock %}
 
-{% block tag_scripts_base %}{% endblock %}
+{% block tag_scripts_base %}
+<script type="text/javascript">window.__hc_scripts = ["{{ JQUERY_URL }}"];</script>
+{% endblock %}
 {% block tag_scripts %}{% endblock %}
 {% block tag_scripts_analytics %}{{ ANALYTICS_CODE }}{% endblock %}
 </body></html>
