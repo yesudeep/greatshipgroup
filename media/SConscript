@@ -23,6 +23,7 @@ SCRIPT_FILES = Split("""
 
 IMAGE_FILES = Split("""
     image/icon/favicon.png
+    image/bg/water.jpg
 """)
 
 CSS_FILES = Split("""
@@ -42,16 +43,24 @@ PLAIN_COPY_DIRECTORIES = Split("""
 """)
 
 
-STITCHED_IMAGES = ()
-'''
+STITCHED_IMAGES = (
     dict(
-        target='target.png',
+        target='image/icon/nav.png',
         sources=Split("""
+            image/logo/logo.png
+            image/logo/en_US/text.png
+            image/icon/nav/home.png
+            image/icon/nav/fleet.png
+            image/icon/nav/construction.png
+            image/icon/nav/logistics.png
+            image/icon/nav/drilling.png
+            image/icon/nav/qhse.png
+            image/icon/nav/contact.png
         """),
         orientation='horizontal',
         ),
-]
-'''
+)
+
 
 COMMON_SCRIPTS = """
 
