@@ -46,12 +46,8 @@ for directory in set(PLAIN_COPY_DIRECTORIES):
 for f in set(PLAIN_COPIES):
     env.Command(DEST_DIR + f, SRC_DIR + f, Copy("$TARGET", "$SOURCE"))
 
+
 # Optimize graphics
-# This isn't working at the moment.
-#for f in filter_files(IMAGE_FILES, allow_patterns=['*.png']):
-#    env.OptimizePNG(DEST_DIR + f, SRC_DIR + f)
-#for f in filter_files(IMAGE_FILES, allow_patterns=['*.jpg, *.jpeg']):
-#    env.OptimizeJPEG(DEST_DIR + f, SRC_DIR + f)
 for f in IMAGE_FILES:
     filename = str(f)
     if match_patterns(filename, patterns=['*.png']):
@@ -61,11 +57,23 @@ for f in IMAGE_FILES:
     else:
         env.Command(DEST_DIR + f, SRC_DIR + f, Copy("$TARGET", "$SOURCE"))
 
+
 # Stitching graphics together
-# env.HStitchImages(DEST_DIR + 'image/filename.png', [SRC_DIR + f for f in Split("""
-#       image/file1.png
-#       image/file2.png
-#     """)])
+
+stitched_images = []
+'''
+    dict(
+        target='target.png',
+        sources=Split("""
+        """),
+        orientation='horizontal',
+        ),
+]
+'''
+
+for stitch in stitched_images:
+    func = env.HStitchImages if stitch.get('orientation', 'horizontal') == 'horizontal' else env.VStitchImages
+    func(DEST_DIR + stitch['target'], [SRC_DIR + f for f in stitch['sources']])
 
 # Minification of the generated CSS and JS files.
 MINIFIABLE_FILES = SCRIPT_FILES + CSS_FILES + Split("""
@@ -90,14 +98,12 @@ for f in minifiables(MINIFIABLE_FILES, NON_MINIFIABLE_FILES):
 #
 # Warning:  THE ORDER MATTERS.
 #
-page_base_js = env.Concatenate([DEST_DIR + 'script/page/base.js'], [SRC_DIR + f for f in Split("""
-    script/base.js
-    """)])
-env.YuiCompressorMinify(page_base_js)
 
-# Include licenses.
-#c3 = env.Concatenate([DEST_DIR + 'script/lib/all-min.js'], [
-#    DEST_DIR + 'script/LICENSES',
-#    DEST_DIR + 'script/lib/all_o-min.js',
-#])
+env.YuiCompressorMinify(env.Concatenate([DEST_DIR + 'script/page/base.js'], [SRC_DIR + f for f in Split("""
+    script/base.js
+""")]))
+
+env.YuiCompressorMinify(env.Concatenate([DEST_DIR + 'css/screen-all.css'], [SRC_DIR + f for f in Split("""
+    css/screen.css
+""")]))
 
