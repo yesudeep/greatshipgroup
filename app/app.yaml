@@ -3,13 +3,13 @@ version: development
 runtime: python
 api_version: 1
 
-default_expiration: "7d"
+default_expiration: "30d"
 
 handlers:
 - url: /s
   static_dir: public
   secure: never
-  expiration: 10s
+  expiration: "30d"
 
 - url: /favicon.ico
   static_files: public/image/icon/favicon.png

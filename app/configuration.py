@@ -81,7 +81,8 @@ else:
     HOST_NAME = SERVER_NAME
     LOCAL = False
     DEBUG = False
-    TEXT_MEDIA_URL = "http://assets.%s/" % (NAKED_DOMAIN, )
+    #TEXT_MEDIA_URL = "http://assets.%s/" % (NAKED_DOMAIN, )
+    TEXT_MEDIA_URL = "/s/"
     MEDIA_URL = TEXT_MEDIA_URL
 
 if DEBUG:
@@ -113,19 +114,10 @@ if LOCAL:
     ANALYTICS_CODE = ""
 else:
     JQUERY_URL = cdn_urls.get('jquery.jquery-1.4')
-    ANALYTICS_CODE = """
-<script type="text/javascript">
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', '%(GOOGLE_ANALYTICS_ID)s']);
-_gaq.push(['_trackPageview']);
-(function() {
-  var doc=document, ga = doc.createElement('script');
-  ga.src = ('https:' == doc.location.protocol ? 'https://ssl' :
-      'http://www') + '.google-analytics.com/ga.js';
-  ga.setAttribute('async', 'true');
-  doc.documentElement.firstChild.appendChild(ga);
-})();
-</script>
+    ANALYTICS_CODE = """<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount', '%(GOOGLE_ANALYTICS_ID)s']);
+_gaq.push(['_trackPageview']);(function(){var doc=document,ga=doc.createElement('script');
+ga.src=('https:'==doc.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';
+ga.setAttribute('async', 'true');doc.documentElement.firstChild.appendChild(ga);})();</script>
 """ % dict(GOOGLE_ANALYTICS_ID=GOOGLE_ANALYTICS_ID)
 
 

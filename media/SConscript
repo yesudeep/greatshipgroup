@@ -169,10 +169,8 @@ def generate_perfectly_cacheable_scripts(sources, selector, media_url, page_dir,
             print message
             print "Error: could not open file `%s' for writing -- permission denied or input/output error" % (output_filename,)    
     
-    selector_script_contents = """
-        var js = {'all': '%(media_url)s%(page_dir)s%(digest)s%(minified)s.js'};
-        window.__hc_scripts.push(js['all']);
-        getScripts(window.__hc_scripts);%(loader_script)s
+    selector_script_contents = """var js = {'all': '%(media_url)s%(page_dir)s%(digest)s%(minified)s.js'};
+        window.__hc_scripts.push(js['all']);getScripts(window.__hc_scripts);%(loader_script)s
         """.strip()
         
     selector_script_contents = selector_script_contents % dict(
