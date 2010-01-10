@@ -16,6 +16,7 @@ SCRIPT_FILES = Split("""
     script/lib/chickoojs/src/jquery/jquery-1.4a1.min.js
     script/lib/chickoojs/src/jquery/tools/1.1.2/jquery.tools.min.js
     script/base.js
+    script/index.js
 """)
 
 IMAGE_FILES = Split("""
@@ -95,16 +96,29 @@ for f in minifiables(MINIFIABLE_FILES, NON_MINIFIABLE_FILES):
     #if fnmatch(basename(filepath), '*.js'):
     #    env.JsminMinify(filepath)
 
-# Combine these JavaScript files and create a common js.
-#
-# Warning:  THE ORDER MATTERS.
-#
 
-env.YuiCompressorMinify(env.Concatenate([DEST_DIR + 'script/page/base.js'], [SRC_DIR + f for f in Split("""
-    script/base.js
-""")]))
+RESOURCE_BUNDLES = (
+    dict(
+        target = "script/page/base.js",
+        sources = Split("""
+            script/base.js
+        """)
+    ),
+    dict(
+        target="script/page/index.js",
+        sources = Split("""
+            script/index.js
+        """)
+    ),
+    dict(
+        target="css/screen-all.css",
+        sources = Split("""
+            css/screen.css
+        """)
+    ),
+)
 
-env.YuiCompressorMinify(env.Concatenate([DEST_DIR + 'css/screen-all.css'], [SRC_DIR + f for f in Split("""
-    css/screen.css
-""")]))
+for bundle in RESOURCE_BUNDLES:
+    env.YuiCompressorMinify(env.Concatenate([DEST_DIR + bundle['target']], 
+        [SRC_DIR + f for f in bundle['sources']]))
 
