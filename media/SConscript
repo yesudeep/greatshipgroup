@@ -16,13 +16,13 @@ LOADER_SCRIPT = SRC_DIR + "script/lib/chickoojs/src/loader.js"
 DEFAULT_MEDIA_URL = "{{ TEXT_MEDIA_URL }}"
 JS_MINIFIED = "-min"
 
-SCRIPT_FILES = Split("""
-    script/lib/chickoojs/src/jquery/jquery-1.3.2.js
-    script/lib/chickoojs/src/jquery/jquery-1.4a1.min.js
-    script/lib/chickoojs/src/jquery/tools/1.1.2/jquery.tools.min.js
-    script/base.js
-    script/index.js
-""")
+#SCRIPT_FILES = Split("""
+#    script/lib/chickoojs/src/jquery/jquery-1.3.2.js
+#    script/lib/chickoojs/src/jquery/jquery-1.4a1.min.js
+#    script/lib/chickoojs/src/jquery/tools/1.1.2/jquery.tools.min.js
+#    script/base.js
+#    script/index.js
+#""")
 
 IMAGE_FILES = Split("""
     image/icon/favicon.png
@@ -36,7 +36,8 @@ CSS_FILES = Split("""
 # Please include them in IMAGE_FILES above.
 # If you would like images to be copied "as is" without
 # any optimizations, then you may include them here.
-PLAIN_COPIES = SCRIPT_FILES + CSS_FILES + Split("""
+#PLAIN_COPIES = SCRIPT_FILES + CSS_FILES + Split("""
+PLAIN_COPIES = CSS_FILES + Split("""
     robots.txt
 """)
 
@@ -56,10 +57,16 @@ STITCHED_IMAGES = ()
 ]
 '''
 
+COMMON_SCRIPTS = """
+    script/lib/chickoojs/src/jquery/jquery-1.4a1.min.js
+"""
+
 SCRIPT_BUNDLES = (
     dict(
         selector="index.js",
-        sources = Split("""
+        sources = Split(
+        COMMON_SCRIPTS + 
+        """
             script/index.js
         """)
     ),
@@ -103,7 +110,8 @@ for stitch in STITCHED_IMAGES:
     func(DEST_DIR + stitch['target'], [SRC_DIR + f for f in stitch['sources']])
 
 # Minification of the generated CSS and JS files.
-MINIFIABLE_FILES = SCRIPT_FILES + CSS_FILES + Split("""
+#MINIFIABLE_FILES = SCRIPT_FILES + CSS_FILES + Split("""
+MINIFIABLE_FILES = CSS_FILES + Split("""
 
 """)
 
