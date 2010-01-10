@@ -7,17 +7,14 @@ from util import match_patterns, minifiables, filter_files
 from fnmatch import fnmatch
 from os.path import basename
 from filesystem import walk_dir
-import hashlib
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from StringIO import StringIO
+
 
 SRC_DIR = './'
 DEST_DIR = '../' + env['MEDIA_DEST_DIR'] + '/'
 
 LOADER_SCRIPT = SRC_DIR + "script/lib/chickoojs/src/loader.js"
 DEFAULT_MEDIA_URL_SCRIPT_GLOBAL = "window.__hc_text_media_url"
+JS_MINIFIED = "-min"
 
 SCRIPT_FILES = Split("""
     script/lib/chickoojs/src/jquery/jquery-1.3.2.js
@@ -124,7 +121,23 @@ for f in minifiables(MINIFIABLE_FILES, NON_MINIFIABLE_FILES):
     #if fnmatch(basename(filepath), '*.js'):
     #    env.JsminMinify(filepath)
 
-def generate_perfectly_cacheable_scripts(sources, selector, media_url, page_dir, dest_dir, loader_script):
+def generate_perfectly_cacheable_scripts(sources, selector, media_url, page_dir, dest_dir, loader_script, minified):
+    import os
+    import errno
+    import hashlib
+    try:
+        from cStringIO import StringIO
+    except ImportError:
+        from StringIO import StringIO
+        
+    def mkdir_p(path):
+        try:
+            os.makedirs(path)
+        except OSError, exc:
+            if exc.errno == errno.EEXIST:
+                pass
+            else: raise
+    
     string_file = StringIO()
     chunk_size = 2048
     hash_service = hashlib.sha1()
@@ -141,22 +154,28 @@ def generate_perfectly_cacheable_scripts(sources, selector, media_url, page_dir,
         except IOError, message:
             print "Error: could not open file `%s' for reading -- permission denied or input/output error" % (filepath,)    
     file_digest = hash_service.hexdigest()
+    mkdir_p(dest_dir)
     output_filename = dest_dir + file_digest + ".js"
-    try:
-        f = open(output_filename, 'wb')
-        f.write(string_file.getvalue())
-        f.close()
-        string_file.close()
-    except IOError, message:
-        print "Error: could not open file `%s' for reading -- permission denied or input/output error" % (output_filename,)    
+    if not os.path.exists(output_filename):
+        try:
+            f = open(output_filename, 'w')
+            f.write(string_file.getvalue())
+            f.close()
+            string_file.close()
+        except IOError, message:
+            print message
+            print "Error: could not open file `%s' for writing -- permission denied or input/output error" % (output_filename,)    
     
     selector_script_contents = """
-        var js = {'all': %(media_url)s + '%(page_dir)s%(digest)s-min.js'};getScripts([js['all']]);%(loader_script)s
-        """ % dict(
-        digest=file_digest, 
+        var js = {'all': %(media_url)s + '%(page_dir)s%(digest)s%(minified)s.js'};getScripts([js['all']]);%(loader_script)s
+        """.strip()
+        
+    selector_script_contents = selector_script_contents % dict(
+        digest=file_digest,
         loader_script=open(loader_script, 'r').read(),
         page_dir=page_dir,
-        media_url=media_url)
+        media_url=media_url,
+        minified=minified)
     
     selector_script_contents = selector_script_contents.strip()
     
@@ -174,16 +193,16 @@ for bundle in SCRIPT_BUNDLES:
     
     page_dir = bundle.get("page_dir", "script/page/")
     dest_dir = DEST_DIR + page_dir
-    selector = dest_dir + bundle["selector"]
-
+    selector = dest_dir + bundle["selector"]    
     output_filename = generate_perfectly_cacheable_scripts(
         sources=[SRC_DIR + f for f in bundle['sources']],
         selector=selector,
         media_url=DEFAULT_MEDIA_URL_SCRIPT_GLOBAL,
         page_dir=page_dir,
         dest_dir=dest_dir,
-        loader_script=LOADER_SCRIPT)
-        
+        loader_script=LOADER_SCRIPT,
+        minified=JS_MINIFIED)
+    
     env.YuiCompressorMinify(selector)
     env.YuiCompressorMinify(output_filename)
     
