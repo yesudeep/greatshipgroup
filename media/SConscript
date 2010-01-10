@@ -7,9 +7,17 @@ from util import match_patterns, minifiables, filter_files
 from fnmatch import fnmatch
 from os.path import basename
 from filesystem import walk_dir
+import hashlib
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from StringIO import StringIO
 
 SRC_DIR = './'
 DEST_DIR = '../' + env['MEDIA_DEST_DIR'] + '/'
+
+LOADER_SCRIPT = SRC_DIR + "script/lib/chickoojs/src/loader.js"
+DEFAULT_MEDIA_URL_SCRIPT_GLOBAL = "window.__hc_text_media_url"
 
 SCRIPT_FILES = Split("""
     script/lib/chickoojs/src/jquery/jquery-1.3.2.js
@@ -51,19 +59,16 @@ STITCHED_IMAGES = ()
 ]
 '''
 
-RESOURCE_BUNDLES = (
+SCRIPT_BUNDLES = (
     dict(
-        target = "script/page/base.js",
-        sources = Split("""
-            script/base.js
-        """)
-    ),
-    dict(
-        target="script/page/index.js",
+        selector="index.js",
         sources = Split("""
             script/index.js
         """)
     ),
+)
+
+CSS_BUNDLES = (
     dict(
         target="css/screen-all.css",
         sources = Split("""
@@ -71,7 +76,6 @@ RESOURCE_BUNDLES = (
         """)
     ),
 )
-
 
 
 
@@ -119,9 +123,73 @@ for f in minifiables(MINIFIABLE_FILES, NON_MINIFIABLE_FILES):
     env.YuiCompressorMinify(filepath)
     #if fnmatch(basename(filepath), '*.js'):
     #    env.JsminMinify(filepath)
+
+def generate_perfectly_cacheable_scripts(sources, selector, media_url, page_dir, dest_dir, loader_script):
+    string_file = StringIO()
+    chunk_size = 2048
+    hash_service = hashlib.sha1()
+    
+    for filepath in sources:
+        try:
+            file_handle = open(filepath, 'rb')
+            bytes_read = True
+            while bytes_read:
+                chunk = file_handle.read(chunk_size)
+                bytes_read = len(chunk)
+                string_file.write(chunk)
+                hash_service.update(chunk)
+        except IOError, message:
+            print "Error: could not open file `%s' for reading -- permission denied or input/output error" % (filepath,)    
+    file_digest = hash_service.hexdigest()
+    output_filename = dest_dir + file_digest + ".js"
+    try:
+        f = open(output_filename, 'wb')
+        f.write(string_file.getvalue())
+        f.close()
+        string_file.close()
+    except IOError, message:
+        print "Error: could not open file `%s' for reading -- permission denied or input/output error" % (output_filename,)    
+    
+    selector_script_contents = """
+        var js = {'all': %(media_url)s + '%(page_dir)s%(digest)s-min.js'};getScripts([js['all']]);%(loader_script)s
+        """ % dict(
+        digest=file_digest, 
+        loader_script=open(loader_script, 'r').read(),
+        page_dir=page_dir,
+        media_url=media_url)
+    
+    selector_script_contents = selector_script_contents.strip()
+    
+    f = open(selector, 'wb')
+    f.write(selector_script_contents)
+    f.close()
+    
+    return output_filename
+
+# Page based resource bundles.
+for bundle in SCRIPT_BUNDLES:
+    #env.YuiCompressorMinify(env.Concatenate([DEST_DIR + bundle['target']], 
+    #    [SRC_DIR + f for f in bundle['sources']]))
+    #env.Concatenate([DEST_DIR + bundle['target']])
+    
+    page_dir = bundle.get("page_dir", "script/page/")
+    dest_dir = DEST_DIR + page_dir
+    selector = dest_dir + bundle["selector"]
+
+    output_filename = generate_perfectly_cacheable_scripts(
+        sources=[SRC_DIR + f for f in bundle['sources']],
+        selector=selector,
+        media_url=DEFAULT_MEDIA_URL_SCRIPT_GLOBAL,
+        page_dir=page_dir,
+        dest_dir=dest_dir,
+        loader_script=LOADER_SCRIPT)
+        
+    env.YuiCompressorMinify(selector)
+    env.YuiCompressorMinify(output_filename)
     
 # Page based resource bundles.
-for bundle in RESOURCE_BUNDLES:
+for bundle in CSS_BUNDLES:
     env.YuiCompressorMinify(env.Concatenate([DEST_DIR + bundle['target']], 
         [SRC_DIR + f for f in bundle['sources']]))
+
 

@@ -17,6 +17,10 @@ window.location.href="/unsupported/browser/";
 
 {% block tag_head %}{% endblock %}
 </head><body {% block body_attributes %}{% endblock %}>
+<script type="text/javascript">
+window.__hc_text_media_url="{{ TEXT_MEDIA_URL }}";
+</script>
+
 {% block chrome_frame_plugin %}
 <!--[if lt IE 7]>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
@@ -26,20 +30,8 @@ window.location.href="/unsupported/browser/";
 {% endblock %}
 {% block tag_body %}{% endblock %}
 
-{% block tag_scripts_prefix %}
-<script type="text/javascript">
-$LOADER_SCRIPT
-window.scripts=["{{ JQUERY_URL }}"];
-</script>
-{% endblock %}
 {% block tag_scripts_base %}{% endblock %}
 {% block tag_scripts %}{% endblock %}
-{% block tag_scripts_suffix %}
-<script type="text/javascript">
-getScripts(window.scripts);
-</script>
-{% endblock %}
-{% block tag_scripts_final %}{% endblock %}
 {% block tag_scripts_analytics %}{{ ANALYTICS_CODE }}{% endblock %}
 </body></html>
 
