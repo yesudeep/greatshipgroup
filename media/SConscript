@@ -29,6 +29,16 @@ IMAGE_FILES = Split("""
     image/photo/shesh.jpg
     image/photo/alok_mahajan.jpg
     image/photo/p_r_naware.jpg
+    
+    image/slickmap/L1-center.png
+    image/slickmap/L1-left.png
+    image/slickmap/L1-right.png
+    image/slickmap/L3-bottom.png
+    image/slickmap/L3-center.png
+    image/slickmap/L3-li-top.png
+    image/slickmap/L3-ul-top.png
+    image/slickmap/vertical-line.png
+    image/slickmap/white-highlight.png
 """)
 
 CSS_FILES = Split("""

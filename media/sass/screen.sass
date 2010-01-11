@@ -1,5 +1,6 @@
 
 @import base.sass
+@import slickmap.sass
 
 body
     :font-family= !font_family_serif
@@ -8,13 +9,14 @@ body
     
 a
     :text-decoration none
+    :border 0
 h1
     :font-family= !font_family_sans_serif
     :font-size 2em
-    :color white
+    :color #fff
     :line-height 1.2
     :letter-spacing -0.03em
-    :margin-bottom 0.6em
+
     strong
         :display block
         :font-weight bold
@@ -22,11 +24,27 @@ h1
         :font-size 130%
 
 h2
+    :color #000
     :font-family= !font_family_serif
     :font-size 1.6em
     :line-height 1.4
     :letter-spacing -0.03em
-    
+    :margin-bottom 1em
+    strong
+        :margin-top -0.2em
+        :font-family= !font_family_sans_serif
+        :display block
+        :font-size 70%
+h3
+    :margin-top 0.5em
+    :font-family= !font_family_sans_serif_medium
+    :font-size 1em
+    :font-weight bold
+    :line-height 1.5
+    :color #000
+p
+    :line-height 1.4
+    :margin-bottom 1em
 
 // Navigation
 
@@ -77,14 +95,15 @@ h2
             :width 128px
             :position absolute
             :margin-left -128px
-
+            
 #trunk
     :min-height 400px
     :padding-top 2em
     :padding-bottom 1em
+
 #trunk-content
     +grid-container()
-    
+    :overlay hidden
 
 // Footer
 #footer
@@ -92,40 +111,81 @@ h2
 
 #footer-content
     :min-height 250px
+    +grid-container()
     
+
+#management-gallery
+    li
+        .info
+            h2
+                :background= "#f5f5f5" !image_favicon "no-repeat 20px 16px"
+                :border-bottom 1px solid silver
+                :padding 5px 40px
+                
+                
 ul.gallery
-    :width 750px
-    li
+    :width 800px
+    > li
         +display-inline-block()
-        
-        .info
-            :color black
-            :background-color white
-            :width 500px
-            :height 300px
-            :position absolute
-            :margin-top -2px
-            :z-index 10
-            :display none
-            :padding 20px
-            
-ul.gallery:hover
-    li
-        +opacity(0.1)
-        +transition("opacity .45s ease")
-    li:hover
-        +opacity(1)
-        //+transition("transform .45s ease")
-        //+transform("scale(1.1)")
-        +box-shadow("1px 1px 25px #000")
-        .info
+        :margin-right 10px
+        :border 5px solid black
+        // Required to keep all the li's aligned.
+        :vertical-align top
+        > a
             :display block
-            +box-shadow("1px 1px 25px #000")
-    li:hover:nth-child(3n)
-        .info
+            :height 180px
+            :width 180px
+            span
+                :font-family= !font_family_sans_serif_medium
+                :font-weight bold
+                :text-align center
+                :background-color #000
+                :background-color rgba(0,0,0,0.5)
+                :color white
+                :display block
+                :padding 10px 0px
+                :height 30px
+                :z-index 10px
+                :top -50px
+                :position relative
+        > .info
+            :margin-top 5px
+            :background-color white
+            :width 790px
+            :min-height 100px
+            :position absolute
+            :z-index 50
+            :display none
+            :padding-bottom 20px
+            > .content
+                :padding 0px 20px
+                +column-count(2)
+                p, li
+                    :font-size 0.8em
+                    :line-height 1.4
+                li
+                    :margin-bottom 1em
+                    :list-style disc inside
+
+ul.gallery:hover
+    > li
+        +opacity(0.08)
+        +transition("opacity .45s ease")
+    > li:hover
+        +opacity(1)
+        +box-shadow("1px 1px 25px #000")
+        a span
+            :display none
+        > .info
+            :display block
             :left 50%
             :margin-left -480px
-    li:hover:nth-child(4n)
-        .info
+            +box-shadow("1px 1px 25px #000")
+    //> li:hover:nth-child(3n)
+        > .info
+            :left 50%
+            :margin-left -480px
+    //> li:hover:nth-child(4n)
+        > .info
             :left 50%
             :margin-left -300px
