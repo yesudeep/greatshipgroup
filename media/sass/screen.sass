@@ -94,29 +94,38 @@ h2
     :min-height 250px
     
 ul.gallery
+    :width 750px
     li
         +display-inline-block()
+        
         .info
             :color black
             :background-color white
-            :width 960px
+            :width 500px
             :height 300px
             :position absolute
+            :margin-top -2px
             :z-index 10
             :display none
-            :left 50%
-            :margin-left -480px
-            h2
-                :padding 10px
-                :background-color= !color_bg_info_h2
-                :color= !color_fg_info_h2
+            :padding 20px
             
 ul.gallery:hover
     li
-        +opacity(0.3)
+        +opacity(0.1)
         +transition("opacity .45s ease")
     li:hover
         +opacity(1)
+        //+transition("transform .45s ease")
+        //+transform("scale(1.1)")
+        +box-shadow("1px 1px 25px #000")
         .info
             :display block
-    
+            +box-shadow("1px 1px 25px #000")
+    li:hover:nth-child(3n)
+        .info
+            :left 50%
+            :margin-left -480px
+    li:hover:nth-child(4n)
+        .info
+            :left 50%
+            :margin-left -300px
