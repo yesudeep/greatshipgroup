@@ -2,11 +2,31 @@
 @import base.sass
 
 body
+    :font-family= !font_family_serif
     :background= !color_bg_body !image_bg_body "repeat-x 0 0"
-
+    :color= !color_fg_body
+    
 a
     :text-decoration none
+h1
+    :font-family= !font_family_sans_serif
+    :font-size 2em
+    :color white
+    :line-height 1.2
+    :letter-spacing -0.03em
+    :margin-bottom 0.6em
+    strong
+        :display block
+        :font-weight bold
+        :color white
+        :font-size 130%
 
+h2
+    :font-family= !font_family_serif
+    :font-size 1.6em
+    :line-height 1.4
+    :letter-spacing -0.03em
+    
 
 // Navigation
 
@@ -58,9 +78,13 @@ a
             :position absolute
             :margin-left -128px
 
-
 #trunk
     :min-height 400px
+    :padding-top 2em
+    :padding-bottom 1em
+#trunk-content
+    +grid-container()
+    
 
 // Footer
 #footer
@@ -68,3 +92,31 @@ a
 
 #footer-content
     :min-height 250px
+    
+ul.gallery
+    li
+        +display-inline-block()
+        .info
+            :color black
+            :background-color white
+            :width 960px
+            :height 300px
+            :position absolute
+            :z-index 10
+            :display none
+            :left 50%
+            :margin-left -480px
+            h2
+                :padding 10px
+                :background-color= !color_bg_info_h2
+                :color= !color_fg_info_h2
+            
+ul.gallery:hover
+    li
+        +opacity(0.3)
+        +transition("opacity .45s ease")
+    li:hover
+        +opacity(1)
+        .info
+            :display block
+    

@@ -42,7 +42,7 @@ def render_cached_template(template_name, **kwargs):
     response = memcache.get(cache_key)
     if not response:
         response = render_template(template_name, **kwargs)
-        memcache.set(cache_key, response, TWO_MINUTES_IN_SECONDS)
+        memcache.set(cache_key, response, 120)
     return response
 
 if configuration.DEPLOYMENT_MODE == configuration.MODE_DEVELOPMENT:
@@ -54,6 +54,11 @@ class IndexHandler(webapp.RequestHandler):
         response = render_cached_template('index.html')
         self.response.out.write(response)
         
+class ManagementHandler(webapp.RequestHandler):
+    def get(self):
+        response = render_cached_template('management.html')
+        self.response.out.write(response)
+
 class FleetHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
@@ -121,6 +126,7 @@ class PressReleasesHandler(webapp.RequestHandler):
 
 urls = (
     ('/', IndexHandler),
+    ('/about/management/?', ManagementHandler),
     ('/careers/?', CareersHandler),
     ('/careers/tour/?', TourHandler),
     ('/contact/offices/?', OfficesHandler),

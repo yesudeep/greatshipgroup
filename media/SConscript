@@ -25,6 +25,10 @@ IMAGE_FILES = Split("""
     image/icon/favicon.png
     image/bg/water.jpg
     image/bg/footer-shadow.png
+    image/photo/ravi_sheth.jpg
+    image/photo/shesh.jpg
+    image/photo/alok_mahajan.jpg
+    image/photo/p_r_naware.jpg
 """)
 
 CSS_FILES = Split("""

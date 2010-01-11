@@ -24,6 +24,7 @@ PAGE_TEMPLATE_FILES = Split("""
 
 BASE_TEMPLATE_FILES = Split("""
     base.html
+    management.html
 """)
 
 TEMPLATE_FILES = BASE_TEMPLATE_FILES + Split("""
