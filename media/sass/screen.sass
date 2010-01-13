@@ -252,7 +252,40 @@ table.classic
 #footer-content
     :min-height 250px
     +grid-container()
-    
+    a
+        font-weight: normal
+
+        &:link, &:visited
+            color: #1a6998
+
+        &:hover
+            color: #cccccc
+            border-bottom: 1px dotted #cccccc
+
+    .footer-menu
+        line-height: 1.6em
+        :font-size 0.8em
+
+        > li
+            float: left
+
+        h2
+            color: #999999
+            margin-right: 10px
+
+        #copyright
+            :clear both
+            font-size: 0.9em
+            margin-bottom: 20px
+
+            ul
+                margin-top: 5px
+                margin-right: 20px
+                min-width: 100px
+
+            li
+                float: none
+                line-height: 2em
 
 #management-gallery
     li
@@ -334,5 +367,10 @@ ul.gallery:hover
             :margin-left -300px
 
 
+
+
+#copyright
+    padding-top: 20px
+    line-height: 1.4
 
 // End imports
