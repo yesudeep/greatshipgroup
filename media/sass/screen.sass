@@ -86,7 +86,7 @@ p
     :line-height 1.4
     :margin-bottom 1em
 
-.columns
+//.columns
     +column-count(2)
     +column-gap(3em)
 
@@ -188,12 +188,14 @@ p
             :list-style-position inside
             :list-style-type  disc
             :margin-bottom 0.5em
+        .dateline
+            :font-style italic
         > .content
             +grid(6, 12)
             +alpha
             :padding 40px 30px
         > .aside
-            +grid(4, 12)
+            +grid(5, 12)
             +omega
             :padding 40px 0px
     .foo
