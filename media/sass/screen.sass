@@ -49,6 +49,10 @@ h1
         :background-image= !image_icon_press
     .icon.careers
         :background-image= !image_icon_careers
+    .icon.fleet
+        :background-image= !image_icon_fleet
+    .icon.feedback
+        :background-image= !image_icon_feedback
     strong
         :display block
         :font-weight bold
@@ -75,16 +79,41 @@ h2
         :font-family= !font_family_sans_serif
         :display block
         :font-size 70%
-h3
+=h3()
     :margin-top 0.5em
     :font-family= !font_family_sans_serif_medium
     :font-size 1em
     :font-weight bold
     :line-height 1.5
     :color #000
+h3
+    +h3()
 p
     :line-height 1.4
     :margin-bottom 1em
+
+form.decorated-fields.tabular
+    #recaptcha_widget_div
+        :margin-left 210px
+
+table.classic
+    :font-family= !font_family_sans_serif
+    :margin-bottom 1.6em
+    caption
+        :font-size 1.4em
+        :border-top= "1px solid" !color_border_top_table_classic
+        :color= !color_fg_table_classic_caption
+        :background-color= !color_bg_table_classic_caption
+        :padding 10px 5px
+        :text-align center
+    thead
+        :background-color= !color_bg_table_classic_header
+        :color= !color_fg_table_classic_header
+    td, th
+        :padding 10px 5px
+    tbody
+        tr:nth-child(2n) 
+            :background-color= !color_bg_table_classic_alternate_row
 
 //.columns
     +column-count(2)
@@ -184,6 +213,11 @@ p
         p, li
             :font-size 0.9em
             :line-height 1.5
+            
+        .visualize
+            ul li
+                :list-style none
+
         li
             :list-style-position inside
             :list-style-type  disc
@@ -298,3 +332,7 @@ ul.gallery:hover
         > .info
             :left 50%
             :margin-left -300px
+
+
+
+// End imports

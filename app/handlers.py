@@ -121,19 +121,66 @@ class OfficesHandler(webapp.RequestHandler):
 
 class SuppliersHandler(webapp.RequestHandler):
     def get(self):
-        response = render_cached_template("about/suppliers.html")
+        from recaptcha.client import captcha
+        captcha_error_code = self.request.get('captcha_error')
+        if not captcha_error_code:
+            captcha_error_code = None
+
+        captcha_html = captcha.displayhtml(
+            public_key = configuration.RECAPTCHA_PUBLIC_KEY,
+            use_ssl = False,
+            error = captcha_error_code
+            )
+        response = render_cached_template("about/suppliers.html", captcha_html=captcha_html)
         self.response.out.write(response)
 
     def post(self):
-        pass
+        from recaptcha.client import captcha
+        captcha_challenge_field = self.request.get('recaptcha_challenge_field')
+        captcha_response_field = self.request.get('recaptcha_response_field')
+        captcha_response = captcha.submit(
+            captcha_challenge_field,
+            captcha_response_field,
+            configuration.RECAPTCHA_PRIVATE_KEY,
+            self.request.remote_addr
+        )
+        if captcha_response.is_valid:
+            self.redirect('/')
+        else:
+            error = captcha_response.error_code
+            self.redirect('/contact/suppliers?captcha_error=%s' % error)
+
 
 class FeedbackHandler(webapp.RequestHandler):
     def get(self):
-        response = render_cached_template("about/feedback.html")
+        from recaptcha.client import captcha
+        captcha_error_code = self.request.get('captcha_error')
+        if not captcha_error_code:
+            captcha_error_code = None
+
+        captcha_html = captcha.displayhtml(
+            public_key = configuration.RECAPTCHA_PUBLIC_KEY,
+            use_ssl = False,
+            error = captcha_error_code
+            )
+        response = render_cached_template("about/feedback.html", captcha_html=captcha_html)
         self.response.out.write(response)
     
     def post(self):
-        pass
+        from recaptcha.client import captcha
+        captcha_challenge_field = self.request.get('recaptcha_challenge_field')
+        captcha_response_field = self.request.get('recaptcha_response_field')
+        captcha_response = captcha.submit(
+            captcha_challenge_field,
+            captcha_response_field,
+            configuration.RECAPTCHA_PRIVATE_KEY,
+            self.request.remote_addr
+        )
+        if captcha_response.is_valid:
+            self.redirect('/')
+        else:
+            error = captcha_response.error_code
+            self.redirect('/contact/feedback?captcha_error=%s' % error)
 
 class CareersHandler(webapp.RequestHandler):
     """Handles the home page requests."""
@@ -161,7 +208,8 @@ class PressReleasesHandler(webapp.RequestHandler):
 
 
 urls = (
-    ('/', IndexHandler),
+    #('/', IndexHandler),
+    ('/', SitemapHandler),
     ('/about/?', AboutHandler),
     ('/about/mission/?', AboutHandler),
     ('/about/management/?', ManagementHandler),
@@ -175,9 +223,10 @@ urls = (
     ('/contact/feedback/?', FeedbackHandler),
     ('/legal/policy/?', PolicyHandler),
     ('/press/?', PressReleasesHandler),
+    ('/services/?', FleetHandler),
+    ('/services/fleet/?', FleetHandler),
     ('/services/construction/?', ConstructionHandler),
     ('/services/drilling/?', DrillingHandler),
-    ('/services/fleet/?', FleetHandler),
     ('/services/logistics/?', LogisticsHandler),
     ('/services/qhse/?', QhseHandler),
     ('/sitemap/?', SitemapHandler),

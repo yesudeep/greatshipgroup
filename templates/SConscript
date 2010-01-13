@@ -3,7 +3,7 @@
 
 Import('env')
 
-from os.path import splitext
+from os.path import splitext, basename
 
 SRC_DIR = './'
 MEDIA_SRC_DIR = '../' + env['MEDIA_SRC_DIR'] + '/'
@@ -20,11 +20,11 @@ env.Cheetah(TEMPLATE_BUILD_DIR + 'admin/base_site.html', 'base_site.html.tmpl', 
 
 PAGE_TEMPLATE_FILES = Split("""
     index.html
+    about/financial.html
 """)
 
 BASE_TEMPLATE_FILES = Split("""
     base.html
-    about/financial.html
     about/management.html
     about/mission.html
     about/offices.html
@@ -36,6 +36,7 @@ BASE_TEMPLATE_FILES = Split("""
     careers/tour.html
     legal/policy.html
     services/qhse.html
+    services/fleet.html
     sitemap.html
 """)
 
@@ -52,7 +53,7 @@ MINIFIABLE_FILES = BASE_TEMPLATE_FILES + PAGE_TEMPLATE_FILES + Split("""
 """)
 
 for f in set(PAGE_TEMPLATE_FILES):
-    template_name = splitext(f)[0]
+    template_name = splitext(basename(f))[0]
     pickle = env.Pickle(template_name + ".pkl", Value({
         'SELECTOR_SCRIPT': open(MEDIA_DEST_DIR + 'script/page/' + template_name + '.js', 'r').read()
     }))

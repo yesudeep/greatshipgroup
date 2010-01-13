@@ -39,6 +39,8 @@ IMAGE_FILES = Split("""
     image/icon/128x128/pie-chart-red.png
     image/icon/128x128/news.png
     image/icon/128x128/onshore-professional.png
+    image/icon/128x128/fleet.png
+    image/icon/128x128/mail.png
     
     image/icon/48x48/flag/india.png
     image/icon/48x48/flag/singapore.png
@@ -109,6 +111,16 @@ SCRIPT_BUNDLES = (
             script/index.js
         """)
     ),
+    dict(
+        selector="financial.js",
+        sources = Split(
+        COMMON_SCRIPTS + 
+        """
+            script/lib/jquery.gchart/jquery.gchart.js
+            script/financial.js
+        """)
+    ),
+    
 )
 
 CSS_BUNDLES = (

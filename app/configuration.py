@@ -121,7 +121,8 @@ ga.setAttribute('async', 'true');doc.documentElement.firstChild.appendChild(ga);
 """ % dict(GOOGLE_ANALYTICS_ID=GOOGLE_ANALYTICS_ID)
 
 JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/AFORM.pdf"
-
+RECAPTCHA_PUBLIC_KEY = "6LfjowkAAAAAAL5Jiz44D3P0OjNPLh29z4ShPh_T"
+RECAPTCHA_PRIVATE_KEY = "6LfjowkAAAAAAMF5GKrFzjdRnsp-ZYLaS1LfHeqU"
 
 # The builtin variables that are available to all templates.
 TEMPLATE_BUILTINS = {
