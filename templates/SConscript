@@ -24,7 +24,15 @@ PAGE_TEMPLATE_FILES = Split("""
 
 BASE_TEMPLATE_FILES = Split("""
     base.html
-    management.html
+    about/financial.html
+    about/management.html
+    about/mission.html
+    about/offices.html
+    about/overseas.html
+    about/suppliers.html
+    legal/policy.html
+    services/qhse.html
+    sitemap.html
 """)
 
 TEMPLATE_FILES = BASE_TEMPLATE_FILES + Split("""

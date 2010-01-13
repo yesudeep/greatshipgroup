@@ -30,6 +30,22 @@ IMAGE_FILES = Split("""
     image/photo/alok_mahajan.jpg
     image/photo/p_r_naware.jpg
     
+    image/icon/128x128/globe.png
+    image/icon/128x128/cheetah.png
+    image/icon/128x128/safety-box.png
+    image/icon/128x128/iphone.png
+    image/icon/128x128/legal.png
+    image/icon/128x128/pie-chart-green.png
+    image/icon/128x128/pie-chart-red.png
+    
+    image/icon/48x48/flag/india.png
+    image/icon/48x48/flag/singapore.png
+    image/icon/48x48/flag/mauritius.png
+    
+    image/bg/button_overlay.png
+    image/bg/textfield_normal.png
+    image/bg/textfield_readonly.png
+    
     image/slickmap/L1-center.png
     image/slickmap/L1-left.png
     image/slickmap/L1-right.png

@@ -2,6 +2,19 @@
 @import base.sass
 @import slickmap.sass
 
+=heading-icon(!height, !width)
+    :height= !height
+    :width= !width
+    :display block
+    :float left
+    :margin-right 1em
+    :margin-bottom -1em
+    :position relative
+    :z-index 10
+    :background-color "transparent"
+    :background-repeat "no-repeat"
+    :background-position 0 0
+
 body
     :font-family= !font_family_serif
     :background= !color_bg_body !image_bg_body "repeat-x 0 0"
@@ -16,12 +29,28 @@ h1
     :color #fff
     :line-height 1.2
     :letter-spacing -0.03em
-
+    .icon
+        +heading-icon("128px", "128px")
+        :margin-left 1em
+        :margin-bottom -1.1em
+    .icon.globe
+        :background-image= !image_icon_globe
+    .icon.speed
+        :background-image= !image_icon_speed
+    .icon.safety
+        :background-image= !image_icon_safety
+    .icon.contact
+        :background-image= !image_icon_contact
+    .icon.legal
+        :background-image= !image_icon_legal
+    .icon.financial
+        :background-image= !image_icon_financial
     strong
         :display block
         :font-weight bold
         :color white
-        :font-size 130%
+        :font-size 150%
+        :margin-top -0.2em
 
 h2
     :color #000
@@ -29,7 +58,14 @@ h2
     :font-size 1.6em
     :line-height 1.4
     :letter-spacing -0.03em
-    :margin-bottom 1em
+    .icon
+        +heading-icon("48px", "48px")
+    .icon.flag.india
+        :background-image= !image_icon_flag_india
+    .icon.flag.mauritius
+        :background-image= !image_icon_flag_mauritius
+    .icon.flag.singapore
+        :background-image= !image_icon_flag_singapore
     strong
         :margin-top -0.2em
         :font-family= !font_family_sans_serif
@@ -52,11 +88,6 @@ p
     :background-color= !color_bg_nav
     :background-color= !color_bg_nav_rgba
     :min-height 70px
-    a
-        +opacity(0.6)
-        +transition("opacity 0.45s ease")
-    a:hover
-        +opacity(1)
 #nav-logo
     :float left
 #nav-logo-link
@@ -72,6 +103,11 @@ p
     >li
         +display-inline-block()
         :margin-right 1em
+        a
+            +opacity(0.6)
+            +transition("opacity 0.45s ease")
+        a:hover
+            +opacity(1)
         >a
             :display block
             :height 48px
@@ -103,7 +139,66 @@ p
 
 #trunk-content
     +grid-container()
-    :overlay hidden
+    :overflow hidden
+    
+    .article.reversed
+        > .aside
+            +grid(4, 12)
+            +alpha
+            :text-align left
+        > .content
+            +grid(8, 12)
+            +omega
+
+    .article.plain
+        > .content
+            +grid(11,12)
+        > .aside
+            :display none
+    .article.columns
+        > .content
+            +column-count(2)
+            +column-gap(3em)
+    
+    .article
+        +box-shadow("1px 1px 10px #000")
+        :background-color white
+        +border-radius("10px")
+        :color= !color_fg_article_content
+        :width 950px
+        :margin-left 5px
+        :overflow hidden
+        h3
+            :color= !color_fg_article_content_h3
+            :font-family= !font_family_sans_serif
+            :font-weight normal
+            :font-size 1.4em
+        p, li
+            :font-size 0.9em
+            :line-height 1.5
+        li
+            :list-style-position inside
+            :list-style-type  disc
+            :margin-bottom 0.5em
+        > .content
+            +grid(6, 12)
+            +alpha
+            :padding 40px 30px
+        > .aside
+            +grid(4, 12)
+            +omega
+    .foo
+
+
+        > .content
+            +grid(8, 12)
+            +alpha
+
+        > .aside
+            +grid(4, 12)
+            +omega
+            :text-align right
+
 
 // Footer
 #footer
@@ -128,6 +223,7 @@ ul.gallery
     > li
         +display-inline-block()
         :margin-right 10px
+        :margin-bottom 10px
         :border 5px solid black
         // Required to keep all the li's aligned.
         :vertical-align top
@@ -163,9 +259,11 @@ ul.gallery
                 p, li
                     :font-size 0.8em
                     :line-height 1.4
+                ul
+                    :list-style-position outside
                 li
                     :margin-bottom 1em
-                    :list-style disc inside
+                    
 
 ul.gallery:hover
     > li

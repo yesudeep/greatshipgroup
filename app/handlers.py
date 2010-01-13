@@ -53,52 +53,77 @@ class IndexHandler(webapp.RequestHandler):
     def get(self):
         response = render_cached_template('index.html')
         self.response.out.write(response)
-        
-class ManagementHandler(webapp.RequestHandler):
+
+# About
+class AboutHandler(webapp.RequestHandler):
     def get(self):
-        response = render_cached_template('management.html')
+        response = render_cached_template('about/mission.html')
         self.response.out.write(response)
 
+class ManagementHandler(webapp.RequestHandler):
+    def get(self):
+        response = render_cached_template('about/management.html')
+        self.response.out.write(response)
+
+class OverseasHandler(webapp.RequestHandler):
+    def get(self):
+        response = render_cached_template('about/overseas.html')
+        self.response.out.write(response)
+
+class FinancialHandler(webapp.RequestHandler):
+    def get(self):
+        response = render_cached_template("about/financial.html")
+        self.response.out.write(response)
+
+class SitemapHandler(webapp.RequestHandler):
+    def get(self):
+        response = render_cached_template("sitemap.html")
+        self.response.out.write(response)
+
+# Services
 class FleetHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('fleet.html')
+        response = render_cached_template('services/fleet.html')
         self.response.out.write(response)
         
 class LogisticsHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('logistics.html')
+        response = render_cached_template('services/logistics.html')
         self.response.out.write(response)                        
         
 class ConstructionHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('construction.html')
+        response = render_cached_template('services/construction.html')
         self.response.out.write(response)            
 
 class DrillingHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('drilling.html')
+        response = render_cached_template('services/drilling.html')
         self.response.out.write(response)
         
 class QhseHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('qhse.html')
+        response = render_cached_template('services/qhse.html')
         self.response.out.write(response)
 
-class ContactHandler(webapp.RequestHandler):
+
+# Corporate relations
+class OfficesHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('contact.html')
+        response = render_cached_template('about/offices.html')
         self.response.out.write(response)
 
-class OfficesHandler(webapp.RequestHandler):
+class SuppliersHandler(webapp.RequestHandler):
     def get(self):
-        response = render_cached_template("offices.html")
-           
+        response = render_cached_template("about/suppliers.html")
+        self.response.out.write(response)
+
 class CareersHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
@@ -110,11 +135,11 @@ class TourHandler(webapp.RequestHandler):
     def get(self):
         response = render_cached_template('tour.html')
         self.response.out.write(response)
-        
+
 class PolicyHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('policy.html')
+        response = render_cached_template('legal/policy.html')
         self.response.out.write(response)
         
 class PressReleasesHandler(webapp.RequestHandler):
@@ -126,17 +151,24 @@ class PressReleasesHandler(webapp.RequestHandler):
 
 urls = (
     ('/', IndexHandler),
+    ('/about/?', AboutHandler),
+    ('/about/mission/?', AboutHandler),
     ('/about/management/?', ManagementHandler),
+    ('/about/overseas/?', OverseasHandler),
+    ('/about/financial/?', FinancialHandler),
     ('/careers/?', CareersHandler),
     ('/careers/tour/?', TourHandler),
+    ('/contact/?', OfficesHandler),
     ('/contact/offices/?', OfficesHandler),
-    ('/policy/?', PolicyHandler),
+    ('/contact/suppliers/?', SuppliersHandler),
+    ('/legal/policy/?', PolicyHandler),
     ('/press/?', PressReleasesHandler),
     ('/services/construction/?', ConstructionHandler),
     ('/services/drilling/?', DrillingHandler),
     ('/services/fleet/?', FleetHandler),
     ('/services/logistics/?', LogisticsHandler),
     ('/services/qhse/?', QhseHandler),
+    ('/sitemap/?', SitemapHandler),
 )
 application = webapp.WSGIApplication(urls, debug=configuration.DEBUG)
 
