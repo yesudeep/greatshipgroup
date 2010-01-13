@@ -124,16 +124,27 @@ class SuppliersHandler(webapp.RequestHandler):
         response = render_cached_template("about/suppliers.html")
         self.response.out.write(response)
 
+    def post(self):
+        pass
+
+class FeedbackHandler(webapp.RequestHandler):
+    def get(self):
+        response = render_cached_template("about/feedback.html")
+        self.response.out.write(response)
+    
+    def post(self):
+        pass
+
 class CareersHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('careers.html')
+        response = render_cached_template('careers/careers.html')
         self.response.out.write(response)
 
 class TourHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('tour.html')
+        response = render_cached_template('careers/tour.html')
         self.response.out.write(response)
 
 class PolicyHandler(webapp.RequestHandler):
@@ -145,7 +156,7 @@ class PolicyHandler(webapp.RequestHandler):
 class PressReleasesHandler(webapp.RequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('press_releases.html')
+        response = render_cached_template('press.html')
         self.response.out.write(response)
 
 
@@ -161,6 +172,7 @@ urls = (
     ('/contact/?', OfficesHandler),
     ('/contact/offices/?', OfficesHandler),
     ('/contact/suppliers/?', SuppliersHandler),
+    ('/contact/feedback/?', FeedbackHandler),
     ('/legal/policy/?', PolicyHandler),
     ('/press/?', PressReleasesHandler),
     ('/services/construction/?', ConstructionHandler),

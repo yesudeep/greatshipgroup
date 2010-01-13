@@ -120,6 +120,8 @@ ga.src=('https:'==doc.location.protocol?'https://ssl':'http://www')+'.google-ana
 ga.setAttribute('async', 'true');doc.documentElement.firstChild.appendChild(ga);})();</script>
 """ % dict(GOOGLE_ANALYTICS_ID=GOOGLE_ANALYTICS_ID)
 
+JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/AFORM.pdf"
+
 
 # The builtin variables that are available to all templates.
 TEMPLATE_BUILTINS = {
@@ -145,6 +147,7 @@ TEMPLATE_BUILTINS = {
     'ROOT_URL': sanitize_url(ROOT_URL),
     'TEMPLATE_DEBUG': DEBUG,
     'TEXT_MEDIA_URL': TEXT_MEDIA_URL,
+    'JOB_APPLICATION_FORM_URL': JOB_APPLICATION_FORM_URL,
 }
 
 # Directories in which to search for templates.

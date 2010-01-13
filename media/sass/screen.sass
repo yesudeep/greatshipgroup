@@ -45,6 +45,10 @@ h1
         :background-image= !image_icon_legal
     .icon.financial
         :background-image= !image_icon_financial
+    .icon.press
+        :background-image= !image_icon_press
+    .icon.careers
+        :background-image= !image_icon_careers
     strong
         :display block
         :font-weight bold
@@ -81,6 +85,10 @@ h3
 p
     :line-height 1.4
     :margin-bottom 1em
+
+.columns
+    +column-count(2)
+    +column-gap(3em)
 
 // Navigation
 
@@ -187,6 +195,7 @@ p
         > .aside
             +grid(4, 12)
             +omega
+            :padding 40px 0px
     .foo
 
 

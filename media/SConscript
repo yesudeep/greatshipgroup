@@ -37,6 +37,8 @@ IMAGE_FILES = Split("""
     image/icon/128x128/legal.png
     image/icon/128x128/pie-chart-green.png
     image/icon/128x128/pie-chart-red.png
+    image/icon/128x128/news.png
+    image/icon/128x128/onshore-professional.png
     
     image/icon/48x48/flag/india.png
     image/icon/48x48/flag/singapore.png

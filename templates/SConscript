@@ -30,6 +30,10 @@ BASE_TEMPLATE_FILES = Split("""
     about/offices.html
     about/overseas.html
     about/suppliers.html
+    about/feedback.html
+    press.html
+    careers/careers.html
+    careers/tour.html
     legal/policy.html
     services/qhse.html
     sitemap.html
