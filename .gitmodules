@@ -11,3 +11,6 @@
 [submodule "app/lib/aeoid"]
 	path = app/lib/aeoid
 	url = git://github.com/Arachnid/aeoid.git
+[submodule "app/lib/haggoo"]
+	path = app/lib/haggoo
+	url = git://github.com/yesudeep/haggoo.git
