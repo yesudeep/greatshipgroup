@@ -8,3 +8,6 @@
 [submodule "app/lib/gaeutilities"]
 	path = app/lib/gaeutilities
 	url = git://github.com/joerussbowman/gaeutilities.git
+[submodule "app/lib/aeoid"]
+	path = app/lib/aeoid
+	url = git://github.com/Arachnid/aeoid.git
