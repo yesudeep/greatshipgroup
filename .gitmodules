@@ -5,3 +5,6 @@
 [submodule "app/lib/pyporter2"]
 	path = app/lib/pyporter2
 	url = git://github.com/mdirolf/pyporter2.git
+[submodule "app/lib/gaeutilities"]
+	path = app/lib/gaeutilities
+	url = git://github.com/joerussbowman/gaeutilities.git
