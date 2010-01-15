@@ -99,7 +99,7 @@ STITCHED_IMAGES = (
 
 
 COMMON_SCRIPTS = """
-
+    script/base.js
 """
 
 SCRIPT_BUNDLES = (
