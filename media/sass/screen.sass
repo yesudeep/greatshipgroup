@@ -1,6 +1,7 @@
 
 @import base.sass
 @import slickmap.sass
+@import google-site-search.sass
 
 =heading-icon(!height, !width)
     :height= !height
@@ -372,5 +373,43 @@ ul.gallery:hover
 #copyright
     padding-top: 20px
     line-height: 1.4
+
+.cse .gsc-control-cse, .gsc-control-cse
+    :background-color transparent
+    :border 0px
+#cse
+    :width 175px
+    .gsc-tabsArea
+        :display none
+    .gsc-control-cse
+        //:padding 10px 10px 10px 20px
+        :padding 5px
+    .gsc-wrapper
+        :position absolute
+        :margin-top -10px
+        :margin-left -235px
+        :z-index 60
+        :background-color white
+        :background-color rgba(255,255,255,0.9)
+        +box-shadow("0px 4px 16px #000")
+        +border-radius-top-left("5px")
+        +border-radius-bottom-right("5px")
+        +border-radius-bottom-left("5px")
+        :width 400px
+    .gsc-search-button
+        :display none
+    .gsc-resultsbox-visible
+        :padding 10px
+    .gsc-webResult.gsc-result
+        :border 0
+    .gsc-clear-button
+        :position relative
+        :margin-left -20px
+    .gsc-input
+        :padding 5px
+    //form
+        +form-clean()
+        input[type="text"]
+            :width 100px
 
 // End imports

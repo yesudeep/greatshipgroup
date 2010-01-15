@@ -26,6 +26,7 @@
 		        <li><a id="nav-drilling" href="/services/drilling"></a></li>
 		        <li><a id="nav-qhse" href="/services/qhse"></a></li>
 		        <li><a id="nav-contact" href="/contact"></a></li>
+		        <li><div id="cse"></div></li>
 		        <li><a id="nav-we-are-hiring" href="/careers"></a></li>		      
 		    </ul>
 		    {% endblock %}
@@ -48,39 +49,37 @@
 		<div id="footer">
 			<div id="footer-content">
 			{% block tag_footer_content %}
-                <ul class="footer-menu"> 
+		    
+            <ul class="footer-menu"> 
                     <li>
                         <h2>About</h2> 
                         <ul> 
                             <li><a href="/">Home</a></li> 
-                            <li><a href="/about/motto/">Our Motto</a></li> 
+                            <li><a href="/about/mission">Our Motto</a></li> 
                             <li><a href="/about/management">Management</a></li> 
                             <li><a href="/about/financial">Financials</a></li> 
-                            <li><a href="/services/overseas/">Subsidiaries Overseas</a></li> 
+                            <li><a href="/about/overseas">Subsidiaries Overseas</a></li> 
                         </ul> 
                     </li> 
                     <li> 
                         <h2>Offshore Oilfield Services</h2> 
                         <ul> 
-                            <li><a href="/services/fleet/">Fleet</a></li> 
-                            <li><a href="/services/logistics/">Logistics</a></li> 
-                            <li><a href="/services/drilling/">Drilling</a></li> 
-                            <li><a href="/services/construction/">Construction</a></li> 
-                            <li><a href="/services/qhse/">Quality, Health, Safety, and Environment</a></li> 
-                            <!--[if lt IE 8]>
-                            <li><a id="ie_sucks" href="#">IE sucks.  This is fscking hack.  Look up main.js for more information.</a></li>
-                            <![endif]--> 
+                            <li><a href="/services/fleet">Fleet</a></li> 
+                            <li><a href="/services/logistics">Logistics</a></li> 
+                            <li><a href="/services/drilling">Drilling</a></li> 
+                            <li><a href="/services/construction">Construction</a></li> 
+                            <li><a href="/services/qhse">Quality, Health, Safety, and Environment</a></li> 
                         </ul> 
                     </li> 
                     <li> 
                         <h2>Corporate Relations</h2> 
                         <ul> 
-                            <li><a href="/contact/offices/">Offices</a></li> 
-                            <li><a href="/careers/">We're Hiring</a></li> 
-                            <li><a href="/policy/">Company Policy</a></li> 
-                            <li><a href="/press_release/">Press Releases</a></li> 
-                            <li><a href="/about/supplier_relations/">Supplier Relations</a></li> 
-                            <li><a href="mailto:olp@greatshipglobal.com">Feedback</a></li> 
+                            <li><a href="/contact/offices">Offices</a></li> 
+                            <li><a href="/careers">We're Hiring</a></li> 
+                            <li><a href="/legal/policy">Company Policy</a></li> 
+                            <li><a href="/press">Press Releases</a></li> 
+                            <li><a href="/contact/suppliers">Supplier Relations</a></li> 
+                            <li><a href="/contact/feedback">Feedback</a></li> 
                         </ul> 
                     </li> 
 
@@ -103,3 +102,14 @@
 	{% endblock %}
 {% endblock %}
 
+{% block tag_scripts_other %}
+<script src="http://www.google.com/jsapi" type="text/javascript"></script>
+<script type="text/javascript">
+  google.load('search', '1', {language : 'en'});
+  google.setOnLoadCallback(function(){
+    var customSearchControl = new google.search.CustomSearchControl('013410470487018134840:jjdhofp7tm0');
+    customSearchControl.setResultSetSize(google.search.Search.SMALL_RESULTSET);
+    customSearchControl.draw('cse');
+  }, true);
+</script>
+{% endblock %}

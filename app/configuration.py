@@ -23,20 +23,28 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+# Some boilerplate.
 import sys
 import os
 
 from os.path import dirname, abspath, realpath, join as path_join
 
 DIR_PATH = abspath(dirname(realpath(__file__)))
+LIB_PATH = path_join(DIR_PATH, 'lib')
 EXTRA_LIB_PATH = [
-    path_join(DIR_PATH, 'appengine'),
-    path_join(DIR_PATH, 'gaeutilities'),
-    path_join(DIR_PATH, 'jinja2'),
-    path_join(DIR_PATH, 'pyporter2'),
     dirname(DIR_PATH),
+    LIB_PATH,
+    path_join(LIB_PATH, 'appengine'),
+    path_join(LIB_PATH, 'gaeutilities'),
+    path_join(LIB_PATH, 'jinja2'),
+    path_join(LIB_PATH, 'pyporter2'),
+    path_join(LIB_PATH, 'aeoid'),
 ]
 sys.path = EXTRA_LIB_PATH + sys.path
+
+# End boilerplate.
+
+# Place your imports here.
 
 def sanitize_url(url):
     """Ensures that the URL ends with a slash."""
@@ -104,8 +112,9 @@ ROOT_URL = 'http://%s/' % (HOST_NAME,)
 cdn_urls = {
     'microsoft.jquery-1.3.2': "http://ajax.microsoft.com/ajax/jQuery/jquery-1.3.2.min.js",
     'google.jquery-1.3.2': "http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js",
-    'jquery.jquery-1.4': "http://code.jquery.com/jquery-1.4a1.min.js",
-    'local.jquery-1.4': "%sscript/lib/chickoojs/src/jquery/jquery-1.4a1.min.js" % (MEDIA_URL,),
+    'google.jquery-1.4': 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js',
+    'jquery.jquery-1.4': "http://code.jquery.com/jquery-1.4.min.js",
+    'local.jquery-1.4': "%sscript/lib/chickoojs/src/jquery/jquery-1.4.min.js" % (MEDIA_URL,),
     'local.jquery-1.3.2': "%sscript/lib/chickoojs/src/jquery/jquery-1.3.2.min.js" % (MEDIA_URL,),
 }
 
@@ -113,7 +122,7 @@ if LOCAL:
     JQUERY_URL = cdn_urls.get('local.jquery-1.4')
     ANALYTICS_CODE = ""
 else:
-    JQUERY_URL = cdn_urls.get('jquery.jquery-1.4')
+    JQUERY_URL = cdn_urls.get('google.jquery-1.4')
     ANALYTICS_CODE = """<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount', '%(GOOGLE_ANALYTICS_ID)s']);
 _gaq.push(['_trackPageview']);(function(){var doc=document,ga=doc.createElement('script');
 ga.src=('https:'==doc.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';

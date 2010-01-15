@@ -38,6 +38,9 @@ logging.basicConfig(level=logging.DEBUG)
 render_template = render_generator(loader=FileSystemCodeLoader, builtins=configuration.TEMPLATE_BUILTINS)
 
 def render_cached_template(template_name, **kwargs):
+    """
+    Renders a template and caches the output in memcached.
+    """
     cache_key = template_name + str(kwargs)
     response = memcache.get(cache_key)
     if not response:
@@ -48,78 +51,84 @@ def render_cached_template(template_name, **kwargs):
 if configuration.DEPLOYMENT_MODE == configuration.MODE_DEVELOPMENT:
     render_cached_template = render_template
 
-class IndexHandler(webapp.RequestHandler):
+class RequestHandler(webapp.RequestHandler):
+    """
+    Base handler for templates.
+    """
+    def render_to_response(self, template_name, **template_values):
+        response = render_template(template_name, **template_values)
+        self.response.out.write(response)
+
+class StaticRequestHandler(RequestHandler):
+    """
+    Base handler for static templates.
+    """
+    def render_to_response(self, template_name, **template_values):
+        response = render_cached_template(template_name, **template_values)
+        self.response.out.write(response)
+
+
+class IndexHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('index.html')
-        self.response.out.write(response)
+        self.render_to_response('index.html')
 
 # About
-class AboutHandler(webapp.RequestHandler):
+class AboutHandler(StaticRequestHandler):
     def get(self):
-        response = render_cached_template('about/mission.html')
-        self.response.out.write(response)
+        self.render_to_response('about/mission.html')
 
-class ManagementHandler(webapp.RequestHandler):
+class ManagementHandler(StaticRequestHandler):
     def get(self):
-        response = render_cached_template('about/management.html')
-        self.response.out.write(response)
+        self.render_to_response('about/management.html')
 
-class OverseasHandler(webapp.RequestHandler):
+class OverseasHandler(StaticRequestHandler):
     def get(self):
-        response = render_cached_template('about/overseas.html')
-        self.response.out.write(response)
+        self.render_to_response('about/overseas.html')
 
-class FinancialHandler(webapp.RequestHandler):
+class FinancialHandler(StaticRequestHandler):
     def get(self):
-        response = render_cached_template("about/financial.html")
-        self.response.out.write(response)
+        self.render_to_response('about/financial.html')
 
-class SitemapHandler(webapp.RequestHandler):
+class SitemapHandler(StaticRequestHandler):
     def get(self):
-        response = render_cached_template("sitemap.html")
-        self.response.out.write(response)
+        self.render_to_response('sitemap.html')
 
 # Services
-class FleetHandler(webapp.RequestHandler):
+class FleetHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('services/fleet.html')
-        self.response.out.write(response)
-        
-class LogisticsHandler(webapp.RequestHandler):
-    """Handles the home page requests."""
-    def get(self):
-        response = render_cached_template('services/logistics.html')
-        self.response.out.write(response)                        
-        
-class ConstructionHandler(webapp.RequestHandler):
-    """Handles the home page requests."""
-    def get(self):
-        response = render_cached_template('services/construction.html')
-        self.response.out.write(response)            
+        self.render_to_response('services/fleet.html')
 
-class DrillingHandler(webapp.RequestHandler):
-    """Handles the home page requests."""
-    def get(self):
-        response = render_cached_template('services/drilling.html')
-        self.response.out.write(response)
         
-class QhseHandler(webapp.RequestHandler):
+class LogisticsHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('services/qhse.html')
-        self.response.out.write(response)
+        self.render_to_response('services/logistics.html')                     
+        
+class ConstructionHandler(StaticRequestHandler):
+    """Handles the home page requests."""
+    def get(self):
+        self.render_to_response('services/construction.html')           
+
+class DrillingHandler(StaticRequestHandler):
+    """Handles the home page requests."""
+    def get(self):
+        self.render_to_response('services/drilling.html')
+        
+class QhseHandler(StaticRequestHandler):
+    """Handles the home page requests."""
+    def get(self):
+        self.render_to_response('services/qhse.html')
 
 
 # Corporate relations
-class OfficesHandler(webapp.RequestHandler):
+class OfficesHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('about/offices.html')
-        self.response.out.write(response)
+        self.render_to_response('about/offices.html')
 
-class SuppliersHandler(webapp.RequestHandler):
+class SuppliersHandler(StaticRequestHandler):
     def get(self):
         from recaptcha.client import captcha
         captcha_error_code = self.request.get('captcha_error')
@@ -131,8 +140,7 @@ class SuppliersHandler(webapp.RequestHandler):
             use_ssl = False,
             error = captcha_error_code
             )
-        response = render_cached_template("about/suppliers.html", captcha_html=captcha_html)
-        self.response.out.write(response)
+        self.render_to_response('about/suppliers.html', captcha_html=captcha_html)
 
     def post(self):
         from recaptcha.client import captcha
@@ -151,7 +159,7 @@ class SuppliersHandler(webapp.RequestHandler):
             self.redirect('/contact/suppliers?captcha_error=%s' % error)
 
 
-class FeedbackHandler(webapp.RequestHandler):
+class FeedbackHandler(StaticRequestHandler):
     def get(self):
         from recaptcha.client import captcha
         captcha_error_code = self.request.get('captcha_error')
@@ -163,8 +171,8 @@ class FeedbackHandler(webapp.RequestHandler):
             use_ssl = False,
             error = captcha_error_code
             )
-        response = render_cached_template("about/feedback.html", captcha_html=captcha_html)
-        self.response.out.write(response)
+        self.render_to_response('about/feedback.html', captcha_html=captcha_html)
+
     
     def post(self):
         from recaptcha.client import captcha
@@ -182,34 +190,30 @@ class FeedbackHandler(webapp.RequestHandler):
             error = captcha_response.error_code
             self.redirect('/contact/feedback?captcha_error=%s' % error)
 
-class CareersHandler(webapp.RequestHandler):
+class CareersHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('careers/careers.html')
-        self.response.out.write(response)
+        self.render_to_response('careers/careers.html')
 
-class TourHandler(webapp.RequestHandler):
+class TourHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('careers/tour.html')
-        self.response.out.write(response)
+        self.render_to_response('careers/tour.html')
 
-class PolicyHandler(webapp.RequestHandler):
+class PolicyHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('legal/policy.html')
-        self.response.out.write(response)
+        self.render_to_response('legal/policy.html')
         
-class PressReleasesHandler(webapp.RequestHandler):
+        
+class PressReleasesHandler(StaticRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        response = render_cached_template('press.html')
-        self.response.out.write(response)
+        self.render_to_response('press.html')
 
 
 urls = (
-    #('/', IndexHandler),
-    ('/', SitemapHandler),
+    ('/', IndexHandler),
     ('/about/?', AboutHandler),
     ('/about/mission/?', AboutHandler),
     ('/about/management/?', ManagementHandler),

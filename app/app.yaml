@@ -30,6 +30,17 @@ handlers:
   script: console/app/console.py
   login: admin
 
+- url: /_ah/queue/deferred
+  script: $PYTHON_LIB/google/appengine/ext/deferred/deferred.py
+  login: admin
+
+- url: /remote_api
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+
+- url: /dl.*
+  script: static.py
+
 - url: /.*
   script: handlers.py
 
