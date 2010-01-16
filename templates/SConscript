@@ -18,6 +18,7 @@ base_site_pickle = env.Pickle('base_site_vars.pkl', Value({
 env.Cheetah(TEMPLATE_BUILD_DIR + 'base_site.html', 'base_site.html.tmpl', PICKLE=base_site_pickle)
 env.Cheetah(TEMPLATE_BUILD_DIR + 'admin/base_site.html', 'base_site.html.tmpl', PICKLE=base_site_pickle)
 
+# These files have page scripts.
 PAGE_TEMPLATE_FILES = Split("""
     index.html
     about/financial.html
