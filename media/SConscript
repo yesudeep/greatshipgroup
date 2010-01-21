@@ -148,7 +148,6 @@ CSS_BUNDLES = (
     dict(
         target="css/screen-all.css",
         sources = Split("""
-            css/dataTables.css
             css/screen.css
         """)
     ),
