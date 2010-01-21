@@ -60,6 +60,16 @@ IMAGE_FILES = Split("""
     image/slickmap/L3-ul-top.png
     image/slickmap/vertical-line.png
     image/slickmap/white-highlight.png
+    
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/back_disabled.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/back_enabled.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/forward_disabled.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/forward_enabled.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_asc.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_asc_disabled.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_both.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc.jpg
+    script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc_disabled.jpg
 """)
 
 CSS_FILES = Split("""
@@ -121,6 +131,16 @@ SCRIPT_BUNDLES = (
             script/financial.js
         """)
     ),
+    dict(
+        selector="fleet.js",
+        sources = Split(
+        COMMON_SCRIPTS + 
+        """
+            script/lib/chickoojs/src/jquery/dataTables/1.6/media/js/jquery.dataTables.js
+            script/fleet.js
+        """)
+    ),
+    
     
 )
 
@@ -128,6 +148,7 @@ CSS_BUNDLES = (
     dict(
         target="css/screen-all.css",
         sources = Split("""
+            css/dataTables.css
             css/screen.css
         """)
     ),

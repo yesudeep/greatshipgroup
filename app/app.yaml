@@ -9,7 +9,6 @@ handlers:
 - url: /s
   static_dir: public
   secure: never
-  expiration: "30d"
 
 - url: /favicon.ico
   static_files: public/image/icon/favicon.png
@@ -19,15 +18,14 @@ handlers:
 - url: /robots.txt
   static_files: public/robots.txt
   upload: public/robots.txt
-  expiration: 7d
   secure: never
 
 - url: /console/static/
-  static_dir: console/app/view/static
-  expiration: 7d
+  static_dir: lib/console/app/view/static
+  secure: never
 
 - url: /console.*
-  script: console/app/console.py
+  script: lib/console/app/console.py
   login: admin
 
 - url: /_ah/queue/deferred

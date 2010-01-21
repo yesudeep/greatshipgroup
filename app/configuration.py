@@ -63,7 +63,6 @@ SERVER_PORT = os.environ['SERVER_PORT']
 SERVER_NAME = os.environ['SERVER_NAME']
 SERVER_SOFTWARE = os.environ['SERVER_SOFTWARE']
 
-
 # Analytics identifiers.
 CLICKY_ANALYTICS_ID = '154848'
 GOOGLE_ANALYTICS_ID = 'UA-11769464-1'
@@ -73,6 +72,8 @@ OWNER_ADDRESS = '#101, Marathon Innova B2, Off. Ganpatrao Kadam Marg, West Lower
 OWNER_URL = '/'
 OWNER_COMPANY = 'Greatship (India) Limited.'
 COPYRIGHT_YEARS = '2008, 2009'
+
+DEFAULT_MARKUP = 'html'
 
 if SERVER_PORT and SERVER_PORT != '80':
     # We are using the development server.

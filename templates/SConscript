@@ -22,6 +22,7 @@ env.Cheetah(TEMPLATE_BUILD_DIR + 'admin/base_site.html', 'base_site.html.tmpl', 
 PAGE_TEMPLATE_FILES = Split("""
     index.html
     about/financial.html
+    services/fleet.html
 """)
 
 BASE_TEMPLATE_FILES = Split("""
@@ -37,7 +38,6 @@ BASE_TEMPLATE_FILES = Split("""
     careers/tour.html
     legal/policy.html
     services/qhse.html
-    services/fleet.html
     sitemap.html
 """)
 

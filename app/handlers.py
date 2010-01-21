@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # Main handlers.
-# Copyright (c) 2009 happychickoo.
+# Copyright (c) 2010 happychickoo.
 #
 # The MIT License
 #
@@ -24,113 +24,79 @@
 # THE SOFTWARE.
 
 import configuration
-from gaefy.db.datastore_cache import DatastoreCachingShim
 from google.appengine.ext import db, webapp
 from google.appengine.api import memcache
 from google.appengine.ext.webapp.util import run_wsgi_app
-from gaefy.jinja2.code_loaders import FileSystemCodeLoader
-from haggoo.template.jinja2 import render_generator
+from utils import render_template, render_cached_template, RequestHandler, CachingRequestHandler
+from recaptcha.client import captcha
+from models import Feedback, SupplierInformation
 import logging
 
 # Set up logging.
 logging.basicConfig(level=logging.DEBUG)
 
-render_template = render_generator(loader=FileSystemCodeLoader, builtins=configuration.TEMPLATE_BUILTINS)
-
-def render_cached_template(template_name, **kwargs):
-    """
-    Renders a template and caches the output in memcached.
-    """
-    cache_key = template_name + str(kwargs)
-    response = memcache.get(cache_key)
-    if not response:
-        response = render_template(template_name, **kwargs)
-        memcache.set(cache_key, response, 120)
-    return response
-
-if configuration.DEPLOYMENT_MODE == configuration.MODE_DEVELOPMENT:
-    render_cached_template = render_template
-
-class RequestHandler(webapp.RequestHandler):
-    """
-    Base handler for templates.
-    """
-    def render_to_response(self, template_name, **template_values):
-        response = render_template(template_name, **template_values)
-        self.response.out.write(response)
-
-class StaticRequestHandler(RequestHandler):
-    """
-    Base handler for static templates.
-    """
-    def render_to_response(self, template_name, **template_values):
-        response = render_cached_template(template_name, **template_values)
-        self.response.out.write(response)
-
-
-class IndexHandler(StaticRequestHandler):
+class IndexHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('index.html')
 
 # About
-class AboutHandler(StaticRequestHandler):
+class AboutHandler(CachingRequestHandler):
     def get(self):
         self.render_to_response('about/mission.html')
 
-class ManagementHandler(StaticRequestHandler):
+class ManagementHandler(CachingRequestHandler):
     def get(self):
         self.render_to_response('about/management.html')
 
-class OverseasHandler(StaticRequestHandler):
+class OverseasHandler(CachingRequestHandler):
     def get(self):
         self.render_to_response('about/overseas.html')
 
-class FinancialHandler(StaticRequestHandler):
+class FinancialHandler(CachingRequestHandler):
     def get(self):
         self.render_to_response('about/financial.html')
 
-class SitemapHandler(StaticRequestHandler):
+class SitemapHandler(CachingRequestHandler):
     def get(self):
         self.render_to_response('sitemap.html')
 
 # Services
-class FleetHandler(StaticRequestHandler):
+class FleetHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('services/fleet.html')
 
         
-class LogisticsHandler(StaticRequestHandler):
+class LogisticsHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('services/logistics.html')                     
         
-class ConstructionHandler(StaticRequestHandler):
+class ConstructionHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('services/construction.html')           
 
-class DrillingHandler(StaticRequestHandler):
+class DrillingHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('services/drilling.html')
         
-class QhseHandler(StaticRequestHandler):
+class QhseHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('services/qhse.html')
 
 
 # Corporate relations
-class OfficesHandler(StaticRequestHandler):
+class OfficesHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('about/offices.html')
 
-class SuppliersHandler(StaticRequestHandler):
+class SuppliersHandler(CachingRequestHandler):
     def get(self):
-        from recaptcha.client import captcha
         captcha_error_code = self.request.get('captcha_error')
         if not captcha_error_code:
             captcha_error_code = None
@@ -143,7 +109,6 @@ class SuppliersHandler(StaticRequestHandler):
         self.render_to_response('about/suppliers.html', captcha_html=captcha_html)
 
     def post(self):
-        from recaptcha.client import captcha
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
         captcha_response_field = self.request.get('recaptcha_response_field')
         captcha_response = captcha.submit(
@@ -153,15 +118,28 @@ class SuppliersHandler(StaticRequestHandler):
             self.request.remote_addr
         )
         if captcha_response.is_valid:
+            full_name = self.request.get('name')
+            email = self.request.get('email')
+            subject = self.request.get('subject')
+            content = self.request.get('content')
+            designation = self.request.get('designation')
+            
+            supplier_info = SupplierInformation()
+            supplier_info.full_name = full_name
+            supplier_info.email = email
+            supplier_info.designation = designation
+            supplier_info.subject = subject
+            supplier_info.content = content
+            supplier_info.put()
+            
             self.redirect('/')
         else:
             error = captcha_response.error_code
             self.redirect('/contact/suppliers?captcha_error=%s' % error)
 
 
-class FeedbackHandler(StaticRequestHandler):
+class FeedbackHandler(CachingRequestHandler):
     def get(self):
-        from recaptcha.client import captcha
         captcha_error_code = self.request.get('captcha_error')
         if not captcha_error_code:
             captcha_error_code = None
@@ -175,7 +153,6 @@ class FeedbackHandler(StaticRequestHandler):
 
     
     def post(self):
-        from recaptcha.client import captcha
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
         captcha_response_field = self.request.get('recaptcha_response_field')
         captcha_response = captcha.submit(
@@ -185,28 +162,39 @@ class FeedbackHandler(StaticRequestHandler):
             self.request.remote_addr
         )
         if captcha_response.is_valid:
+            full_name = self.request.get('name')
+            email = self.request.get('email')
+            subject = self.request.get('subject')
+            content = self.request.get('content')
+            
+            feedback = Feedback()
+            feedback.full_name = full_name
+            feedback.email = email
+            feedback.subject = subject
+            feedback.content = content
+            feedback.put()
+            
             self.redirect('/')
         else:
             error = captcha_response.error_code
             self.redirect('/contact/feedback?captcha_error=%s' % error)
 
-class CareersHandler(StaticRequestHandler):
+class CareersHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('careers/careers.html')
 
-class TourHandler(StaticRequestHandler):
+class TourHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('careers/tour.html')
 
-class PolicyHandler(StaticRequestHandler):
+class PolicyHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('legal/policy.html')
-        
-        
-class PressReleasesHandler(StaticRequestHandler):
+
+class PressReleasesHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('press.html')
@@ -238,6 +226,7 @@ urls = (
 application = webapp.WSGIApplication(urls, debug=configuration.DEBUG)
 
 def main():
+    from gaefy.db.datastore_cache import DatastoreCachingShim
     DatastoreCachingShim.Install()
     run_wsgi_app(application)
     DatastoreCachingShim.Uninstall()
