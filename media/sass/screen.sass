@@ -101,6 +101,28 @@ p
     :line-height 1.4
     :margin-bottom 1em
 
+a.plastic-button
+    :border= "1px solid " !color_awesome_silver
+    +awesome-button(!color_awesome_gray, "8px 15px", "5px")
+    :text-shadow 1px 1px 1px white
+    :color= !color_awesome_black
+    :text-decoration none
+a.tag
+    +border-radius("10px")
+    //+box-shadow("0px -1px 1px" !color_awesome_gray_dark)
+    :background-color= !color_awesome_gray
+    :color= #000
+    :text-shadow= 1px 1px 1px white
+    :text-decoration none
+    :padding 3px 15px
+a.tag:hover
+    :background-color #b5b5b5
+a.tag.selected
+    :background-color= !color_awesome_gray_dark
+    :color= white
+    :text-shadow none
+    :letter-spacing 0.06em
+
 form.decorated-fields.tabular
     #recaptcha_widget_div
         :margin-left 210px
@@ -196,8 +218,12 @@ table.classic
         :padding 40px 40px 10px 40px
     ul.actions
         li
+            :font-family= !font_family_sans_serif_medium
+            :font-size 0.8em
             +display-inline-block
-            
+            :margin-right 5px
+        li.separator
+            :display block
     ul.info-list
         li
             :overflow hidden
@@ -446,5 +472,9 @@ ul.gallery:hover
         +form-clean()
         input[type="text"]
             :width 100px
+
+#form-filter-fleet
+    input[type="search"]
+        :width 350px
 
 // End imports

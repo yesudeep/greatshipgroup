@@ -25,9 +25,9 @@ import configuration
 
 from google.appengine.ext import db
 from google.appengine.api import memcache
-from haggoo.db.properties import DecimalProperty
 from dbhelper import SerializableModel
 from aetycoon import TransformProperty
+import appengine_admin
 
 import static
 import utils
@@ -46,6 +46,7 @@ else:
 VESSEL_STATUS_CHOICES = (
     'operational',
     'under_construction',
+    'available',
     )
 
 VESSEL_TYPE_CHOICES = (
@@ -62,58 +63,62 @@ VESSEL_GENERIC_TYPE_CHOICES = (
     'vessel',
     )
 
-SUBSIDIARY_CHOICES = (
-    'gges',
-    'gil',
-    'ggos',
-    )
-
 class Manager(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
     description = db.TextProperty()
-    description_html = db.TextProperty()
-    
+    description_html = TransformProperty(description, markup.render_markdown)
+
 class AssetLiabilityStatement(SerializableModel):
     start_year = db.IntegerProperty()
     end_year = db.IntegerProperty()
-    share_capital = DecimalProperty()
-    reserves_and_surplus = DecimalProperty()
-    secured_loans = DecimalProperty()
-    total_liabilities = DecimalProperty()
-    fixed_assets = DecimalProperty()
-    investments = DecimalProperty()
-    net_current_assets = DecimalProperty()
-    total_assets = DecimalProperty()
+    share_capital = db.StringProperty()
+    reserves_and_surplus = db.StringProperty()
+    secured_loans = db.StringProperty()
+    total_liabilities = db.StringProperty()
+    fixed_assets = db.StringProperty()
+    investments = db.StringProperty()
+    net_current_assets = db.StringProperty()
+    total_assets = db.StringProperty()
 
 class IncomeStatement(SerializableModel):
     start_year = db.IntegerProperty()
     end_year = db.IntegerProperty()
-    total_revenue = DecimalProperty()
-    pbdit = DecimalProperty()
-    depreciation = DecimalProperty()
-    interest = DecimalProperty()
-    tax_provision = DecimalProperty()
-    pat = DecimalProperty()
-    eps = DecimalProperty()
+    total_revenue = db.StringProperty()
+    pbdit = db.StringProperty()
+    depreciation = db.StringProperty()
+    interest = db.StringProperty()
+    tax_provision = db.StringProperty()
+    pat = db.StringProperty()
+    eps = db.StringProperty()
 
 class Vessel(SerializableModel):
     name = db.StringProperty()
     build_year = db.IntegerProperty()
     vessel_type = db.StringProperty(choices=VESSEL_TYPE_CHOICES)
     yard = db.StringProperty()
-    deadweight_in_tons = DecimalProperty()
+    deadweight_in_tons = db.StringProperty()
     design = db.StringProperty()
-    bp_in_tons = DecimalProperty()
+    bp_in_tons = db.StringProperty()
     dp = db.StringProperty()
     fifi = db.StringProperty()
-    company = db.StringProperty(choices=SUBSIDIARY_CHOICES)
+    company = db.StringProperty()
     when_available = db.DateProperty()
     
     # Classification in table.
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
-    
+
+class AdminVessel(appengine_admin.ModelAdmin):
+    model = Vessel
+    listFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard', 
+        'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
+        'operational_status')
+    editFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard',  
+        'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
+        'operational_status')
+    readonlyFields = ('when_created', 'when_modified')
+
 class Post(SerializableModel):
     path = db.StringProperty()
     checksum = db.StringProperty()
@@ -182,3 +187,39 @@ class SupplierInformation(SerializableModel):
     email = db.EmailProperty()
     subject = db.StringProperty()
     content = db.TextProperty()
+
+
+class AdminAssetLiabilityStatement(appengine_admin.ModelAdmin):
+    model = AssetLiabilityStatement
+    listFields = ('start_year', 'end_year', 'share_capital', 
+        'reserves_and_surplus', 'secured_loans', 'total_liabilities',
+        'fixed_assets', 'investments', 'net_current_assets', 'total_assets')
+    editFields = ('start_year', 'end_year', 'share_capital', 
+        'reserves_and_surplus', 'secured_loans', 'total_liabilities',
+        'fixed_assets', 'investments', 'net_current_assets', 'total_assets')
+    readonlyFields = ('when_created', 'when_modified')
+
+class AdminFeedback(appengine_admin.ModelAdmin):
+    model = Feedback
+    listFields = ('full_name', 'email', 'subject', 'content')
+    editFields = ('full_name', 'email', 'subject', 'content')
+    readonlyFields = ('when_created', 'when_modified')
+
+class AdminSupplierInformation(appengine_admin.ModelAdmin):
+    model = SupplierInformation
+    listFields = ('full_name', 'designation', 'email', 'subject', 'content')
+    editFields = ('full_name', 'designation', 'email', 'subject', 'content')
+    readonlyFields = ('when_created', 'when_modified')
+
+class AdminManager(appengine_admin.ModelAdmin):
+    model = Manager
+    listFields = ('full_name', 'designation', 'description')
+    editFields = ('full_name', 'designation', 'description')
+    readonlyFields = ('when_created', 'when_modified', 'description_html')
+
+appengine_admin.register(AdminFeedback, 
+    AdminSupplierInformation, 
+    AdminManager,
+    AdminAssetLiabilityStatement,
+    AdminVessel)
+
