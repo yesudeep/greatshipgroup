@@ -104,7 +104,7 @@
 {% block tag_scripts_base %}
 <script type="text/javascript">window.__hc_scripts = ["{{ JQUERY_URL }}"];</script>
 {% endblock %}
-{% block tag_scripts_other %}
+{#{% block tag_scripts_other %}
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 <script type="text/javascript">
   google.load('search', '1', {language : 'en'});
@@ -114,4 +114,4 @@
     customSearchControl.draw('cse');
   }, true);
 </script>
-{% endblock %}
+{% endblock %}#}

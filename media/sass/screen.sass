@@ -24,6 +24,14 @@ body
 a
     :text-decoration none
     :border 0
+    :font-weight normal
+
+    &:link, &:visited
+        :color= !color_link
+
+    &:hover
+        :color= !color_link_hover
+    
 h1
     :font-family= !font_family_sans_serif
     :font-size 2em
@@ -96,6 +104,12 @@ p
 form.decorated-fields.tabular
     #recaptcha_widget_div
         :margin-left 210px
+form.decorated-fields
+    span.prefix
+        img
+            :margin-right 5px
+            :position relative
+            :top 4px
 
 table.classic
     :font-family= !font_family_sans_serif
@@ -116,10 +130,6 @@ table.classic
     tbody
         tr:nth-child(2n) 
             :background-color= !color_bg_table_classic_alternate_row
-
-//.columns
-    +column-count(2)
-    +column-gap(3em)
 
 // Navigation
 
@@ -170,7 +180,7 @@ table.classic
             :width 128px
             :position absolute
             :margin-left -128px
-            
+
 #trunk
     :min-height 400px
     :padding-top 2em
@@ -179,6 +189,40 @@ table.classic
 #trunk-content
     +grid-container()
     :overflow hidden
+    div.header
+        +border-radius-top-left("10px")
+        +border-radius-top-right("10px")
+        :background-color #eee
+        :padding 40px 40px 10px 40px
+    ul.actions
+        li
+            +display-inline-block
+            
+    ul.info-list
+        li
+            :overflow hidden
+            :list-style none
+            :border-bottom= "1px dashed" !color_border_top_table_classic
+            :padding-top 1em
+            :padding-bottom 1em
+            div.title
+                :width 400px
+                :float left
+            div.info
+                :font-family= !font_family_sans_serif
+                :float left
+                :width 400px
+                dl
+                    :font-size 0.9em
+                    dt
+                        :float left
+                        :clear left
+                        :min-width 200px
+                    dd
+                        :color #222
+                        :display block
+                        :margin-left 100px
+                        :min-width 200px
     
     .article.reversed
         > .aside
@@ -213,7 +257,7 @@ table.classic
             :font-weight normal
             :font-size 1.4em
         p, li
-            :font-size 0.9em
+            :font-size 1em
             :line-height 1.5
             
         .visualize
@@ -234,17 +278,7 @@ table.classic
             +grid(5, 12)
             +omega
             :padding 40px 0px
-    .foo
 
-
-        > .content
-            +grid(8, 12)
-            +alpha
-
-        > .aside
-            +grid(4, 12)
-            +omega
-            :text-align right
 
 
 // Footer

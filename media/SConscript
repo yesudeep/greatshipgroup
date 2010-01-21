@@ -43,6 +43,9 @@ IMAGE_FILES = Split("""
     image/icon/128x128/fleet.png
     image/icon/128x128/mail.png
     
+    image/icon/24x24/search.gif
+    image/icon/16x16/magnifying-glass.png
+    
     image/icon/48x48/flag/india.png
     image/icon/48x48/flag/singapore.png
     image/icon/48x48/flag/mauritius.png
@@ -136,7 +139,9 @@ SCRIPT_BUNDLES = (
         sources = Split(
         COMMON_SCRIPTS + 
         """
-            script/lib/chickoojs/src/jquery/dataTables/1.6/media/js/jquery.dataTables.js
+            script/lib/chickoojs/src/quicksilver.js
+            script/lib/chickoojs/src/jquery/defer/jquery.defer.js
+            script/lib/chickoojs/src/jquery/liveFilter/jquery.liveFilter.js
             script/fleet.js
         """)
     ),
