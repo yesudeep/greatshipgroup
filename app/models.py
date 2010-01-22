@@ -70,8 +70,8 @@ class Manager(SerializableModel):
     description_html = TransformProperty(description, markup.render_markdown)
 
 class AssetLiabilityStatement(SerializableModel):
-    start_year = db.IntegerProperty()
-    end_year = db.IntegerProperty()
+    start_year = db.DateProperty()
+    end_year = db.DateProperty()
     share_capital = db.StringProperty()
     reserves_and_surplus = db.StringProperty()
     secured_loans = db.StringProperty()
@@ -82,8 +82,8 @@ class AssetLiabilityStatement(SerializableModel):
     total_assets = db.StringProperty()
 
 class IncomeStatement(SerializableModel):
-    start_year = db.IntegerProperty()
-    end_year = db.IntegerProperty()
+    start_year = db.DateProperty()
+    end_year = db.DateProperty()
     total_revenue = db.StringProperty()
     pbdit = db.StringProperty()
     depreciation = db.StringProperty()
@@ -94,7 +94,7 @@ class IncomeStatement(SerializableModel):
 
 class Vessel(SerializableModel):
     name = db.StringProperty()
-    build_year = db.IntegerProperty()
+    build_year = db.DateProperty()
     vessel_type = db.StringProperty(choices=VESSEL_TYPE_CHOICES)
     yard = db.StringProperty()
     deadweight_in_tons = db.StringProperty()
@@ -104,6 +104,7 @@ class Vessel(SerializableModel):
     fifi = db.StringProperty()
     company = db.StringProperty()
     when_available = db.DateProperty()
+    specification_url = db.URLProperty()
     
     # Classification in table.
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
@@ -222,4 +223,3 @@ appengine_admin.register(AdminFeedback,
     AdminManager,
     AdminAssetLiabilityStatement,
     AdminVessel)
-

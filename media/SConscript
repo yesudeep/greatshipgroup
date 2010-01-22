@@ -73,9 +73,18 @@ IMAGE_FILES = Split("""
     script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_both.jpg
     script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc.jpg
     script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc_disabled.jpg
+    
+    
+    image/icon/128x128/qhse.png
+    image/icon/128x128/drilling.png
+    image/icon/128x128/fleet.png
+    image/icon/128x128/construction.png
+    image/icon/128x128/logistics.png
+    
 """)
 
 CSS_FILES = Split("""
+    css/ie6.css
     css/screen.css
 """)
 
@@ -109,6 +118,20 @@ STITCHED_IMAGES = (
         """),
         orientation='horizontal',
         ),
+    dict(
+        target='image/icon/landing_icons.png',
+        sources=Split("""
+            image/icon/128x128/qhse.png
+            image/icon/128x128/drilling.png
+            image/icon/128x128/fleet.png
+            image/icon/128x128/construction.png
+            image/icon/128x128/logistics.png
+        """),
+        orientation='horizontal',
+        ),
+        
+
+        
 )
 
 
