@@ -20,6 +20,10 @@ handlers:
   upload: public/robots.txt
   secure: never
 
+- url: /appengine_admin_media/
+  static_dir: lib/appengine_admin/media
+  secure: never
+
 - url: /console/static/
   static_dir: lib/console/app/view/static
   secure: never

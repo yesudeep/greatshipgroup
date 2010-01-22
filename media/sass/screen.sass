@@ -24,6 +24,14 @@ body
 a
     :text-decoration none
     :border 0
+    :font-weight normal
+
+    &:link, &:visited
+        :color= !color_link
+
+    &:hover
+        :color= !color_link_hover
+    
 h1
     :font-family= !font_family_sans_serif
     :font-size 2em
@@ -93,9 +101,37 @@ p
     :line-height 1.4
     :margin-bottom 1em
 
+a.plastic-button
+    :border= "1px solid " !color_awesome_silver
+    +awesome-button(!color_awesome_gray, "8px 15px", "5px")
+    :text-shadow 1px 1px 1px white
+    :color= !color_awesome_black
+    :text-decoration none
+a.tag
+    +border-radius("10px")
+    //+box-shadow("0px -1px 1px" !color_awesome_gray_dark)
+    :background-color= !color_awesome_gray
+    :color= #000
+    :text-shadow= 1px 1px 1px white
+    :text-decoration none
+    :padding 3px 15px
+a.tag:hover
+    :background-color #b5b5b5
+a.tag.selected
+    :background-color= !color_awesome_gray_dark
+    :color= white
+    :text-shadow none
+    :letter-spacing 0.06em
+
 form.decorated-fields.tabular
     #recaptcha_widget_div
         :margin-left 210px
+form.decorated-fields
+    span.prefix
+        img
+            :margin-right 5px
+            :position relative
+            :top 4px
 
 table.classic
     :font-family= !font_family_sans_serif
@@ -116,10 +152,6 @@ table.classic
     tbody
         tr:nth-child(2n) 
             :background-color= !color_bg_table_classic_alternate_row
-
-//.columns
-    +column-count(2)
-    +column-gap(3em)
 
 // Navigation
 
@@ -142,11 +174,6 @@ table.classic
     >li
         +display-inline-block()
         :margin-right 1em
-        a
-            +opacity(0.6)
-            +transition("opacity 0.45s ease")
-        a:hover
-            +opacity(1)
         >a
             :display block
             :height 48px
@@ -170,7 +197,14 @@ table.classic
             :width 128px
             :position absolute
             :margin-left -128px
-            
+#nav-links:hover
+    >li
+        a
+            +opacity(0.6)
+            +transition("opacity 0.45s ease")
+        a:hover
+            +opacity(1)
+
 #trunk
     :min-height 400px
     :padding-top 2em
@@ -179,6 +213,44 @@ table.classic
 #trunk-content
     +grid-container()
     :overflow hidden
+    div.header
+        +border-radius-top-left("10px")
+        +border-radius-top-right("10px")
+        :background-color #eee
+        :padding 40px 40px 10px 40px
+    ul.actions
+        li
+            :font-family= !font_family_sans_serif_medium
+            :font-size 0.8em
+            +display-inline-block
+            :margin-right 5px
+        li.separator
+            :display block
+    ul.info-list
+        li
+            :overflow hidden
+            :list-style none
+            :border-bottom= "1px dashed" !color_border_top_table_classic
+            :padding-top 1em
+            :padding-bottom 1em
+            div.title
+                :width 400px
+                :float left
+            div.info
+                :font-family= !font_family_sans_serif
+                :float left
+                :width 400px
+                dl
+                    :font-size 0.9em
+                    dt
+                        :float left
+                        :clear left
+                        :min-width 200px
+                    dd
+                        :color #222
+                        :display block
+                        :margin-left 100px
+                        :min-width 200px
     
     .article.reversed
         > .aside
@@ -213,7 +285,7 @@ table.classic
             :font-weight normal
             :font-size 1.4em
         p, li
-            :font-size 0.9em
+            :font-size 1em
             :line-height 1.5
             
         .visualize
@@ -234,17 +306,7 @@ table.classic
             +grid(5, 12)
             +omega
             :padding 40px 0px
-    .foo
 
-
-        > .content
-            +grid(8, 12)
-            +alpha
-
-        > .aside
-            +grid(4, 12)
-            +omega
-            :text-align right
 
 
 // Footer
@@ -418,5 +480,36 @@ ul.gallery:hover
         +form-clean()
         input[type="text"]
             :width 100px
+
+#splash-presentation
+    :width= (128px * 5)
+    :margin 0px auto
+    li
+        +display-inline-block()
+        :height 128px
+        :width 128px
+        :margin-left 40px
+        :margin-right 40px
+    a.icon
+        :height 128px
+        :width 128px
+        :display block
+        +transition("-webkit-transform 0.6s ease")
+    a.icon:hover
+        +transform("scale(1.5)")
+    #landing-qhse
+        :background= "transparent" !image_landing_icons "no-repeat 0 0"
+    #landing-drilling
+        :background= "transparent" !image_landing_icons "no-repeat -128px 0"
+    #landing-fleet
+        :background= "transparent" !image_landing_icons "no-repeat" (-128px * 2) 0
+    #landing-construction
+        :background= "transparent" !image_landing_icons "no-repeat" (-128px * 3) 0
+    #landing-logistics
+        :background= "transparent" !image_landing_icons "no-repeat" (-128px * 4) 0
+
+#form-filter-fleet
+    input[type="search"]
+        :width 350px
 
 // End imports

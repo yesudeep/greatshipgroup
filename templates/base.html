@@ -2,7 +2,10 @@
 
 {% block tag_head %}
 	{% block tag_stylesheets %}
-    <link rel="stylesheet" href="{{ MEDIA_URL }}css/screen-all{{ CSS_MINIFIED }}.css" type="text/css" media="screen" charset="utf-8" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/screen-all{{ CSS_MINIFIED }}.css" type="text/css" media="screen,projection" charset="utf-8" />
+    <!--[if lt IE 9]>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/ie6{{CSS_MINIFIED}}.css" type="text/css" media="screen,projection" charset="utf-8" />
+    <![endif]-->
 	{% endblock %}
 	{% block tag_additional_stylesheets %}{% endblock %}
 {% endblock %}

@@ -27,6 +27,7 @@ import configuration
 
 import re
 import unicodedata
+from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from gaefy.jinja2.code_loaders import FileSystemCodeLoader
 from haggoo.template.jinja2 import render_generator
@@ -40,7 +41,7 @@ dec = partial(int, base=10)
 def slugify(s):
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
     return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
- 
+
  
 render_template = render_generator(loader=FileSystemCodeLoader, builtins=configuration.TEMPLATE_BUILTINS)
 

@@ -31,6 +31,7 @@ from utils import render_template, render_cached_template, RequestHandler, Cachi
 from recaptcha.client import captcha
 from models import Feedback, SupplierInformation
 import logging
+import appengine_admin
 
 # Set up logging.
 logging.basicConfig(level=logging.DEBUG)
@@ -201,27 +202,28 @@ class PressReleasesHandler(CachingRequestHandler):
 
 
 urls = (
-    ('/', IndexHandler),
-    ('/about/?', AboutHandler),
-    ('/about/mission/?', AboutHandler),
-    ('/about/management/?', ManagementHandler),
-    ('/about/overseas/?', OverseasHandler),
-    ('/about/financial/?', FinancialHandler),
-    ('/careers/?', CareersHandler),
-    ('/careers/tour/?', TourHandler),
-    ('/contact/?', OfficesHandler),
-    ('/contact/offices/?', OfficesHandler),
-    ('/contact/suppliers/?', SuppliersHandler),
-    ('/contact/feedback/?', FeedbackHandler),
-    ('/legal/policy/?', PolicyHandler),
-    ('/press/?', PressReleasesHandler),
-    ('/services/?', FleetHandler),
-    ('/services/fleet/?', FleetHandler),
-    ('/services/construction/?', ConstructionHandler),
-    ('/services/drilling/?', DrillingHandler),
-    ('/services/logistics/?', LogisticsHandler),
-    ('/services/qhse/?', QhseHandler),
-    ('/sitemap/?', SitemapHandler),
+    (r'/', IndexHandler),
+    (r'/about/?', AboutHandler),
+    (r'/about/mission/?', AboutHandler),
+    (r'/about/management/?', ManagementHandler),
+    (r'/about/overseas/?', OverseasHandler),
+    (r'/about/financial/?', FinancialHandler),
+    (r'/careers/?', CareersHandler),
+    (r'/careers/tour/?', TourHandler),
+    (r'/contact/?', OfficesHandler),
+    (r'/contact/offices/?', OfficesHandler),
+    (r'/contact/suppliers/?', SuppliersHandler),
+    (r'/contact/feedback/?', FeedbackHandler),
+    (r'/legal/policy/?', PolicyHandler),
+    (r'/press/?', PressReleasesHandler),
+    (r'/services/?', FleetHandler),
+    (r'/services/fleet/?', FleetHandler),
+    (r'/services/construction/?', ConstructionHandler),
+    (r'/services/drilling/?', DrillingHandler),
+    (r'/services/logistics/?', LogisticsHandler),
+    (r'/services/qhse/?', QhseHandler),
+    (r'/sitemap/?', SitemapHandler),
+    (r'(/admin)(.*)$', appengine_admin.Admin),
 )
 application = webapp.WSGIApplication(urls, debug=configuration.DEBUG)
 
