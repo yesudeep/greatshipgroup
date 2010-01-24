@@ -29,7 +29,7 @@ from google.appengine.api import memcache
 from google.appengine.ext.webapp.util import run_wsgi_app
 from utils import render_template, render_cached_template, RequestHandler, CachingRequestHandler
 from recaptcha.client import captcha
-from models import Feedback, SupplierInformation
+from models import Vessel, Feedback, SupplierInformation
 import logging
 import appengine_admin
 
@@ -66,8 +66,12 @@ class SitemapHandler(CachingRequestHandler):
 class FleetHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/fleet.html')
+        vessels = Vessel.get_all()
+        self.render_to_response('services/fleet.html', vessels=vessels)
 
+class FleetStatusHandler(CachingRequestHandler):
+    def get(self):
+        self.render_to_response("services/fleet_status.html")
         
 class LogisticsHandler(CachingRequestHandler):
     """Handles the home page requests."""
@@ -218,6 +222,7 @@ urls = (
     (r'/press/?', PressReleasesHandler),
     (r'/services/?', FleetHandler),
     (r'/services/fleet/?', FleetHandler),
+    (r'/services/fleet/status/?', FleetStatusHandler),
     (r'/services/construction/?', ConstructionHandler),
     (r'/services/drilling/?', DrillingHandler),
     (r'/services/logistics/?', LogisticsHandler),

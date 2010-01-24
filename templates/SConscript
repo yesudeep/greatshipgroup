@@ -38,6 +38,7 @@ BASE_TEMPLATE_FILES = Split("""
     careers/tour.html
     legal/policy.html
     services/qhse.html
+    services/fleet_status.html
     sitemap.html
 """)
 

@@ -42,6 +42,7 @@ IMAGE_FILES = Split("""
     image/icon/128x128/onshore-professional.png
     image/icon/128x128/fleet.png
     image/icon/128x128/mail.png
+    image/icon/128x128/logo.png
     
     image/icon/24x24/search.gif
     image/icon/16x16/magnifying-glass.png
@@ -74,6 +75,7 @@ IMAGE_FILES = Split("""
     script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc.jpg
     script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc_disabled.jpg
     
+    image/icon/48x48/pdf_document.png
     
     image/icon/128x128/qhse.png
     image/icon/128x128/drilling.png
@@ -109,8 +111,8 @@ STITCHED_IMAGES = (
             image/logo/en_US/text.png
             image/icon/nav/home.png
             image/icon/nav/fleet.png
-            image/icon/nav/construction.png
             image/icon/nav/logistics.png
+            image/icon/nav/construction.png
             image/icon/nav/drilling.png
             image/icon/nav/qhse.png
             image/icon/nav/contact.png

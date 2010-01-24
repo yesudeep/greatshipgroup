@@ -110,15 +110,21 @@ class Vessel(SerializableModel):
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
 
-class AdminVessel(appengine_admin.ModelAdmin):
-    model = Vessel
-    listFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard', 
-        'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status')
-    editFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard',  
-        'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status')
-    readonlyFields = ('when_created', 'when_modified')
+    @classmethod
+    def get_all(cls):
+        cache_key = 'Vessel.get_all'
+        entities = dbhelper.deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all().fetch(100)
+            memcache.set(cache_key, dbhelper.serialize_entities(entities))
+        return entities
+
+class AnnualReport(SerializableModel):
+    title = db.StringProperty()
+    subtitle = db.StringProperty()
+    start_year = db.DateProperty()
+    end_year = db.DateProperty()
+    document_url = db.URLProperty()
 
 class Post(SerializableModel):
     path = db.StringProperty()
@@ -218,8 +224,25 @@ class AdminManager(appengine_admin.ModelAdmin):
     editFields = ('full_name', 'designation', 'description')
     readonlyFields = ('when_created', 'when_modified', 'description_html')
 
+class AdminAnnualReport(appengine_admin.ModelAdmin):
+    model = AnnualReport
+    listFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url')
+    editFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url')
+    readonlyFields = ('when_created', 'when_modified')
+
+class AdminVessel(appengine_admin.ModelAdmin):
+    model = Vessel
+    listFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard', 
+        'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
+        'operational_status')
+    editFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard',  
+        'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
+        'operational_status')
+    readonlyFields = ('when_created', 'when_modified')
+
 appengine_admin.register(AdminFeedback, 
     AdminSupplierInformation, 
     AdminManager,
     AdminAssetLiabilityStatement,
-    AdminVessel)
+    AdminVessel,
+    AdminAnnualReport)

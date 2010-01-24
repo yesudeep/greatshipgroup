@@ -31,6 +31,7 @@ from google.appengine.api import memcache
 from google.appengine.ext import webapp
 from gaefy.jinja2.code_loaders import FileSystemCodeLoader
 from haggoo.template.jinja2 import render_generator
+from haggoo.template.jinja2 import filters
 from functools import partial
 
 
@@ -42,8 +43,20 @@ def slugify(s):
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
     return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
 
- 
-render_template = render_generator(loader=FileSystemCodeLoader, builtins=configuration.TEMPLATE_BUILTINS)
+def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+    if value and hasattr(value, 'strftime'):
+        formatted_datetime = value.strftime(format)
+    else:
+        formatted_datetime = ""
+    return formatted_datetime
+
+filters = {
+    'datetimeformat': datetimeformat,
+    'slugify': slugify,
+}
+render_template = render_generator(loader=FileSystemCodeLoader, 
+    builtins=configuration.TEMPLATE_BUILTINS,
+    filters=filters)
 
 def render_cached_template(template_name, **kwargs):
     """

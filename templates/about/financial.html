@@ -94,7 +94,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div id="income-statement-chart" style="height:450px;width:700px"></div>
+            #*<div id="income-statement-chart" style="height:450px;width:700px"></div>*#
             <table id="asset-liability-statement" class="classic chart" cellspacing="0" cellpadding="0">
                 <caption>Asset-Liability Statement</caption>
                 <thead>
@@ -193,12 +193,21 @@
                      </tr>
                  </tbody>
              </table>
-             <div id="asset-liability-statement-chart" style="height:450px;width:700px"></div>
+             #*<div id="asset-liability-statement-chart" style="height:450px;width:700px"></div>*#
+             <ul class="list-view">
+                {% for annual_report in annual_reports %}
+                    <li><a href="{{ annual_report.document_url }}">
+                        <img src="{{ MEDIA_URL }}image/icon/48x48/pdf_document.png" />
+                        {{ annual_report.title }}<span class="subtitle">{{ annual_report.subtitle }}</span>
+                    </a></li>
+                {% endfor %}
+                <li><a href="#"></a></li>
+             </ul>
         </div>
     </div>
 {% endblock %}
 
 
-{% block tag_scripts %}
+#*{% block tag_scripts %}
 <script type="text/javascript">$SELECTOR_SCRIPT</script>
-{% endblock %}
+{% endblock %}*#

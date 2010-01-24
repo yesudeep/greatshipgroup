@@ -114,7 +114,7 @@ a.tag
     :color= #000
     :text-shadow= 1px 1px 1px white
     :text-decoration none
-    :padding 3px 15px
+    :padding 3px 10px
 a.tag:hover
     :background-color #b5b5b5
 a.tag.selected
@@ -136,6 +136,7 @@ form.decorated-fields
 table.classic
     :font-family= !font_family_sans_serif
     :margin-bottom 1.6em
+    :width 100%
     caption
         :font-size 1.2em
         :border-top= "1px solid" !color_border_top_table_classic
@@ -218,7 +219,9 @@ table.classic
         +border-radius-top-right("10px")
         :background-color #eee
         :padding 40px 40px 10px 40px
+        //:padding 10px
     ul.actions
+        :margin-bottom 2em
         li
             :font-family= !font_family_sans_serif_medium
             :font-size 0.8em
@@ -237,6 +240,7 @@ table.classic
                 :width 400px
                 :float left
             div.info
+                //:display none
                 :font-family= !font_family_sans_serif
                 :float left
                 :width 400px
@@ -251,7 +255,9 @@ table.classic
                         :display block
                         :margin-left 100px
                         :min-width 200px
-    
+        //li:hover
+            div.info
+                :display block
     .article.reversed
         > .aside
             +grid(4, 12)
@@ -305,7 +311,8 @@ table.classic
         > .aside
             +grid(5, 12)
             +omega
-            :padding 40px 0px
+            :padding 40px 10px 40px 20px
+            :background-color #eee
 
 
 
@@ -430,7 +437,34 @@ ul.gallery:hover
             :left 50%
             :margin-left -300px
 
-
+ul.list-view
+    font-size: 0.8em
+    line-height: 1.4
+    margin: 10px
+    li
+        height: 68px
+        min-width: 250px
+        overflow: hidden
+        a
+            display: block
+            &:link
+                color: silver
+            &:hover
+                color: white
+                text-decoration: none
+            &:visited
+                color: silver
+            &:visited:hover
+                color: white
+                text-decoration: none  
+            > img
+                position: relative
+                top: 20px
+            span.suffix
+                font-size: 0.9em
+                display: block
+                margin-left: 50px
+                color: gray
 
 
 #copyright
@@ -504,6 +538,6 @@ ul.gallery:hover
 
 #form-filter-fleet
     input[type="search"]
-        :width 350px
+        :width 200px
 
 // End imports
