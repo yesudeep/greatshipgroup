@@ -68,6 +68,7 @@ class Manager(SerializableModel):
     designation = db.StringProperty()
     description = db.TextProperty()
     description_html = TransformProperty(description, markup.render_markdown)
+    photo_url = db.URLProperty()
 
 class AssetLiabilityStatement(SerializableModel):
     start_year = db.DateProperty()
@@ -220,8 +221,8 @@ class AdminSupplierInformation(appengine_admin.ModelAdmin):
 
 class AdminManager(appengine_admin.ModelAdmin):
     model = Manager
-    listFields = ('full_name', 'designation', 'description')
-    editFields = ('full_name', 'designation', 'description')
+    listFields = ('full_name', 'designation', 'description', 'photo_url')
+    editFields = ('full_name', 'designation', 'description', 'photo_url')
     readonlyFields = ('when_created', 'when_modified', 'description_html')
 
 class AdminAnnualReport(appengine_admin.ModelAdmin):
