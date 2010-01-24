@@ -3,13 +3,10 @@
 {% block tag_trunk_content %}
     
     <h1><span class="icon contact"></span>Got services that might interest us? <strong>Get in touch.</strong></h1>
-    <div class="article plain">
-        <div class="content">
-            <p>Our purchasing mission is to procure materials and services from approved sources in a professional, ethical, competitive and cost effective manner consistent with company policies, procedures and business objectives, while promoting supplier relationships.</p>
-            <p>GIL welcomes service providers to post in their presentations relating to the field of offshore oil field support services using the following form:</p>
-            
-            <h2>Tell us about yourself.</h2>
-            <form id="form-contact-services" class="decorated-fields tabular" method="POST" action="">
+    <div class="article">
+        <div class="content">            
+            <h2>Tell us about your services.</h2>
+            <form id="form-contact-services" class="decorated-fields vertical" method="POST" action="">
                 <label for="name">
                     <span class="prefix">name</span>
                     <input type="text" name="name" value="" />
@@ -20,11 +17,15 @@
                     <input type="text" name="designation" value="" />
                     <span class="suffix"></span>                    
                 </label>
+                <label for="website_url">
+                    <span class="prefix">website</span>
+                    <input type="text" name="website_url" value="" />
+                    <span class="suffix"></span>            
+                </label>                
                 <label for="email">
                     <span class="prefix">email</span>
                     <input type="text" name="email" value="" />
-                    <span class="suffix"></span>                    
-                </label>                
+                    <span class="suffix">Kindly enter a valid email address as we will contact you using this information.</span>                </label>                
                 <label for="subject">
                     <span class="prefix">subject</span>
                     <input type="text" name="subject" value="" />
@@ -38,16 +39,32 @@
                 <label for="captcha">
                     <span class="prefix">human beings only</span>
                     {{ captcha_html }}
-                    <span class="suffix"></span>
+                    <span class="suffix">A captcha is a test to distinguish between you and robots.  We dislike spam as much as you do and entering this information helps us receive genuine information.</span>
                 </label>
                 <label for="submit">
                     <span class="prefix"></span>
-                    <input type="submit" class="awesome-button large" name="submit" value="Send Message" />
+                    <input type="submit" class="awesome-button large" name="submit" value="&#10004; Send Information" />
                     <span class="suffix"></span>
                 </label>
             </form>
         </div>
-
+        <div class="aside">
+            <h3>Welcome!</h3>
+            <p>Our purchasing mission is to procure materials and services from approved sources in a professional, ethical, competitive and cost effective manner consistent with company policies, procedures and business objectives, while promoting supplier relationships.</p>
+            <p>GIL welcomes service providers to post in their presentations relating to the field of offshore oil field support services using the following form:</p>
+            <h3>Terms and conditions</h3>
+            <p>Kindly read through the terms of conditions for each of our subsidiaries which are of interest to you before sending us information about yourself.</p>
+            <p>Sending information about yourself to us implies that you agree with our <a href="/legal/policy">policy</a> and terms of service.</p>
+            <ul>
+                <li><a href="/legal/terms/gil">Greatship (India) Ltd.</a></li>
+                <li><a href="/legal/terms/gges">Greatship Group Energy Services Pte. Ltd.</a></li>
+                <li><a href="/legal/terms/ggos">Greatship Group Offshore Services Pte. Ltd.</a></li>
+            </ul>
+            <h3>Technical Assistance</h3>
+            <p>If you need any technical assistance, you can contact us on any of the numbers provided on the <a href="/contact">Contact</a> page.</p>
+            <h3>Website Feedback</h3>
+            <p>Use the <a href="/contact/feedback">Website Feedback</a> page to give us your feedback or report any problems you experienced finding information on our website. Please note that we cannot respond to general questions and/or information requests submitted through our Feedback site. This form will not help you receive customer support.</p>
+        </div>
     </div>
 
 {% endblock %}
