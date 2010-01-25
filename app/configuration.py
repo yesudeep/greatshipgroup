@@ -130,7 +130,8 @@ ga.src=('https:'==doc.location.protocol?'https://ssl':'http://www')+'.google-ana
 ga.setAttribute('async', 'true');doc.documentElement.firstChild.appendChild(ga);})();</script>
 """ % dict(GOOGLE_ANALYTICS_ID=GOOGLE_ANALYTICS_ID)
 
-JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/AFORM.pdf"
+#JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/AFORM.pdf"
+JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/website/download/careers/job_application_form.pdf"
 RECAPTCHA_PUBLIC_KEY = "6LfjowkAAAAAAL5Jiz44D3P0OjNPLh29z4ShPh_T"
 RECAPTCHA_PRIVATE_KEY = "6LfjowkAAAAAAMF5GKrFzjdRnsp-ZYLaS1LfHeqU"
 

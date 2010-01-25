@@ -29,7 +29,7 @@ from google.appengine.api import memcache
 from google.appengine.ext.webapp.util import run_wsgi_app
 from utils import render_template, render_cached_template, RequestHandler, CachingRequestHandler
 from recaptcha.client import captcha
-from models import Vessel, Feedback, SupplierInformation
+from models import Vessel, Feedback, SupplierInformation, LegalTerms
 import logging
 import appengine_admin
 
@@ -48,7 +48,12 @@ class AboutHandler(CachingRequestHandler):
 
 class ManagementHandler(CachingRequestHandler):
     def get(self):
-        self.render_to_response('about/management.html')
+        from models import Manager, BoardDirector, Auditor, SeniorManagement
+        managers = Manager.get_all()
+        board_directors = BoardDirector.get_all()
+        auditors = Auditor.get_all()
+        senior_managers = SeniorManagement.get_all()
+        self.render_to_response('about/management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
 
 class OverseasHandler(CachingRequestHandler):
     def get(self):
@@ -128,10 +133,12 @@ class SuppliersHandler(CachingRequestHandler):
             subject = self.request.get('subject')
             content = self.request.get('content')
             designation = self.request.get('designation')
+            website_url = self.request.get('website_url')
             
             supplier_info = SupplierInformation()
             supplier_info.full_name = full_name
             supplier_info.email = email
+            supplier_info.website_url = website_url
             supplier_info.designation = designation
             supplier_info.subject = subject
             supplier_info.content = content
@@ -194,16 +201,21 @@ class TourHandler(CachingRequestHandler):
     def get(self):
         self.render_to_response('careers/tour.html')
 
-class PolicyHandler(CachingRequestHandler):
-    """Handles the home page requests."""
-    def get(self):
-        self.render_to_response('legal/policy.html')
-
 class PressReleasesHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         self.render_to_response('press.html')
 
+# Legal
+class PolicyHandler(CachingRequestHandler):
+    """Handles the home page requests."""
+    def get(self):
+        self.render_to_response('legal/policy.html')
+
+class TermsHandler(CachingRequestHandler):
+    def get(self, slug):
+        legal_terms = LegalTerms.get_by_slug(slug)        
+        self.render_to_response('legal/terms.html', legal_terms=legal_terms)
 
 urls = (
     (r'/', IndexHandler),
@@ -219,13 +231,14 @@ urls = (
     (r'/contact/suppliers/?', SuppliersHandler),
     (r'/contact/feedback/?', FeedbackHandler),
     (r'/legal/policy/?', PolicyHandler),
+    (r'/legal/terms/(.*)/?', TermsHandler),
     (r'/press/?', PressReleasesHandler),
     (r'/services/?', FleetHandler),
     (r'/services/fleet/?', FleetHandler),
     (r'/services/fleet/status/?', FleetStatusHandler),
-    (r'/services/construction/?', ConstructionHandler),
-    (r'/services/drilling/?', DrillingHandler),
-    (r'/services/logistics/?', LogisticsHandler),
+    (r'/services/fleet/construction/?', ConstructionHandler),
+    (r'/services/fleet/drilling/?', DrillingHandler),
+    (r'/services/fleet/logistics/?', LogisticsHandler),
     (r'/services/qhse/?', QhseHandler),
     (r'/sitemap/?', SitemapHandler),
     (r'(/admin)(.*)$', appengine_admin.Admin),

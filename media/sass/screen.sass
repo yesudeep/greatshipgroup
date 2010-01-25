@@ -231,6 +231,55 @@ table.classic
             :margin-right 5px
         li.separator
             :display block
+    ul.list-view
+        :list-style none
+        > li
+            +display-inline-block()
+            :overflow hidden
+            :cursor default
+            > div.title
+                :width 200px
+                h2
+                    :font-size 1em
+                    strong
+                        :font-size 0.9em
+                > p.dateline
+                    :font-style normal
+                    :font-size 0.8em
+            > div.info
+                :display none
+                :font-family= !font_family_sans_serif
+                :width 400px
+                dl
+                    :font-size 0.9em
+                    dt
+                        :float left
+                        :clear left
+                        :min-width 200px
+                    dd
+                        :color #222
+                        :display block
+                        :margin-left 100px
+                        :min-width 200px
+        > li:hover
+            :background-color #f5f5f5
+            > div.info
+                :display block  
+                :position absolute
+                +box-shadow("1px 1px 10px #000")
+                +border-radius("10px")
+                :z-index 10
+                :padding 0
+                :background-color white
+                h3
+                    +border-radius-top-left("10px")
+                    +border-radius-top-right("10px")
+                    :margin 0
+                    :padding 10px
+                    :background-color #eee
+                dl
+                    :padding 10px
+
     ul.info-list
         li
             :overflow hidden
@@ -287,6 +336,7 @@ table.classic
         :width 950px
         :margin-left 5px
         :overflow hidden
+        :margin-bottom 2em
         h3
             :color= !color_fg_article_content_h3
             :font-family= !font_family_sans_serif
@@ -315,8 +365,6 @@ table.classic
             +omega
             :padding 40px 10px 40px 20px
             :background-color #eee
-
-
 
 // Footer
 #footer
@@ -451,7 +499,8 @@ ul.gallery:hover
             :left 50%
             :margin-left -300px
 
-ul.list-view
+
+//ul.list-view
     font-size: 0.8em
     line-height: 1.4
     margin: 10px

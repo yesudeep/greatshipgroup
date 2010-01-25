@@ -25,7 +25,7 @@ import configuration
 
 from google.appengine.ext import db
 from google.appengine.api import memcache
-from dbhelper import SerializableModel
+from dbhelper import CACHE_DURATION, MAX_COUNT, SerializableModel, deserialize_entities, serialize_entities
 from aetycoon import TransformProperty
 import appengine_admin
 
@@ -37,25 +37,16 @@ import datetime
 import dbhelper
 import logging
 
-
 if configuration.DEFAULT_MARKUP in markup.MARKUP_MAP:
     DEFAULT_MARKUP = configuration.DEFAULT_MARKUP
 else:
     DEFAULT_MARKUP = 'html'
 
+render_markup = markup.render_markdown
+
 VESSEL_STATUS_CHOICES = (
     'operational',
     'under_construction',
-    'available',
-    )
-
-VESSEL_TYPE_CHOICES = (
-    '350_ic_jackup_rig',
-    'psv',
-    'ahtsv',
-    'mpssv',
-    'msv',
-    'rov_support',
     )
 
 VESSEL_GENERIC_TYPE_CHOICES = (
@@ -67,7 +58,7 @@ class Manager(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
     description = db.TextProperty()
-    description_html = TransformProperty(description, markup.render_markdown)
+    description_html = TransformProperty(description, render_markup)
     photo_url = db.URLProperty()
 
 class AssetLiabilityStatement(SerializableModel):
@@ -93,10 +84,20 @@ class IncomeStatement(SerializableModel):
     pat = db.StringProperty()
     eps = db.StringProperty()
 
+class VesselType(SerializableModel):
+    vessel_type_name = db.StringProperty()
+    vessel_type_shortname = db.StringProperty()
+    
+    def __str__(self):
+        return self.vessel_type_name
+    
+    def __unicode__(self):
+        return self.__str__()
+
 class Vessel(SerializableModel):
     name = db.StringProperty()
-    build_year = db.DateProperty()
-    vessel_type = db.StringProperty(choices=VESSEL_TYPE_CHOICES)
+    built = db.DateProperty()
+    vessel_type = db.ReferenceProperty(VesselType, collection_name='vessels')
     yard = db.StringProperty()
     deadweight_in_tons = db.StringProperty()
     design = db.StringProperty()
@@ -107,18 +108,23 @@ class Vessel(SerializableModel):
     when_available = db.DateProperty()
     specification_url = db.URLProperty()
     
+    # Delivery status
+    is_delivered = db.BooleanProperty(default=False)
+    when_delivered = db.DateProperty()
+    when_expected = db.StringProperty()
+    
     # Classification in table.
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
 
-    @classmethod
-    def get_all(cls):
-        cache_key = 'Vessel.get_all'
-        entities = dbhelper.deserialize_entities(memcache.get(cache_key))
-        if not entities:
-            entities = Vessel.all().fetch(100)
-            memcache.set(cache_key, dbhelper.serialize_entities(entities))
-        return entities
+    #@classmethod
+    #def get_all(cls):
+    #    cache_key = 'Vessel.get_all'
+    #    entities = deserialize_entities(memcache.get(cache_key))
+    #    if not entities:
+    #        entities = Vessel.all().fetch(100)
+    #        memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+    #    return entities
 
 class AnnualReport(SerializableModel):
     title = db.StringProperty()
@@ -127,6 +133,40 @@ class AnnualReport(SerializableModel):
     end_year = db.DateProperty()
     document_url = db.URLProperty()
 
+class LegalTerms(SerializableModel):
+    title = db.StringProperty()
+    short_name = db.StringProperty()
+    slug = TransformProperty(short_name, utils.slugify)
+    content = db.TextProperty(required=True)
+    #content_html = TransformProperty(content, render_markup)
+    content_html = db.TextProperty()
+    
+    @classmethod
+    def get_by_slug(cls, slug):
+        cache_key = 'LegalTerms.get_by_slug(%s)' % slug
+        entity = deserialize_entities(memcache.get(cache_key))
+        if not entity:
+            entity = LegalTerms.all().filter('slug =', slug).get()
+            memcache.set(cache_key, serialize_entities(entity), CACHE_DURATION)
+        return entity
+    
+    def put(self):
+        self.content_html = render_markup(self.content)
+        super(LegalTerms, self).put()
+
+
+class BoardDirector(SerializableModel):
+    full_name = db.StringProperty()
+    designation = db.StringProperty()
+
+class SeniorManagement(SerializableModel):
+    full_name = db.StringProperty()
+    designation = db.StringProperty()
+    
+class Auditor(SerializableModel):
+    full_name = db.StringProperty()
+    designation = db.StringProperty()
+    
 class Post(SerializableModel):
     path = db.StringProperty()
     checksum = db.StringProperty()
@@ -193,9 +233,14 @@ class SupplierInformation(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
     email = db.EmailProperty()
+    website_url = db.URLProperty()
     subject = db.StringProperty()
     content = db.TextProperty()
 
+class FleetSearchTerms(SerializableModel):
+    search_terms = db.StringProperty()
+    remote_addr = db.StringProperty()
+    user_agent = db.StringProperty()
 
 class AdminAssetLiabilityStatement(appengine_admin.ModelAdmin):
     model = AssetLiabilityStatement
@@ -206,44 +251,95 @@ class AdminAssetLiabilityStatement(appengine_admin.ModelAdmin):
         'reserves_and_surplus', 'secured_loans', 'total_liabilities',
         'fixed_assets', 'investments', 'net_current_assets', 'total_assets')
     readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by end_year desc'
 
 class AdminFeedback(appengine_admin.ModelAdmin):
     model = Feedback
     listFields = ('full_name', 'email', 'subject', 'content')
     editFields = ('full_name', 'email', 'subject', 'content')
     readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by when_created desc'
 
 class AdminSupplierInformation(appengine_admin.ModelAdmin):
     model = SupplierInformation
-    listFields = ('full_name', 'designation', 'email', 'subject', 'content')
-    editFields = ('full_name', 'designation', 'email', 'subject', 'content')
+    listFields = ('full_name', 'designation', 'website_url', 'email', 'subject', 'content')
+    editFields = ('full_name', 'designation', 'website_url', 'email', 'subject', 'content')
     readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by when_created desc'
 
 class AdminManager(appengine_admin.ModelAdmin):
     model = Manager
     listFields = ('full_name', 'designation', 'description', 'photo_url')
     editFields = ('full_name', 'designation', 'description', 'photo_url')
     readonlyFields = ('when_created', 'when_modified', 'description_html')
+    listGql = 'order by full_name asc'
+
+class AdminBoardDirector(appengine_admin.ModelAdmin):
+    model = BoardDirector
+    listFields = ('full_name', 'designation')
+    editFields = ('full_name', 'designation')
+    readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by full_name asc'
+
+class AdminSeniorManagement(appengine_admin.ModelAdmin):
+    model = SeniorManagement
+    listFields = ('full_name', 'designation')
+    editFields = ('full_name', 'designation')
+    readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by full_name asc'
+
+class AdminAuditor(appengine_admin.ModelAdmin):
+    model = Auditor
+    listFields = ('full_name', 'designation')
+    editFields = ('full_name', 'designation')
+    readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by full_name asc'
+
+class AdminLegalTerms(appengine_admin.ModelAdmin):
+    model = LegalTerms
+    listFields = ('title', 'short_name', 'slug', 'content')
+    editFields = ('title', 'short_name', 'content')
+    readonlyFields = ('slug', 'when_created', 'when_modified', 'content_html')
+    listGql = 'order by slug asc'
 
 class AdminAnnualReport(appengine_admin.ModelAdmin):
     model = AnnualReport
     listFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url')
     editFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url')
     readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by end_year desc'
+
+class AdminVesselType(appengine_admin.ModelAdmin):
+    model = VesselType
+    listFields = ('vessel_type_shortname', 'vessel_type_name',)
+    editFields = ('vessel_type_shortname', 'vessel_type_name',)
+    readonlyFields = ('vessels', 'when_created', 'when_modified')
 
 class AdminVessel(appengine_admin.ModelAdmin):
     model = Vessel
-    listFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard', 
+    listFields = ('name', 'built', 'vessel_type', 'generic_type', 'yard',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status')
-    editFields = ('name', 'build_year', 'vessel_type', 'generic_type', 'yard',  
+        'operational_status', 'is_delivered', 'when_delivered', 'when_expected')
+    editFields = ('name', 'built', 'vessel_type', 'generic_type', 'yard', 'specification_url',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status')
+        'operational_status', 'is_delivered', 'when_delivered', 'when_expected')
     readonlyFields = ('when_created', 'when_modified')
+
+class AdminFleetSearchTerms(appengine_admin.ModelAdmin):
+    model = FleetSearchTerms
+    listFields = ('search_terms', 'remote_addr', 'user_agent', 'when_created')
+    editFields = ()
+    readonlyFields = ('search_terms', 'remote_addr', 'user_agent', 'when_created', 'when_modified')
+    listGql = 'order by when_created desc'
 
 appengine_admin.register(AdminFeedback, 
     AdminSupplierInformation, 
     AdminManager,
     AdminAssetLiabilityStatement,
     AdminVessel,
-    AdminAnnualReport)
+    AdminAnnualReport,
+    AdminLegalTerms,
+    AdminVesselType,
+    AdminBoardDirector,
+    AdminSeniorManagement,
+    AdminAuditor)

@@ -1,5 +1,9 @@
 
 from google.appengine.ext import db
+from google.appengine.api import memcache
+
+MAX_COUNT = 100
+CACHE_DURATION = 120
 
 def serialize_entities(models):
     if models is None:
@@ -32,6 +36,15 @@ class SerializableModel(db.Model):
     is_active = db.BooleanProperty(default=False)
     when_created = db.DateTimeProperty(auto_now_add=True)
     when_modified = db.DateTimeProperty(auto_now=True)
+
+    @classmethod
+    def get_all(cls, count=MAX_COUNT):
+        cache_key = '%s.get_all()' % (cls.__name__,)
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = db.GqlQuery('SELECT * FROM %s' % cls.__name__).fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
 
     def to_json_dict(self, *props):
         properties = self.properties()

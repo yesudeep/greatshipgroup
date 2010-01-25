@@ -5,98 +5,33 @@
     <h1><span class="icon fleet"></span>Our fleet. <strong>Our assets.</strong></h1>
     <div class="article">
         <div class="content">
-            #*<p>Hover over an item to view more information.</p>*#
-            <ul id="fleet-list" class="info-list">
+            <h2>Fleet browser.</h2>
+            <p>Hover over an item to view more information or <a href="/services/fleet/status">view the entire fleet status</a> as a table.</p>
+            <ul id="fleet-list" class="list-view">
                 {% for vessel in vessels %}
-                    <li>
+                    <li class="{{ vessel.generic_type }}">
                         <div class="title">
-                            <h2>{{ vessel.name }}<strong>{{ vessel.vessel_type }}</strong></h2>
-                            <p><a href="{{ vessel.specification_url }}">Specification Sheet (.pdf)</a></p>
+                            <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
+                            <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered }}{% else %}Expected: {{ vessel.when_expected }}{% endif %}</p>
                         </div>
                         <div class="info">
                             <h3>Specifications</h3>
                             <dl>
+                                <dt>Specification Sheet</dt><dd><a href="{{ vessel.specification_url }}">Download PDF</a></dd>
                                 <dt>Availability</dt><dd>{{ vessel.when_available }}</dd>
-                                <dt>Built</dt><dd>{{ vessel.build_year }}</dd>
+                                <dt>Built</dt><dd>{{ vessel.built }}</dd>
                                 <dt>Type</dt><dd>{{ vessel.vessel_type }}</dd>
                                 <dt>Yard</dt><dd>{{ vessel.yard }}</dd>
-                                <dt>Deadweight</dt><dd>{{ vessel.deadweight_in_tons }}</dd>
-                                <dt>Design</dt><dd>{{ vessel.design }}</dd>
-                                <dt>BP</dt><dd>{{ vessel.bp_in_tons }}</dd>
-                                <dt>DP</dt><dd>{{ vessel.dp }}</dd>
-                                <dt>FiFi</dt><dd>{{ vessel.fifi }}</dd>
+                                <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% endif %}</dd>
+                                <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% endif %}</dd>
+                                <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% endif %}</dd>
+                                <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% endif %}</dd>
+                                <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% endif %}</dd>
                                 <dt>Company</dt><dd>{{ vessel.company }}</dd>
                             </dl>
                         </div>
                     </li>
                 {% endfor %}
-                #*
-                <li>
-                    <div class="title">
-                        <h2>Greatdrill Chetna <strong>March, 2012</strong></h2>
-                        <p><a href="/dl/fleet/specs/chetna.pdf">Specification Sheet (.pdf)</a></p>
-                    </div>
-                    <div class="info">
-                        <h3>Specifications</h3>
-                        <dl>
-                            <dt>Built</dt>
-                            <dd>2009</dd>
-                            <dt>Type</dt>
-                            <dd>350' IC JU rig</dd>
-                            <dt>Yard</dt>
-                            <dd>Keppel Fels</dd>
-                            <dt>Deadweight</dt>
-                            <dd>-</dd>
-                            <dt>Design</dt>
-                            <dd>KFELS B Class</dd>
-                            <dt>BP</dt>
-                            <dd>-</dd>
-                            <dt>DP</dt>
-                            <dd>-</dd>
-                            <dt>FiFi</dt>
-                            <dd>-</dd>
-                            <dt>Company</dt>
-                            <dd>GGES</dd>
-                        </dl>
-                    </div>
-                </li>
-                <li>
-                    <div class="title">
-                        <h2>Greatdrill Chitra <strong>October, 2014</strong></h2>
-                    </div>
-                    <div class="info">
-                        <h3>Specifications</h3>
-                        <dl>
-                            <dt>Built</dt>
-                            <dd>2009</dd>
-                            <dt>Type</dt>
-                            <dd>350' IC JU rig</dd>
-                            <dt>Yard</dt>
-                            <dd>Keppel Fels</dd>
-                            <dt>Deadweight</dt>
-                            <dd>-</dd>
-                            <dt>Design</dt>
-                            <dd>KFELS B Class</dd>
-                            <dt>BP</dt>
-                            <dd>-</dd>
-                            <dt>DP</dt>
-                            <dd>-</dd>
-                            <dt>FiFi</dt>
-                            <dd>-</dd>
-                            <dt>Company</dt>
-                            <dd>GGES</dd>
-                        </dl>
-                    </div>
-                </li>
-                <li>Greatdrill Chitra</li>
-                <li>Greatship Disha</li>
-                <li>Greatship Diya</li>
-                <li>Greatship Dipti</li>
-                <li>Greatship Anjali</li>
-                <li>Greatship Amrita</li>
-                <li>Greatship Dhriti</li>
-                <li>Greatship Dhwani</li>
-                <li>Greatship Abha</li>*#
             </ul>
         </div>
         <div class="aside">
@@ -146,7 +81,9 @@
             <p>We aim to provide safe and efficient drilling operations to E&P operators worldwide. We have made our beginning with our under-construction Jack-Up Rig at Keppel Fels in Singapore.</p>
             <h3>Construction</h3>
             <p>We aim to provide safe, efficient and versatile vessels in order to fulfill the demanding needs of offshore construction companies to support offshore construction, maintenance, modifications and other sub-sea operations, world wide.</p>
-            <p>DOF subsea ASA & GIL have joined hands to form a JV partnership to cater to various subsea project requirements in Indain subcontinents.</p>
+            <p>DOF subsea ASA & GIL have joined hands to form a JV partnership to cater to various subsea project requirements in the Indian subcontinent.</p>
+            <h3>In-Chartering</h3>
+            <p>GIL has entered into alliances/partnerships with global service providers to in-charter Rigs and Offshore Supply Vessels of diverse types to service prospective requirements in India.</p>
         </div>
     </div>
 

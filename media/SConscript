@@ -52,6 +52,8 @@ IMAGE_FILES = Split("""
     image/icon/48x48/flag/india.png
     image/icon/48x48/flag/singapore.png
     image/icon/48x48/flag/mauritius.png
+    image/icon/48x48/fleet_spec.png
+    image/icon/48x48/drill_spec.png
     
     image/bg/button_overlay.png
     image/bg/textfield_normal.png

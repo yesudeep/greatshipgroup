@@ -6,6 +6,7 @@
     <div class="article">
         <div class="content">            
             <h2>Tell us about your services.</h2>
+            <p>Please enter information in all fields.</p>
             <form id="form-contact-services" class="decorated-fields vertical" method="POST" action="">
                 <label for="name">
                     <span class="prefix">name</span>
@@ -18,9 +19,9 @@
                     <span class="suffix"></span>                    
                 </label>
                 <label for="website_url">
-                    <span class="prefix">website</span>
+                    <span class="prefix">website url</span>
                     <input type="text" name="website_url" value="" />
-                    <span class="suffix"></span>            
+                    <span class="suffix">For example: http://www.example.com is a Website URL.</span>            
                 </label>                
                 <label for="email">
                     <span class="prefix">email</span>
@@ -54,11 +55,11 @@
             <p>GIL welcomes service providers to post in their presentations relating to the field of offshore oil field support services using the following form:</p>
             <h3>Terms and conditions</h3>
             <p>Kindly read through the terms of conditions for each of our subsidiaries which are of interest to you before sending us information about yourself.</p>
-            <p>Sending information about yourself to us implies that you agree with our <a href="/legal/policy">policy</a> and terms of service.</p>
+            <p>Sending information about yourself to us implies that you agree with our <a href="/legal/policy">policy</a> and terms of service:</p>
             <ul>
-                <li><a href="/legal/terms/gil">Greatship (India) Ltd.</a></li>
-                <li><a href="/legal/terms/gges">Greatship Group Energy Services Pte. Ltd.</a></li>
-                <li><a href="/legal/terms/ggos">Greatship Group Offshore Services Pte. Ltd.</a></li>
+                {% for legal_terms in legal_terms_list %}
+                <li><a href="/legal/terms/{{ legal_terms.slug }}">{{ legal_terms.title }}</a></li>                    
+                {% endfor %}
             </ul>
             <h3>Technical Assistance</h3>
             <p>If you need any technical assistance, you can contact us on any of the numbers provided on the <a href="/contact">Contact</a> page.</p>

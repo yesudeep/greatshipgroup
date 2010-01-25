@@ -2,6 +2,28 @@
 
 {% block tag_trunk_content %}
     <h1><span class="icon management"></span>Our visionaries. <strong>The Management.</strong></h1>
+    <div class="article plain columns">
+        <div class="content">
+            <h2>Board of Directors</h2>
+            <ul>
+                {% for board_director in board_directors %}
+                    <li>{{ board_director.full_name }}, {{ board_director.designation }}</li>
+                {% endfor %}
+            </ul>
+            <h2>Senior Management</h2>
+            <ul>
+                {% for senior_manager in senior_managers %}
+                    <li>{{ senior_manager.full_name }}, {{ senior_manager.designation }}</li>
+                {% endfor %}
+            </ul>
+            <h2>Auditors</h2>
+            <ul>
+                {% for auditor in auditors %}
+                    <li>{{ auditor.full_name }}, {{ auditor.designation }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
     <div class="article plain">
         <div class="content">        
             <ul id="management-gallery">
