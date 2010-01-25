@@ -30,7 +30,7 @@
                         </tr>
                         {% for vessel in operating_rigs %}                        
                             <tr> 
-                                <td>{{ vessel.name }}</td> 
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
                                 <td>{{ vessel.built }}</td> 
                                 <td>{{ vessel.vessel_type }}</td> 
                                 <td>{{ vessel.yard }}</td> 
@@ -50,7 +50,7 @@
                         </tr>
                         {% for vessel in operating_vessels %}                        
                             <tr> 
-                                <td>{{ vessel.name }}</td> 
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
                                 <td>{{ vessel.built }}</td> 
                                 <td>{{ vessel.vessel_type }}</td> 
                                 <td>{{ vessel.yard }}</td> 
@@ -70,7 +70,7 @@
                         </tr>
                         {% for vessel in under_construction_vessels %}                        
                             <tr> 
-                                <td>{{ vessel.name }}</td> 
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
                                 <td>{{ vessel.built }}</td> 
                                 <td>{{ vessel.vessel_type }}</td> 
                                 <td>{{ vessel.yard }}</td> 
