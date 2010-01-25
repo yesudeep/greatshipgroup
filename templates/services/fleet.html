@@ -10,6 +10,7 @@
             <ul id="fleet-list" class="list-view">
                 {% for vessel in vessels %}
                     <li class="{{ vessel.generic_type }}">
+                        <img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" />
                         <div class="title">
                             <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
                             <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered }}{% else %}Expected: {{ vessel.when_expected }}{% endif %}</p>
