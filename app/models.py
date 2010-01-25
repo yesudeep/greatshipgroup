@@ -62,8 +62,12 @@ class Manager(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
     description = db.TextProperty()
-    description_html = TransformProperty(description, render_markup)
+    description_html = db.TextProperty()
     photo_url = db.URLProperty()
+    
+    def put(self):
+        self.description_html = render_markup(self.description)
+        super(Manager, self).put()
 
 class AssetLiabilityStatement(SerializableModel):
     start_year = db.StringProperty()
@@ -243,13 +247,28 @@ class Post(SerializableModel):
 
     title = db.StringProperty()
     place = db.StringProperty()
+    is_published = db.BooleanProperty(default=False)
     when_published = db.DateTimeProperty()
     content = db.TextProperty()
     content_html = db.TextProperty()
-    markup_type = db.StringProperty(choices=set(markup.MARKUP_MAP), default=DEFAULT_MARKUP)
+    #markup_type = db.StringProperty(choices=set(markup.MARKUP_MAP), default=DEFAULT_MARKUP)
+    
+    @classmethod
+    def get_latest(cls, count=20):
+        cache_key = 'Post.get_latest(count=%d)' % count
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Post.all().filter('is_published = ', True).order('-when_published').fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+    
+    def put(self):
+        if self.is_published:
+            self.publish()
+        super(Post, self).put()
     
     def format_post_path(self, num=0, format='/%(year)d/%(month)02d/%(slug)s'):
-        slug = utils.slugify(self.title)
+        slug = utils.slugify(self.title.lower())
         if num > 0:
             slug += "-" + str(num)
         return format % {
@@ -262,15 +281,16 @@ class Post(SerializableModel):
     def publish(self):
         if not self.checksum or self.checksum != self.hash:
             self.when_published = datetime.datetime.utcnow()
-            if not self.path:
-                num = 0
-                entity = Post.get_by_path(path)
-                while entity:
-                    path = self.format_post_path(num)
-                    logging.info(path)
-                    entity = Post.get_by_path(path)
-                    num += 1
-                self.path = path
+            #if not self.path:
+            #    num = 0
+            #    entity = None
+            #    while not entity:
+            #        path = self.format_post_path(num)
+            #        logging.info(path)
+            #        entity = Post.get_by_path(path)
+            #        num += 1
+            #    self.path = path
+            self.path = self.format_post_path()
             self.content_html = self.rendered
             self.checksum = self.hash
             self.put()
@@ -280,7 +300,7 @@ class Post(SerializableModel):
         cache_key = 'Post.' + path
         entity = dbhelper.deserialize_entities(memcache.get(cache_key))
         if not entity:
-            entity = Post.all().filter('path =', path).get()
+            entity = Post.all().filter('path = ', path).get()
             memcache.set(cache_key, dbhelper.serialize_entities(entity))
         return entity
 
@@ -290,8 +310,9 @@ class Post(SerializableModel):
     
     @property
     def rendered(self):
-        renderer = markup.get_renderer(self.markup_type)
-        return renderer(self.content)
+        #renderer = markup.get_renderer(self.markup_type)
+        #return renderer(self.content)
+        return render_markup(self.content)
 
 class Feedback(SerializableModel):
     full_name = db.StringProperty()
@@ -415,6 +436,24 @@ class AdminFleetSearchTerms(appengine_admin.ModelAdmin):
     readonlyFields = ('search_terms', 'remote_addr', 'user_agent', 'when_created', 'when_modified')
     listGql = 'order by when_created desc'
 
+class AdminPost(appengine_admin.ModelAdmin):
+    model = Post
+    
+    path = db.StringProperty()
+    checksum = db.StringProperty()
+
+    title = db.StringProperty()
+    place = db.StringProperty()
+    is_published = db.BooleanProperty(default=False)
+    when_published = db.DateTimeProperty()
+    content = db.TextProperty()
+    content_html = db.TextProperty()
+    
+    listFields = ('path', 'title', 'place', 'is_published', 'when_published')
+    editFields = ('title', 'place', 'is_published', 'content')
+    readonlyFields = ('path', 'checksum', 'when_published', 'content_html', 'when_created', 'when_modified')
+    listGql = 'order by when_published desc'
+
 appengine_admin.register(AdminFeedback, 
     AdminSupplierInformation, 
     AdminManager,
@@ -426,4 +465,5 @@ appengine_admin.register(AdminFeedback,
     AdminVesselType,
     AdminBoardDirector,
     AdminSeniorManagement,
-    AdminAuditor)
+    AdminAuditor,
+    AdminPost)

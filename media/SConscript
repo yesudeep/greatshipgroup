@@ -151,6 +151,7 @@ SCRIPT_BUNDLES = (
         sources = Split(
         COMMON_SCRIPTS + 
         """
+            script/lib/chickoojs/src/jquery/innerfade/js/jquery.innerfade.js
             script/index.js
         """)
     ),

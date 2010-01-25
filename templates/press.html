@@ -3,17 +3,18 @@
 {% block tag_trunk_content %}
     
     <h1><span class="icon press"></span>Press Releases. <strong>What's new at Greatship?</strong></h1>
+    
     <div class="article">
         <div class="content">
-            <h2>Greatship and Greatship's subsidiary contract to sell a Platform Supply Vessel (PSV) and a Platform/ROV Support Vessel (ROVSV), respectively.</h2>
-            <p class="dateline">December 29, 2009&mdash;Mumbai</p>
-            
-            <p>Greatship (India) Limited (GIL), a wholly owned subsidiary of The Great Eastern Shipping Co. Ltd. has contracted to sell its Platform Supply Vessel - "Greatship Diya". This 2003 built, 3350 dwt PSV is expected to be delivered to the buyers in Q1 FY11.</p>
-            
-            <p>Greatship Global Offshore Services Pte. Ltd. (GGOS), a Singapore incorporated subsidiary of GIL, has also contracted to sell its Platform/ROV Support Vessel identified as Hull No. NC 0215 (tbn "Greatship Rekha") which is currently under construction. This 3000 dwt ROVSV is expected to be delivered to the buyers in Q4 FY10.</p>
-            
-            <p>The current owned and / or operated fleet of GIL and its subsidiaries stands at six PSVs, eight AHTSVs, two jack up rigs and one MPSSV. The current order book of GIL and its subsidiaries comprises of eleven vessels - three MPSSVs in Singapore, two MSVs in India, four ROVSVs in Sri Lanka and two 150 TBP AHTSVs in Batam.</p>
+        {% for post in posts %}
+            <h2><a href="/press/post{{ post.path }}">{{ post.title }}</a></h2>
+            <p class="dateline">{{ post.when_published }}&mdash;{{ post.place }}</p>
+            <div class="post-content">
+                {{ post.content_html }}
+            </div>
+        {% endfor %}
         </div>
     </div>
+    
 
 {% endblock %}

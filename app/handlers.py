@@ -29,7 +29,7 @@ from google.appengine.api import memcache
 from google.appengine.ext.webapp.util import run_wsgi_app
 from utils import render_template, render_cached_template, RequestHandler, CachingRequestHandler
 from recaptcha.client import captcha
-from models import Vessel, Feedback, SupplierInformation, LegalTerms
+from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms
 import logging
 import appengine_admin
 import utils
@@ -40,7 +40,8 @@ logging.basicConfig(level=logging.DEBUG)
 class IndexHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('index.html')
+        posts = Post.get_latest()
+        self.render_to_response('index.html', posts=posts)
 
 # About
 class AboutHandler(CachingRequestHandler):
@@ -94,19 +95,22 @@ class FleetStatusHandler(CachingRequestHandler):
 class LogisticsHandler(CachingRequestHandler):
     def get(self):
         vessels = Vessel.get_all_logistics()
-        self.render_to_response('services/fleet.html', vessels=vessels)             
+        self.render_to_response('services/fleet.html', vessels=vessels,
+            content_title="Logistics fleet browser.")             
         
 class ConstructionHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_construction()
-        self.render_to_response('services/fleet.html', vessels=vessels)             
+        self.render_to_response('services/fleet.html', vessels=vessels,
+            content_title='Construction fleet browser.')             
 
 class DrillingHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_drilling()
-        self.render_to_response('services/fleet.html', vessels=vessels)             
+        self.render_to_response('services/fleet.html', vessels=vessels,
+            content_title='Drilling fleet browser.')             
         
 class QhseHandler(CachingRequestHandler):
     """Handles the home page requests."""
@@ -219,7 +223,19 @@ class TourHandler(CachingRequestHandler):
 class PressReleasesHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('press.html')
+        from models import Post
+        posts = Post.get_latest(20)
+        self.render_to_response('press.html', posts=posts)
+
+# Note singular
+class PressReleaseHandler(CachingRequestHandler):
+    def get(self, path):
+        from models import Post
+        post = Post.get_by_path(path)
+        if post:
+            self.render_to_response('press.html', posts=[post])
+        else:
+            self.redirect('/press')
 
 # Legal
 class PolicyHandler(CachingRequestHandler):
@@ -248,6 +264,7 @@ urls = (
     (r'/legal/policy/?', PolicyHandler),
     (r'/legal/terms/(.*)/?', TermsHandler),
     (r'/press/?', PressReleasesHandler),
+    (r'/press/post(.*)', PressReleaseHandler),
     (r'/services/?', FleetHandler),
     (r'/services/fleet/?', FleetHandler),
     (r'/services/fleet/status/?', FleetStatusHandler),
