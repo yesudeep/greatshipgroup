@@ -24,60 +24,66 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th colspan="11">Operating Rigs</th>
-                    </tr>
-                    {% for vessel in operating_rigs %}                        
-                        <tr> 
-                            <td>{{ vessel.name }}</td> 
-                            <td>{{ vessel.built }}</td> 
-                            <td>{{ vessel.vessel_type }}</td> 
-                            <td>{{ vessel.yard }}</td> 
-                            <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% endif %}</td> 
-                            <td>{{ vessel.design }}</td> 
-                            <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% endif %}</td> 
-                            <td>{% if vessel.dp %}{{ vessel.dp }}{% endif %}</td> 
-                            <td>{% if vessel.fifi %}{{ vessel.fifi }}{% endif %}</td> 
-                            <td>{{ vessel.company }}</td> 
-                            <td>{{ vessel.when_available }}</td> 
+                    {% if operating_rigs %}                        
+                        <tr>
+                            <th colspan="11">Operating Rigs</th>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <th colspan="11">Operating vessels</th>
-                    </tr>
-                    {% for vessel in operating_vessels %}                        
-                        <tr> 
-                            <td>{{ vessel.name }}</td> 
-                            <td>{{ vessel.built }}</td> 
-                            <td>{{ vessel.vessel_type }}</td> 
-                            <td>{{ vessel.yard }}</td> 
-                            <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% endif %}</td> 
-                            <td>{{ vessel.design }}</td> 
-                            <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% endif %}</td> 
-                            <td>{% if vessel.dp %}{{ vessel.dp }}{% endif %}</td> 
-                            <td>{% if vessel.fifi %}{{ vessel.fifi }}{% endif %}</td> 
-                            <td>{{ vessel.company }}</td> 
-                            <td>{{ vessel.when_available }}</td> 
+                        {% for vessel in operating_rigs %}                        
+                            <tr> 
+                                <td>{{ vessel.name }}</td> 
+                                <td>{{ vessel.built }}</td> 
+                                <td>{{ vessel.vessel_type }}</td> 
+                                <td>{{ vessel.yard }}</td> 
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% endif %}</td> 
+                                <td>{{ vessel.design }}</td> 
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% endif %}</td> 
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% endif %}</td> 
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% endif %}</td> 
+                                <td>{{ vessel.company }}</td> 
+                                <td>{{ vessel.when_available }}</td> 
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    {% if operating_vessels %}                        
+                        <tr>
+                            <th colspan="11">Operating vessels</th>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <th colspan="11">Under-construction vessels</th>
-                    </tr>
-                    {% for vessel in under_construction_vessels %}                        
-                        <tr> 
-                            <td>{{ vessel.name }}</td> 
-                            <td>{{ vessel.built }}</td> 
-                            <td>{{ vessel.vessel_type }}</td> 
-                            <td>{{ vessel.yard }}</td> 
-                            <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% endif %}</td> 
-                            <td>{{ vessel.design }}</td> 
-                            <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% endif %}</td> 
-                            <td>{% if vessel.dp %}{{ vessel.dp }}{% endif %}</td> 
-                            <td>{% if vessel.fifi %}{{ vessel.fifi }}{% endif %}</td> 
-                            <td>{{ vessel.company }}</td> 
-                            <td>{{ vessel.when_available }}</td> 
+                        {% for vessel in operating_vessels %}                        
+                            <tr> 
+                                <td>{{ vessel.name }}</td> 
+                                <td>{{ vessel.built }}</td> 
+                                <td>{{ vessel.vessel_type }}</td> 
+                                <td>{{ vessel.yard }}</td> 
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% endif %}</td> 
+                                <td>{{ vessel.design }}</td> 
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% endif %}</td> 
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% endif %}</td> 
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% endif %}</td> 
+                                <td>{{ vessel.company }}</td> 
+                                <td>{{ vessel.when_available }}</td> 
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
+                    {% if under_construction_vessels %}                        
+                        <tr>
+                            <th colspan="11">Under-construction vessels</th>
                         </tr>
-                    {% endfor %}
+                        {% for vessel in under_construction_vessels %}                        
+                            <tr> 
+                                <td>{{ vessel.name }}</td> 
+                                <td>{{ vessel.built }}</td> 
+                                <td>{{ vessel.vessel_type }}</td> 
+                                <td>{{ vessel.yard }}</td> 
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% endif %}</td> 
+                                <td>{{ vessel.design }}</td> 
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% endif %}</td> 
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% endif %}</td> 
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% endif %}</td> 
+                                <td>{{ vessel.company }}</td> 
+                                <td>{{ vessel.when_available }}</td> 
+                            </tr>
+                        {% endfor %}
+                    {% endif %}
 
 #*
                     <tr> 

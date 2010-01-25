@@ -88,7 +88,7 @@ class FleetStatusHandler(CachingRequestHandler):
             under_construction_vessels=under_construction_vessels,
             previous_month=previous_month,
             previous_year=previous_year)
-        
+
 class LogisticsHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):

@@ -66,8 +66,8 @@ class Manager(SerializableModel):
     photo_url = db.URLProperty()
 
 class AssetLiabilityStatement(SerializableModel):
-    start_year = db.DateProperty()
-    end_year = db.DateProperty()
+    start_year = db.StringProperty()
+    end_year = db.StringProperty()
     share_capital = db.StringProperty()
     reserves_and_surplus = db.StringProperty()
     secured_loans = db.StringProperty()
@@ -78,8 +78,8 @@ class AssetLiabilityStatement(SerializableModel):
     total_assets = db.StringProperty()
 
 class IncomeStatement(SerializableModel):
-    start_year = db.DateProperty()
-    end_year = db.DateProperty()
+    start_year = db.StringProperty()
+    end_year = db.StringProperty()
     total_revenue = db.StringProperty()
     pbdit = db.StringProperty()
     depreciation = db.StringProperty()
@@ -87,6 +87,7 @@ class IncomeStatement(SerializableModel):
     tax_provision = db.StringProperty()
     pat = db.StringProperty()
     eps = db.StringProperty()
+
 
 class VesselType(SerializableModel):
     vessel_type_name = db.StringProperty()
@@ -100,7 +101,7 @@ class VesselType(SerializableModel):
 
 class Vessel(SerializableModel):
     name = db.StringProperty()
-    built = db.DateProperty()
+    built = db.StringProperty()
     vessel_type = db.ReferenceProperty(VesselType, collection_name='vessels')
     yard = db.StringProperty()
     deadweight_in_tons = db.StringProperty()
@@ -160,8 +161,8 @@ class Vessel(SerializableModel):
 class AnnualReport(SerializableModel):
     title = db.StringProperty()
     subtitle = db.StringProperty()
-    start_year = db.DateProperty()
-    end_year = db.DateProperty()
+    start_year = db.StringProperty()
+    end_year = db.StringProperty()
     document_url = db.URLProperty()
 
 class LegalTerms(SerializableModel):
@@ -284,6 +285,17 @@ class AdminAssetLiabilityStatement(appengine_admin.ModelAdmin):
     readonlyFields = ('when_created', 'when_modified')
     listGql = 'order by end_year desc'
 
+class AdminIncomeStatement(appengine_admin.ModelAdmin):
+    model = IncomeStatement
+    listFields = ('start_year', 'end_year', 'total_revenue', 
+        'pbdit', 'depreciation', 'interest',
+        'tax_provision', 'pat', 'eps')
+    editFields = ('start_year', 'end_year', 'total_revenue', 
+        'pbdit', 'depreciation', 'interest',
+        'tax_provision', 'pat', 'eps')
+    readonlyFields = ('when_created', 'when_modified')
+    listGql = 'order by end_year desc'
+
 class AdminFeedback(appengine_admin.ModelAdmin):
     model = Feedback
     listFields = ('full_name', 'email', 'subject', 'content')
@@ -367,6 +379,7 @@ appengine_admin.register(AdminFeedback,
     AdminSupplierInformation, 
     AdminManager,
     AdminAssetLiabilityStatement,
+    AdminIncomeStatement,
     AdminVessel,
     AdminAnnualReport,
     AdminLegalTerms,
