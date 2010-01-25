@@ -122,6 +122,43 @@ class Vessel(SerializableModel):
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
 
+    is_construction = db.BooleanProperty(default=False)
+    is_logistics = db.BooleanProperty(default=False)
+    is_drilling = db.BooleanProperty(default=False)
+
+    @classmethod
+    def get_all_logistics(cls):
+        cache_key = 'Vessel.get_all_logistics()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('is_logistics = ', True) \
+                .fetch(MAX_COUNT)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
+    @classmethod
+    def get_all_construction(cls):
+        cache_key = 'Vessel.get_all_construction()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('is_construction = ', True) \
+                .fetch(MAX_COUNT)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+        
+    @classmethod
+    def get_all_drilling(cls):
+        cache_key = 'Vessel.get_all_drilling()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('is_drilling = ', True) \
+                .fetch(MAX_COUNT)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
     @classmethod
     def get_operating_vessels(cls):
         cache_key = 'Vessel.get_operating_vessels()'
@@ -164,6 +201,7 @@ class AnnualReport(SerializableModel):
     start_year = db.StringProperty()
     end_year = db.StringProperty()
     document_url = db.URLProperty()
+    cover_image_url = db.URLProperty()
 
 class LegalTerms(SerializableModel):
     title = db.StringProperty()
@@ -347,8 +385,8 @@ class AdminLegalTerms(appengine_admin.ModelAdmin):
 
 class AdminAnnualReport(appengine_admin.ModelAdmin):
     model = AnnualReport
-    listFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url')
-    editFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url')
+    listFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url', 'cover_image_url')
+    editFields = ('title', 'subtitle', 'start_year', 'end_year', 'document_url', 'cover_image_url')
     readonlyFields = ('when_created', 'when_modified')
     listGql = 'order by end_year desc'
 
@@ -362,10 +400,12 @@ class AdminVessel(appengine_admin.ModelAdmin):
     model = Vessel
     listFields = ('name', 'built', 'vessel_type', 'generic_type', 'yard',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status', 'is_delivered', 'when_delivered', 'when_expected')
+        'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
+        'is_construction', 'is_drilling', 'is_logistics')
     editFields = ('name', 'built', 'vessel_type', 'generic_type', 'yard', 'specification_url',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status', 'is_delivered', 'when_delivered', 'when_expected')
+        'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
+        'is_construction', 'is_drilling', 'is_logistics')
     readonlyFields = ('when_created', 'when_modified')
 
 class AdminFleetSearchTerms(appengine_admin.ModelAdmin):

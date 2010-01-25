@@ -194,15 +194,18 @@
              </table>
              #*<div id="asset-liability-statement-chart" style="height:450px;width:700px"></div>*#
              <h2>Annual Reports</h2>
-             <ul class="list-view">
-                {% for annual_report in annual_reports %}
-                    <li><a href="{{ annual_report.document_url }}">
-                        <img src="{{ MEDIA_URL }}image/icon/48x48/pdf_document.png" />
-                        {{ annual_report.title }}<span class="subtitle">{{ annual_report.subtitle }}</span>
-                    </a></li>
-                {% endfor %}
-                <li><a href="#"></a></li>
+             <ul id="annual-report-list" class="list-view">
+                 {% for annual_report in annual_reports %}
+                     <li>
+                         <a href="{{ annual_report.document_url }}"><img class="icon" src="{{ annual_report.cover_image_url }}" /></a>
+                         <div class="title">
+                             <h2><a href="{{ annual_report.document_url }}">{{ annual_report.title }}</a><strong>{{ annual_report.subtitle }}</strong></h2>
+                         </div>
+                         <div class="info"></div>
+                     </li>
+                 {% endfor %}
              </ul>
+             
         </div>
     </div>
 {% endblock %}

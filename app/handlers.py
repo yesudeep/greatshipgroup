@@ -62,7 +62,9 @@ class OverseasHandler(CachingRequestHandler):
 
 class FinancialHandler(CachingRequestHandler):
     def get(self):
-        self.render_to_response('about/financial.html')
+        from models import AnnualReport
+        annual_reports = AnnualReport.get_all()
+        self.render_to_response('about/financial.html', annual_reports=annual_reports)
 
 class SitemapHandler(CachingRequestHandler):
     def get(self):
@@ -90,19 +92,21 @@ class FleetStatusHandler(CachingRequestHandler):
             previous_year=previous_year)
 
 class LogisticsHandler(CachingRequestHandler):
-    """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/logistics.html')                     
+        vessels = Vessel.get_all_logistics()
+        self.render_to_response('services/fleet.html', vessels=vessels)             
         
 class ConstructionHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/construction.html')           
+        vessels = Vessel.get_all_construction()
+        self.render_to_response('services/fleet.html', vessels=vessels)             
 
 class DrillingHandler(CachingRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/drilling.html')
+        vessels = Vessel.get_all_drilling()
+        self.render_to_response('services/fleet.html', vessels=vessels)             
         
 class QhseHandler(CachingRequestHandler):
     """Handles the home page requests."""
