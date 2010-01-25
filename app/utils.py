@@ -33,11 +33,22 @@ from gaefy.jinja2.code_loaders import FileSystemCodeLoader
 from haggoo.template.jinja2 import render_generator
 from haggoo.template.jinja2 import filters
 from functools import partial
-
+from datetime import datetime
 
 # Conveninence wrapper to make sure int conversion uses a decimal base.
 dec = partial(int, base=10)
 
+def get_previous_month(d=None):
+    if not d:
+        d = datetime.utcnow()
+    months = range(0, 12)
+    month_index = d.month - 1
+    previous_m_index = month_index - 1
+    if previous_m_index < 0:
+        year = d.year - 1
+    else:
+        year = d.year
+    return datetime(year, months[previous_m_index] + 1, 1)
 
 def slugify(s):
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')

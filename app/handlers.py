@@ -32,6 +32,7 @@ from recaptcha.client import captcha
 from models import Vessel, Feedback, SupplierInformation, LegalTerms
 import logging
 import appengine_admin
+import utils
 
 # Set up logging.
 logging.basicConfig(level=logging.DEBUG)
@@ -76,7 +77,17 @@ class FleetHandler(CachingRequestHandler):
 
 class FleetStatusHandler(CachingRequestHandler):
     def get(self):
-        self.render_to_response("services/fleet_status.html")
+        operating_vessels = Vessel.get_operating_vessels()
+        operating_rigs = Vessel.get_operating_rigs()
+        under_construction_vessels = Vessel.get_under_construction_vessels()
+        d = utils.get_previous_month()
+        previous_month = utils.datetimeformat(d, format="%B")
+        previous_year = utils.datetimeformat(d, format="%Y")
+        self.render_to_response("services/fleet_status.html", operating_vessels=operating_vessels, 
+            operating_rigs=operating_rigs, 
+            under_construction_vessels=under_construction_vessels,
+            previous_month=previous_month,
+            previous_year=previous_year)
         
 class LogisticsHandler(CachingRequestHandler):
     """Handles the home page requests."""

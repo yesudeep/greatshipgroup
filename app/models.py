@@ -44,14 +44,18 @@ else:
 
 render_markup = markup.render_markdown
 
+VESSEL_STATUS_OPERATIONAL = 'operational'
+VESSEL_STATUS_UNDER_CONSTRUCTION = 'under_construction'
 VESSEL_STATUS_CHOICES = (
-    'operational',
-    'under_construction',
+    VESSEL_STATUS_OPERATIONAL,
+    VESSEL_STATUS_UNDER_CONSTRUCTION,
     )
 
+VESSEL_GENERIC_TYPE_RIG = 'rig'
+VESSEL_GENERIC_TYPE_VESSEL = 'vessel'
 VESSEL_GENERIC_TYPE_CHOICES = (
-    'rig',
-    'vessel',
+    VESSEL_GENERIC_TYPE_RIG,
+    VESSEL_GENERIC_TYPE_VESSEL,
     )
 
 class Manager(SerializableModel):
@@ -117,14 +121,41 @@ class Vessel(SerializableModel):
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
 
-    #@classmethod
-    #def get_all(cls):
-    #    cache_key = 'Vessel.get_all'
-    #    entities = deserialize_entities(memcache.get(cache_key))
-    #    if not entities:
-    #        entities = Vessel.all().fetch(100)
-    #        memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
-    #    return entities
+    @classmethod
+    def get_operating_vessels(cls):
+        cache_key = 'Vessel.get_operating_vessels()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
+                .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
+                .fetch(MAX_COUNT)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
+    @classmethod
+    def get_operating_rigs(cls):
+        cache_key = 'Vessel.get_operating_rigs()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
+                .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
+                .fetch(MAX_COUNT)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+        
+    @classmethod
+    def get_under_construction_vessels(cls):
+        cache_key = 'Vessel.get_under_construction_vessels()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
+                .fetch(MAX_COUNT)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
 
 class AnnualReport(SerializableModel):
     title = db.StringProperty()
