@@ -25,18 +25,63 @@
 
 import configuration
 
-import re
-import unicodedata
 from google.appengine.api import memcache
 from google.appengine.ext import webapp
-from gaefy.jinja2.code_loaders import FileSystemCodeLoader
-from haggoo.template.jinja2 import render_generator
-from haggoo.template.jinja2 import filters
-from functools import partial
+
+import re
+import tornado.web
+import tornado.wsgi
+import unicodedata
+
 from datetime import datetime
+from functools import partial
+from urllib import urlencode
 
 # Conveninence wrapper to make sure int conversion uses a decimal base.
 dec = partial(int, base=10)
+
+def slugify(s):
+    s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
+    return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
+
+def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+    if value and hasattr(value, 'strftime'):
+        formatted_datetime = value.strftime(format)
+    else:
+        formatted_datetime = ""
+    return formatted_datetime
+
+
+def truncate(s, length=255, killwords=False, end='...'):
+    """Return a truncated copy of the string. The length is specified
+    with the first parameter which defaults to ``255``. If the second
+    parameter is ``true`` the filter will cut the text at length. Otherwise
+    it will try to save the last word. If the text was in fact
+    truncated it will append an ellipsis sign (``"..."``). If you want a
+    different ellipsis sign than ``"..."`` you can specify it using the
+    third parameter.
+
+    .. sourcecode jinja::
+
+        {{ mytext|truncate(300, false, '&raquo;') }}
+            truncate mytext to 300 chars, don't split up words, use a
+            right pointing double arrow as ellipsis sign.
+    """
+    if len(s) <= length:
+        return s
+    elif killwords:
+        return s[:length] + end
+    words = s.split(' ')
+    result = []
+    m = 0
+    for word in words:
+        m += len(word) + 1
+        if m > length:
+            break
+        result.append(word)
+    result.append(end)
+    return u' '.join(result)
+
 
 def get_previous_month(d=None):
     if not d:
@@ -50,51 +95,10 @@ def get_previous_month(d=None):
         year = d.year
     return datetime(year, months[previous_m_index] + 1, 1)
 
-def slugify(s):
-    s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
-    return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
+class BaseRequestHandler(tornado.web.RequestHandler):
+    def render_string(self, template_name, **values):
+        template_values = {}
+        template_values.update(configuration.TEMPLATE_BUILTINS)
+        template_values.update(values)
+        return tornado.web.RequestHandler.render_string(self, template_name, **template_values)
 
-def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
-    if value and hasattr(value, 'strftime'):
-        formatted_datetime = value.strftime(format)
-    else:
-        formatted_datetime = ""
-    return formatted_datetime
-
-filters = {
-    'datetimeformat': datetimeformat,
-    'slugify': slugify,
-}
-render_template = render_generator(loader=FileSystemCodeLoader, 
-    builtins=configuration.TEMPLATE_BUILTINS,
-    filters=filters)
-
-def render_cached_template(template_name, **kwargs):
-    """
-    Renders a template and caches the output in memcached.
-    """
-    cache_key = template_name + str(kwargs)
-    response = memcache.get(cache_key)
-    if not response:
-        response = render_template(template_name, **kwargs)
-        memcache.set(cache_key, response, 120)
-    return response
-
-if configuration.DEPLOYMENT_MODE == configuration.MODE_DEVELOPMENT:
-    render_cached_template = render_template
-
-class RequestHandler(webapp.RequestHandler):
-    """
-    Base handler for templates.
-    """
-    def render_to_response(self, template_name, **template_values):
-        response = render_template(template_name, **template_values)
-        self.response.out.write(response)
-
-class CachingRequestHandler(RequestHandler):
-    """
-    Base handler for static templates.
-    """
-    def render_to_response(self, template_name, **template_values):
-        response = render_cached_template(template_name, **template_values)
-        self.response.out.write(response)

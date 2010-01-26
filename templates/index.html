@@ -15,11 +15,11 @@
     </ul>
     <ul class="news-ticker">
         {% for post in posts %}                    
-        <li>Headlines | <a href="/press/post{{ post.path }}">{{ post.title|truncate(150) }}</a></li>
-        {% endfor %}
+        <li>Headlines | <a href="/press/post{{ post.path }}">{{ truncate(post.title, 100) }}</a></li>
+        {% end %}
     </ul>
-{% endblock %}
+{% end %}
 
 {% block tag_scripts %}
 <script type="text/javascript">$SELECTOR_SCRIPT</script>
-{% endblock %}
+{% end %}

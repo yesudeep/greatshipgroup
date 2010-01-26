@@ -163,6 +163,8 @@ TEMPLATE_BUILTINS = {
 }
 
 # Directories in which to search for templates.
-TEMPLATE_DIRS = (
-    path_join(DIR_PATH, 'templates'),
-)
+#TEMPLATE_DIRS = (
+#    path_join(DIR_PATH, 'templates'),
+#)
+
+TEMPLATE_PATH = path_join(DIR_PATH, 'templates')

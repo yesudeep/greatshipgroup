@@ -24,61 +24,66 @@
 # THE SOFTWARE.
 
 import configuration
-from google.appengine.ext import db, webapp
-from google.appengine.api import memcache
-from google.appengine.ext.webapp.util import run_wsgi_app
-from utils import render_template, render_cached_template, RequestHandler, CachingRequestHandler
-from recaptcha.client import captcha
-from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms
-import logging
+
 import appengine_admin
+import logging
 import utils
+import tornado.web
+import tornado.wsgi
+
+from google.appengine.api import memcache
+from google.appengine.ext import db, webapp
+from google.appengine.ext.webapp.util import run_wsgi_app
+from recaptcha.client import captcha
+
+from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms
+from utils import BaseRequestHandler
 
 # Set up logging.
 logging.basicConfig(level=logging.DEBUG)
 
-class IndexHandler(CachingRequestHandler):
+class IndexHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         posts = Post.get_latest()
-        self.render_to_response('index.html', posts=posts)
+        self.render('index.html', truncate=utils.truncate, posts=posts)
 
 # About
-class AboutHandler(CachingRequestHandler):
+class AboutHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('about/mission.html')
+        self.render('about/mission.html')
 
-class ManagementHandler(CachingRequestHandler):
+class ManagementHandler(BaseRequestHandler):
     def get(self):
         from models import Manager, BoardDirector, Auditor, SeniorManagement
         managers = Manager.get_all()
         board_directors = BoardDirector.get_all()
         auditors = Auditor.get_all()
         senior_managers = SeniorManagement.get_all()
-        self.render_to_response('about/management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
+        self.render('about/management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
 
-class OverseasHandler(CachingRequestHandler):
+class OverseasHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('about/overseas.html')
+        self.render('about/overseas.html')
 
-class FinancialHandler(CachingRequestHandler):
+class FinancialHandler(BaseRequestHandler):
     def get(self):
         from models import AnnualReport
         annual_reports = AnnualReport.get_all()
-        self.render_to_response('about/financial.html', annual_reports=annual_reports)
+        self.render('about/financial.html', annual_reports=annual_reports)
 
-class SitemapHandler(CachingRequestHandler):
+class SitemapHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('sitemap.html')
+        self.render('sitemap.html')
 
 # Services
-class FleetHandler(CachingRequestHandler):
+class FleetHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all()
-        self.render_to_response('services/fleet.html', vessels=vessels)
+        self.render('services/fleet.html', vessels=vessels)
 
-class FleetStatusHandler(CachingRequestHandler):
+class FleetStatusHandler(BaseRequestHandler):
     def get(self):
         operating_vessels = Vessel.get_operating_vessels()
         operating_rigs = Vessel.get_operating_rigs()
@@ -86,45 +91,45 @@ class FleetStatusHandler(CachingRequestHandler):
         d = utils.get_previous_month()
         previous_month = utils.datetimeformat(d, format="%B")
         previous_year = utils.datetimeformat(d, format="%Y")
-        self.render_to_response("services/fleet_status.html", operating_vessels=operating_vessels, 
+        self.render("services/fleet_status.html", operating_vessels=operating_vessels, 
             operating_rigs=operating_rigs, 
             under_construction_vessels=under_construction_vessels,
             previous_month=previous_month,
             previous_year=previous_year)
 
-class LogisticsHandler(CachingRequestHandler):
+class LogisticsHandler(BaseRequestHandler):
     def get(self):
         vessels = Vessel.get_all_logistics()
-        self.render_to_response('services/fleet.html', vessels=vessels,
+        self.render('services/fleet.html', vessels=vessels,
             content_title="Logistics fleet browser.")             
         
-class ConstructionHandler(CachingRequestHandler):
+class ConstructionHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_construction()
-        self.render_to_response('services/fleet.html', vessels=vessels,
+        self.render('services/fleet.html', vessels=vessels,
             content_title='Construction fleet browser.')             
 
-class DrillingHandler(CachingRequestHandler):
+class DrillingHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_drilling()
-        self.render_to_response('services/fleet.html', vessels=vessels,
+        self.render('services/fleet.html', vessels=vessels,
             content_title='Drilling fleet browser.')             
         
-class QhseHandler(CachingRequestHandler):
+class QhseHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/qhse.html')
+        self.render('services/qhse.html')
 
 
 # Corporate relations
-class OfficesHandler(CachingRequestHandler):
+class OfficesHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('about/offices.html')
+        self.render('about/offices.html')
 
-class SuppliersHandler(CachingRequestHandler):
+class SuppliersHandler(BaseRequestHandler):
     def get(self):
         captcha_error_code = self.request.get('captcha_error')
         if not captcha_error_code:
@@ -138,7 +143,7 @@ class SuppliersHandler(CachingRequestHandler):
         from models import LegalTerms
         legal_terms_list = LegalTerms.get_all()
         
-        self.render_to_response('about/suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
+        self.render('about/suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
 
     def post(self):
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
@@ -172,7 +177,7 @@ class SuppliersHandler(CachingRequestHandler):
             self.redirect('/contact/suppliers?captcha_error=%s' % error)
 
 
-class FeedbackHandler(CachingRequestHandler):
+class FeedbackHandler(BaseRequestHandler):
     def get(self):
         captcha_error_code = self.request.get('captcha_error')
         if not captcha_error_code:
@@ -183,7 +188,7 @@ class FeedbackHandler(CachingRequestHandler):
             use_ssl = False,
             error = captcha_error_code
             )
-        self.render_to_response('about/feedback.html', captcha_html=captcha_html)
+        self.render('about/feedback.html', captcha_html=captcha_html)
 
     
     def post(self):
@@ -213,44 +218,49 @@ class FeedbackHandler(CachingRequestHandler):
             error = captcha_response.error_code
             self.redirect('/contact/feedback?captcha_error=%s' % error)
 
-class CareersHandler(CachingRequestHandler):
+class CareersHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('careers/careers.html')
+        self.render('careers/careers.html')
 
-class TourHandler(CachingRequestHandler):
+class TourHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('careers/tour.html')
+        self.render('careers/tour.html')
 
-class PressReleasesHandler(CachingRequestHandler):
+class PressReleasesHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         from models import Post
         posts = Post.get_latest(20)
-        self.render_to_response('press.html', posts=posts)
+        self.render('press.html', posts=posts)
 
 # Note singular
-class PressReleaseHandler(CachingRequestHandler):
+class PressReleaseHandler(BaseRequestHandler):
     def get(self, path):
         from models import Post
         post = Post.get_by_path(path)
         if post:
-            self.render_to_response('press.html', posts=[post])
+            self.render('press.html', posts=[post])
         else:
             self.redirect('/press')
 
 # Legal
-class PolicyHandler(CachingRequestHandler):
+class PolicyHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('legal/policy.html')
+        self.render('legal/policy.html')
 
-class TermsHandler(CachingRequestHandler):
+class TermsHandler(BaseRequestHandler):
     def get(self, slug):
         legal_terms = LegalTerms.get_by_slug(slug)        
-        self.render_to_response('legal/terms.html', legal_terms=legal_terms)
+        self.render('legal/terms.html', legal_terms=legal_terms)
 
+settings = {
+    "debug": configuration.DEBUG,
+    "xsrf_cookies": True,
+    "template_path": configuration.TEMPLATE_PATH,
+}
 urls = (
     (r'/', IndexHandler),
     (r'/about/?', AboutHandler),
@@ -278,7 +288,7 @@ urls = (
     (r'/sitemap/?', SitemapHandler),
     (r'(/admin)(.*)$', appengine_admin.Admin),
 )
-application = webapp.WSGIApplication(urls, debug=configuration.DEBUG)
+application = tornado.wsgi.WSGIApplication(urls, **settings)
 
 def main():
     from gaefy.db.datastore_cache import DatastoreCachingShim

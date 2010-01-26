@@ -8,13 +8,12 @@
         <div class="content">
         {% for post in posts %}
             <h2><a href="/press/post{{ post.path }}">{{ post.title }}</a></h2>
-            <p class="dateline">{{ post.when_published }}&mdash;{{ post.place }}</p>
+            <p class="dateline">{{ post.when_published|slugify }}&mdash;{{ post.place }}</p>
             <div class="post-content">
                 {{ post.content_html }}
             </div>
-        {% endfor %}
+        {% end %}
         </div>
     </div>
-    
 
-{% endblock %}
+{% end %}

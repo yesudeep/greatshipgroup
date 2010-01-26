@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "..base.html" %}
 
 {% block tag_trunk_content %}
     
@@ -9,7 +9,7 @@
                 {{ content_title }}
             {% else %}
             Fleet browser.
-            {% endif %}</h2>
+            {% end %}</h2>
             <p>Hover over an item to view more information or <a href="/services/fleet/status">view the entire fleet status</a> as a table.</p>
             <ul id="fleet-list" class="list-view">
                 {% for vessel in vessels %}
@@ -17,7 +17,7 @@
                         <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
                         <div class="title">
                             <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
-                            <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered }}{% else %}Expected: {{ vessel.when_expected }}{% endif %}</p>
+                            <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
                         </div>
                         <div class="info">
                             <h3>Specifications</h3>
@@ -27,16 +27,16 @@
                                 <dt>Built</dt><dd>{{ vessel.built }}</dd>
                                 <dt>Type</dt><dd>{{ vessel.vessel_type }}</dd>
                                 <dt>Yard</dt><dd>{{ vessel.yard }}</dd>
-                                <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% endif %}</dd>
-                                <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% endif %}</dd>
-                                <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% endif %}</dd>
-                                <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% endif %}</dd>
-                                <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% endif %}</dd>
+                                <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% end %}</dd>
+                                <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% end %}</dd>
+                                <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% end %}</dd>
+                                <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% end %}</dd>
+                                <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% end %}</dd>
                                 <dt>Company</dt><dd>{{ vessel.company }}</dd>
                             </dl>
                         </div>
                     </li>
-                {% endfor %}
+                {% end %}
             </ul>
         </div>
         <div class="aside">
@@ -84,8 +84,8 @@
         </div>
     </div>
 
-{% endblock %}
+{% end %}
 
 {% block tag_scripts %}
     <script type="text/javascript">$SELECTOR_SCRIPT</script>
-{% endblock %}
+{% end %}

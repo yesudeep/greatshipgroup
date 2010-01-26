@@ -1,7 +1,7 @@
-<!doctype html><html {% block html_attributes %}{% endblock %}><head>
+<!doctype html><html {% block html_attributes %}{% end %}><head>
 <meta http-equiv="X-UA-Compatible" content="chrome=1" />
 <meta charset="utf-8" />
-<title>{% block tag_title %}{{ APPLICATION_TITLE }}{% endblock %}</title>
+<title>{% block tag_title %}{{ APPLICATION_TITLE }}{% end %}</title>
 
 {% block unsupported_browser %}
 #*<!--[if IE]>
@@ -9,9 +9,9 @@
 window.location.href="/unsupported/browser/";
 </script>
 <![endif]-->*#
-{% endblock %}
+{% end %}
 
-{% block tag_head %}{% endblock %}
+{% block tag_head %}{% end %}
 
 <!--[if lt IE 8]>
 <script type="text/javascript">IE7_PNG_SUFFIX = ".png";</script>
@@ -22,18 +22,18 @@ window.location.href="/unsupported/browser/";
 <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 <![endif]-->
 
-</head><body {% block body_attributes %}{% endblock %}>
+</head><body {% block body_attributes %}{% end %}>
 {% block chrome_frame_plugin %}
-{#}<!--[if lt IE 7]>
+#*<!--[if lt IE 7]>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/chrome-frame/1/CFInstall.min.js"></script>
 <div id="chrome_frame_plugin_placeholder"></div>
 <script type="text/javascript">CFInstall.check({node:"chrome_frame_plugin_placeholder"});</script>
-<![endif]-->#}
-{% endblock %}
-{% block tag_body %}{% endblock %}
+<![endif]-->*#
+{% end %}
+{% block tag_body %}{% end %}
 
-{% block tag_scripts_base %}{% endblock %}
-{% block tag_scripts %}{% endblock %}
-{% block tag_scripts_other %}{% endblock %}
-{% block tag_scripts_analytics %}{{ ANALYTICS_CODE }}{% endblock %}
+{% block tag_scripts_base %}{% end %}
+{% block tag_scripts %}{% end %}
+{% block tag_scripts_other %}{% end %}
+{% block tag_scripts_analytics %}{{ ANALYTICS_CODE }}{% end %}
 </body></html>

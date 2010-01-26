@@ -6,9 +6,9 @@
     <!--[if lt IE 9]>
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/ie6{{CSS_MINIFIED}}.css" type="text/css" media="screen,projection" charset="utf-8" />
     <![endif]-->
-	{% endblock %}
-	{% block tag_additional_stylesheets %}{% endblock %}
-{% endblock %}
+	{% end %}
+	{% block tag_additional_stylesheets %}{% end %}
+{% end %}
 
 {% block tag_body %}
 	{% block tag_wrapper %}
@@ -32,22 +32,22 @@
 		        <li><div id="cse"></div></li>
 		        <li><a id="nav-we-are-hiring" href="/careers"></a></li>		      
 		    </ul>
-		    {% endblock %}
+		    {% end %}
 		    </div>
             <div id="header-content">
 			{% block tag_header_content %}
-            {% endblock %}
+            {% end %}
             </div>
         </div>
-		{% endblock %}
+		{% end %}
 		{% block tag_trunk %}
 		<div id="trunk">
 			<div id="trunk-content">
 			{% block tag_trunk_content %}
-			{% endblock %}
+			{% end %}
 			</div>
 		</div>
-		{% endblock %}
+		{% end %}
 		{% block tag_footer %}
 		<div id="footer">
 			<div id="footer-content">
@@ -96,17 +96,17 @@
                         <a href="http://www.happychickoo.com/"><img src="http://static.greatshipglobal.com/public/images/logo/48x48/chickoo_white_silhuette.png" alt="HappyChickoo Logo" /></a> 
                     </p> 
                 </div>
-			{% endblock %}
+			{% end %}
             </div>
 		</div>
-		{% endblock %}
-		{% endblock %}
+		{% end %}
+		{% end %}
 	</div>
-	{% endblock %}
-{% endblock %}
+	{% end %}
+{% end %}
 {% block tag_scripts_base %}
 <script type="text/javascript">window.__hc_scripts = ["{{ JQUERY_URL }}"];</script>
-{% endblock %}
+{% end %}
 {% block tag_scripts_other %}
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 <script type="text/javascript">
@@ -117,4 +117,4 @@
     customSearchControl.draw('cse');
   }, true);
 </script>
-{% endblock %}
+{% end %}

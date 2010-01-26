@@ -8,19 +8,19 @@
             <ul>
                 {% for board_director in board_directors %}
                     <li>{{ board_director.full_name }}, {{ board_director.designation }}</li>
-                {% endfor %}
+                {% end %}
             </ul>
             <h2>Senior Management</h2>
             <ul>
                 {% for senior_manager in senior_managers %}
                     <li>{{ senior_manager.full_name }}, {{ senior_manager.designation }}</li>
-                {% endfor %}
+                {% end %}
             </ul>
             <h2>Auditors</h2>
             <ul>
                 {% for auditor in auditors %}
                     <li>{{ auditor.full_name }}, {{ auditor.designation }}</li>
-                {% endfor %}
+                {% end %}
             </ul>
         </div>
     </div>
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                     </li>
-                {% endfor %}
+                {% end %}
                 <li>
                     <a class="photo" href="/about/management/1">
                         <img src="{{ MEDIA_URL }}image/photo/ravi_sheth.jpg" />
@@ -183,4 +183,4 @@
         </div>
     </div>
 
-{% endblock %}
+{% end %}
