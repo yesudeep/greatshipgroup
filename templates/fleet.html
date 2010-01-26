@@ -5,11 +5,7 @@
     <h1><span class="icon fleet"></span>Our fleet. <strong>Our assets.</strong></h1>
     <div class="article">
         <div class="content">
-            <h2>{% if content_title %}
-                {{ content_title }}
-            {% else %}
-            Fleet browser.
-            {% end %}</h2>
+            <h2>{{ content_title }}</h2>
             <p>Hover over an item to view more information or <a href="/services/fleet/status">view the entire fleet status</a> as a table.</p>
             <ul id="fleet-list" class="list-view">
                 {% for vessel in vessels %}

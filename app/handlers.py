@@ -81,7 +81,7 @@ class FleetHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all()
-        self.render('fleet.html', vessels=vessels)
+        self.render('fleet.html', vessels=vessels, content_title="Fleet browser.")
 
 class FleetStatusHandler(BaseRequestHandler):
     def get(self):
