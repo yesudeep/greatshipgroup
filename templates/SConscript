@@ -21,25 +21,25 @@ env.Cheetah(TEMPLATE_BUILD_DIR + 'admin/base_site.html', 'base_site.html.tmpl', 
 # These files have page scripts.
 PAGE_TEMPLATE_FILES = Split("""
     index.html
-    about/financial.html
-    services/fleet.html
+    financial.html
+    fleet.html
 """)
 
 BASE_TEMPLATE_FILES = Split("""
     base.html
-    about/management.html
-    about/mission.html
-    about/offices.html
-    about/overseas.html
-    about/suppliers.html
-    about/feedback.html
+    management.html
+    mission.html
+    offices.html
+    overseas.html
+    suppliers.html
+    feedback.html
     press.html
-    careers/careers.html
-    careers/tour.html
-    legal/policy.html
-    legal/terms.html
-    services/qhse.html
-    services/fleet_status.html
+    careers.html
+    tour.html
+    policy.html
+    terms.html
+    qhse.html
+    fleet_status.html
     sitemap.html
 """)
 

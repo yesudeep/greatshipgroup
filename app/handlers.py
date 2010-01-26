@@ -51,7 +51,7 @@ class IndexHandler(BaseRequestHandler):
 # About
 class AboutHandler(BaseRequestHandler):
     def get(self):
-        self.render('about/mission.html')
+        self.render('mission.html')
 
 class ManagementHandler(BaseRequestHandler):
     def get(self):
@@ -60,17 +60,17 @@ class ManagementHandler(BaseRequestHandler):
         board_directors = BoardDirector.get_all()
         auditors = Auditor.get_all()
         senior_managers = SeniorManagement.get_all()
-        self.render('about/management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
+        self.render('management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
 
 class OverseasHandler(BaseRequestHandler):
     def get(self):
-        self.render('about/overseas.html')
+        self.render('overseas.html')
 
 class FinancialHandler(BaseRequestHandler):
     def get(self):
         from models import AnnualReport
         annual_reports = AnnualReport.get_all()
-        self.render('about/financial.html', annual_reports=annual_reports)
+        self.render('financial.html', annual_reports=annual_reports)
 
 class SitemapHandler(BaseRequestHandler):
     def get(self):
@@ -81,7 +81,7 @@ class FleetHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all()
-        self.render('services/fleet.html', vessels=vessels)
+        self.render('fleet.html', vessels=vessels)
 
 class FleetStatusHandler(BaseRequestHandler):
     def get(self):
@@ -91,7 +91,7 @@ class FleetStatusHandler(BaseRequestHandler):
         d = utils.get_previous_month()
         previous_month = utils.datetimeformat(d, format="%B")
         previous_year = utils.datetimeformat(d, format="%Y")
-        self.render("services/fleet_status.html", operating_vessels=operating_vessels, 
+        self.render("fleet_status.html", operating_vessels=operating_vessels, 
             operating_rigs=operating_rigs, 
             under_construction_vessels=under_construction_vessels,
             previous_month=previous_month,
@@ -100,34 +100,34 @@ class FleetStatusHandler(BaseRequestHandler):
 class LogisticsHandler(BaseRequestHandler):
     def get(self):
         vessels = Vessel.get_all_logistics()
-        self.render('services/fleet.html', vessels=vessels,
+        self.render('fleet.html', vessels=vessels,
             content_title="Logistics fleet browser.")             
         
 class ConstructionHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_construction()
-        self.render('services/fleet.html', vessels=vessels,
+        self.render('fleet.html', vessels=vessels,
             content_title='Construction fleet browser.')             
 
 class DrillingHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_drilling()
-        self.render('services/fleet.html', vessels=vessels,
+        self.render('fleet.html', vessels=vessels,
             content_title='Drilling fleet browser.')             
         
 class QhseHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('services/qhse.html')
+        self.render('qhse.html')
 
 
 # Corporate relations
 class OfficesHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('about/offices.html')
+        self.render('offices.html')
 
 class SuppliersHandler(BaseRequestHandler):
     def get(self):
@@ -143,7 +143,7 @@ class SuppliersHandler(BaseRequestHandler):
         from models import LegalTerms
         legal_terms_list = LegalTerms.get_all()
         
-        self.render('about/suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
+        self.render('suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
 
     def post(self):
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
@@ -188,7 +188,7 @@ class FeedbackHandler(BaseRequestHandler):
             use_ssl = False,
             error = captcha_error_code
             )
-        self.render('about/feedback.html', captcha_html=captcha_html)
+        self.render('feedback.html', captcha_html=captcha_html)
 
     
     def post(self):
@@ -221,12 +221,12 @@ class FeedbackHandler(BaseRequestHandler):
 class CareersHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('careers/careers.html')
+        self.render('careers.html')
 
 class TourHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('careers/tour.html')
+        self.render('tour.html')
 
 class PressReleasesHandler(BaseRequestHandler):
     """Handles the home page requests."""
@@ -249,12 +249,12 @@ class PressReleaseHandler(BaseRequestHandler):
 class PolicyHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('legal/policy.html')
+        self.render('policy.html')
 
 class TermsHandler(BaseRequestHandler):
     def get(self, slug):
         legal_terms = LegalTerms.get_by_slug(slug)        
-        self.render('legal/terms.html', legal_terms=legal_terms)
+        self.render('terms.html', legal_terms=legal_terms)
 
 settings = {
     "debug": configuration.DEBUG,
