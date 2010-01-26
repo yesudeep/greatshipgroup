@@ -135,7 +135,10 @@ class SuppliersHandler(CachingRequestHandler):
             use_ssl = False,
             error = captcha_error_code
             )
-        self.render_to_response('about/suppliers.html', captcha_html=captcha_html)
+        from models import LegalTerms
+        legal_terms_list = LegalTerms.get_all()
+        
+        self.render_to_response('about/suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
 
     def post(self):
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
