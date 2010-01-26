@@ -231,17 +231,15 @@ class TourHandler(BaseRequestHandler):
 class PressReleasesHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        from models import Post
-        posts = Post.get_latest(20)
-        self.render('press.html', posts=posts)
+        posts = Post.get_latest(40)
+        self.render('press.html', datetimeformat=utils.datetimeformat, posts=posts)
 
 # Note singular
 class PressReleaseHandler(BaseRequestHandler):
     def get(self, path):
-        from models import Post
         post = Post.get_by_path(path)
         if post:
-            self.render('press.html', posts=[post])
+            self.render('press.html', datetimeformat=utils.datetimeformat, posts=[post])
         else:
             self.redirect('/press')
 
@@ -255,6 +253,19 @@ class TermsHandler(BaseRequestHandler):
     def get(self, slug):
         legal_terms = LegalTerms.get_by_slug(slug)        
         self.render('terms.html', legal_terms=legal_terms)
+
+# Feeds
+class PressFeedAtomHandler(BaseRequestHandler):
+    def get(self):
+        from datetime import datetime
+        posts = Post.get_latest()
+        config = dict(host=configuration.HOST_NAME, 
+            subtitle="Press Releases",
+            title=configuration.APPLICATION_TITLE,
+            developer_url=configuration.DEVELOPER_URL,
+            developer_name=configuration.DEVELOPER_NAME)
+        self.set_header("Content-Type", "application/atom+xml")
+        self.render('feeds/atom.xml', posts=posts, datetimeformat=utils.datetimeformat, **config)
 
 settings = {
     "debug": configuration.DEBUG,
@@ -286,6 +297,8 @@ urls = (
     (r'/services/fleet/logistics/?', LogisticsHandler),
     (r'/services/qhse/?', QhseHandler),
     (r'/sitemap/?', SitemapHandler),
+    (r'/press/feed/atom.xml?', PressFeedAtomHandler),
+    #(r'/press/feed/rss.xml?', PressFeedRssHandler),
     (r'(/admin)(.*)$', appengine_admin.Admin),
 )
 application = tornado.wsgi.WSGIApplication(urls, **settings)

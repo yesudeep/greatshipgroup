@@ -63,6 +63,9 @@ SERVER_PORT = os.environ['SERVER_PORT']
 SERVER_NAME = os.environ['SERVER_NAME']
 SERVER_SOFTWARE = os.environ['SERVER_SOFTWARE']
 
+DEVELOPER_URL = "http://happychickoo.com"
+DEVELOPER_NAME = "happychickoo"
+
 # Analytics identifiers.
 CLICKY_ANALYTICS_ID = '154848'
 GOOGLE_ANALYTICS_ID = 'UA-11769464-1'

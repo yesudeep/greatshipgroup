@@ -44,7 +44,7 @@ def slugify(s):
     s = unicodedata.normalize('NFKD', s).encode('ascii', 'ignore')
     return re.sub('[^a-zA-Z0-9-]+', '-', s).strip('-')
 
-def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+def datetimeformat(value, format="%Y-%m-%dT%H:%M:%SZ"):
     if value and hasattr(value, 'strftime'):
         formatted_datetime = value.strftime(format)
     else:

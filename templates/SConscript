@@ -41,6 +41,7 @@ BASE_TEMPLATE_FILES = Split("""
     qhse.html
     fleet_status.html
     sitemap.html
+    feeds/atom.xml
 """)
 
 TEMPLATE_FILES = BASE_TEMPLATE_FILES + Split("""
