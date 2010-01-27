@@ -114,6 +114,7 @@ STITCHED_IMAGES = (
         sources=Split("""
             image/logo/logo.png
             image/logo/en_US/text.png
+            image/logo/passion-fuels-performance.png
             image/icon/nav/home.png
             image/icon/nav/fleet.png
             image/icon/nav/logistics.png
