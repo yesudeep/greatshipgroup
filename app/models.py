@@ -280,7 +280,8 @@ class Post(SerializableModel):
     
     def publish(self):
         if not self.checksum or self.checksum != self.hash:
-            self.when_published = datetime.datetime.utcnow()
+            if not self.when_published:
+                self.when_published = datetime.datetime.utcnow()
             #if not self.path:
             #    num = 0
             #    entity = None

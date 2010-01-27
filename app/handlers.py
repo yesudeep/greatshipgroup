@@ -25,7 +25,6 @@
 
 import configuration
 
-import appengine_admin
 import logging
 import utils
 import tornado.web
@@ -34,7 +33,7 @@ import tornado.wsgi
 from google.appengine.api import memcache
 from google.appengine.ext import db, webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
-from recaptcha.client import captcha
+
 
 from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms
 from utils import BaseRequestHandler
@@ -131,6 +130,7 @@ class OfficesHandler(BaseRequestHandler):
 
 class SuppliersHandler(BaseRequestHandler):
     def get(self):
+        from recaptcha.client import captcha
         captcha_error_code = self.request.get('captcha_error')
         if not captcha_error_code:
             captcha_error_code = None
@@ -146,6 +146,7 @@ class SuppliersHandler(BaseRequestHandler):
         self.render('suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
 
     def post(self):
+        from recaptcha.client import captcha
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
         captcha_response_field = self.request.get('recaptcha_response_field')
         captcha_response = captcha.submit(
@@ -179,6 +180,7 @@ class SuppliersHandler(BaseRequestHandler):
 
 class FeedbackHandler(BaseRequestHandler):
     def get(self):
+        from recaptcha.client import captcha
         captcha_error_code = self.request.get('captcha_error')
         if not captcha_error_code:
             captcha_error_code = None
@@ -192,6 +194,7 @@ class FeedbackHandler(BaseRequestHandler):
 
     
     def post(self):
+        from recaptcha.client import captcha
         captcha_challenge_field = self.request.get('recaptcha_challenge_field')
         captcha_response_field = self.request.get('recaptcha_response_field')
         captcha_response = captcha.submit(
@@ -299,7 +302,6 @@ urls = (
     (r'/sitemap/?', SitemapHandler),
     (r'/press/feed/atom.xml?', PressFeedAtomHandler),
     #(r'/press/feed/rss.xml?', PressFeedRssHandler),
-    (r'(/admin)(.*)$', appengine_admin.Admin),
 )
 application = tornado.wsgi.WSGIApplication(urls, **settings)
 

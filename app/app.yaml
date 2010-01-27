@@ -43,6 +43,10 @@ handlers:
 - url: /dl.*
   script: static.py
 
+- url: /admin.*
+  script: admin.py
+  login: admin
+
 - url: /.*
   script: handlers.py
 
