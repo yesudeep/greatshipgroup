@@ -4,6 +4,7 @@ from google.appengine.api import memcache
 
 MAX_COUNT = 100
 CACHE_DURATION = 120
+LONG_CACHE_DURATION = 7200
 
 def serialize_entities(models):
     if models is None:

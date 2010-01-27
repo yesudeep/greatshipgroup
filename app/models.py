@@ -25,7 +25,7 @@ import configuration
 
 from google.appengine.ext import db
 from google.appengine.api import memcache
-from dbhelper import CACHE_DURATION, MAX_COUNT, SerializableModel, deserialize_entities, serialize_entities
+from dbhelper import LONG_CACHE_DURATION, CACHE_DURATION, MAX_COUNT, SerializableModel, deserialize_entities, serialize_entities
 from aetycoon import TransformProperty
 import appengine_admin
 
@@ -64,7 +64,16 @@ class Manager(SerializableModel):
     description = db.TextProperty()
     description_html = db.TextProperty()
     photo_url = db.URLProperty()
-    
+
+    @classmethod
+    def get_all(cls, count=MAX_COUNT):
+        cache_key = '%s.get_all()' % (cls.__name__,)
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Manager.all().order('when_created').fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
     def put(self):
         self.description_html = render_markup(self.description)
         super(Manager, self).put()
@@ -302,7 +311,7 @@ class Post(SerializableModel):
         entity = dbhelper.deserialize_entities(memcache.get(cache_key))
         if not entity:
             entity = Post.all().filter('path = ', path).get()
-            memcache.set(cache_key, dbhelper.serialize_entities(entity))
+            memcache.set(cache_key, dbhelper.serialize_entities(entity), CACHE_DURATION)
         return entity
 
     @property
@@ -372,7 +381,7 @@ class AdminSupplierInformation(appengine_admin.ModelAdmin):
 
 class AdminManager(appengine_admin.ModelAdmin):
     model = Manager
-    listFields = ('full_name', 'designation', 'description', 'photo_url')
+    listFields = ('full_name', 'designation', 'photo_url')
     editFields = ('full_name', 'designation', 'description', 'photo_url')
     readonlyFields = ('when_created', 'when_modified', 'description_html')
     listGql = 'order by full_name asc'
@@ -400,7 +409,7 @@ class AdminAuditor(appengine_admin.ModelAdmin):
 
 class AdminLegalTerms(appengine_admin.ModelAdmin):
     model = LegalTerms
-    listFields = ('title', 'short_name', 'slug', 'content')
+    listFields = ('title', 'short_name', 'slug')
     editFields = ('title', 'short_name', 'content')
     readonlyFields = ('slug', 'when_created', 'when_modified', 'content_html')
     listGql = 'order by slug asc'

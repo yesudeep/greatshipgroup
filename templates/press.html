@@ -2,9 +2,9 @@
 
 {% block tag_trunk_content %}
     
-    <h1><span class="icon press"></span>Press Releases. <strong>What's new at Greatship?</strong></h1>
+    <h1><a class="icon" href="/press/feed/atom.xml"><span class="icon press"></span></a>Press Releases. <strong>What's new at Greatship?</strong></h1>
     
-    <div class="article">
+    <div class="article plain">
         <div class="content">
         {% for post in posts %}
             <h2><a href="/press/post{{ post.path }}">{{ post.title }}</a></h2>

@@ -44,7 +44,7 @@ logging.basicConfig(level=logging.DEBUG)
 class IndexHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        posts = Post.get_latest()
+        posts = Post.get_latest(5)
         self.render('index.html', truncate=utils.truncate, posts=posts)
 
 # About
@@ -131,9 +131,7 @@ class OfficesHandler(BaseRequestHandler):
 class SuppliersHandler(BaseRequestHandler):
     def get(self):
         from recaptcha.client import captcha
-        captcha_error_code = self.request.get('captcha_error')
-        if not captcha_error_code:
-            captcha_error_code = None
+        captcha_error_code = self.get_argument('captcha_error', None)
 
         captcha_html = captcha.displayhtml(
             public_key = configuration.RECAPTCHA_PUBLIC_KEY,
@@ -147,21 +145,21 @@ class SuppliersHandler(BaseRequestHandler):
 
     def post(self):
         from recaptcha.client import captcha
-        captcha_challenge_field = self.request.get('recaptcha_challenge_field')
-        captcha_response_field = self.request.get('recaptcha_response_field')
+        captcha_challenge_field = self.get_argument('recaptcha_challenge_field')
+        captcha_response_field = self.get_argument('recaptcha_response_field')
         captcha_response = captcha.submit(
             captcha_challenge_field,
             captcha_response_field,
             configuration.RECAPTCHA_PRIVATE_KEY,
-            self.request.remote_addr
+            self.request.remote_ip
         )
         if captcha_response.is_valid:
-            full_name = self.request.get('name')
-            email = self.request.get('email')
-            subject = self.request.get('subject')
-            content = self.request.get('content')
-            designation = self.request.get('designation')
-            website_url = self.request.get('website_url')
+            full_name = self.get_argument('name')
+            email = self.get_argument('email')
+            subject = self.get_argument('subject')
+            content = self.get_argument('content')
+            designation = self.get_argument('designation')
+            website_url = self.get_argument('website_url')
             
             supplier_info = SupplierInformation()
             supplier_info.full_name = full_name
@@ -181,10 +179,8 @@ class SuppliersHandler(BaseRequestHandler):
 class FeedbackHandler(BaseRequestHandler):
     def get(self):
         from recaptcha.client import captcha
-        captcha_error_code = self.request.get('captcha_error')
-        if not captcha_error_code:
-            captcha_error_code = None
-
+        captcha_error_code = self.get_argument('captcha_error', None)
+        
         captcha_html = captcha.displayhtml(
             public_key = configuration.RECAPTCHA_PUBLIC_KEY,
             use_ssl = False,
@@ -195,19 +191,19 @@ class FeedbackHandler(BaseRequestHandler):
     
     def post(self):
         from recaptcha.client import captcha
-        captcha_challenge_field = self.request.get('recaptcha_challenge_field')
-        captcha_response_field = self.request.get('recaptcha_response_field')
+        captcha_challenge_field = self.get_argument('recaptcha_challenge_field')
+        captcha_response_field = self.get_argument('recaptcha_response_field')
         captcha_response = captcha.submit(
             captcha_challenge_field,
             captcha_response_field,
             configuration.RECAPTCHA_PRIVATE_KEY,
-            self.request.remote_addr
+            self.request.remote_ip
         )
         if captcha_response.is_valid:
-            full_name = self.request.get('name')
-            email = self.request.get('email')
-            subject = self.request.get('subject')
-            content = self.request.get('content')
+            full_name = self.get_argument('name')
+            email = self.get_argument('email')
+            subject = self.get_argument('subject')
+            content = self.get_argument('content')
             
             feedback = Feedback()
             feedback.full_name = full_name
@@ -272,7 +268,7 @@ class PressFeedAtomHandler(BaseRequestHandler):
 
 settings = {
     "debug": configuration.DEBUG,
-    "xsrf_cookies": True,
+    #"xsrf_cookies": True,
     "template_path": configuration.TEMPLATE_PATH,
 }
 urls = (

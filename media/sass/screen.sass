@@ -38,7 +38,9 @@ h1
     :color #fff
     :line-height 1.2
     :letter-spacing -0.03em
-    .icon
+    a.icon
+        :display block
+    span.icon
         +heading-icon("128px", "128px")
         :margin-left 1em
         :margin-bottom -1.1em
@@ -154,7 +156,7 @@ table.classic
         :font-size 0.8em
     tbody
         th
-            :background-color silver
+            :background-color= !color_bg_table_classic_row_header
             :color white
             :font-weight bold
         tr:nth-child(2n) 

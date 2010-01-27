@@ -80,6 +80,7 @@ IMAGE_FILES = Split("""
     script/lib/chickoojs/src/jquery/dataTables/1.6/media/images/sort_desc_disabled.jpg
     
     image/icon/48x48/pdf_document.png
+    image/icon/14x14/feed-icon-14x14.png
     
     image/icon/128x128/qhse.png
     image/icon/128x128/drilling.png
