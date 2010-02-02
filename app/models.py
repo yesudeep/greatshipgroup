@@ -464,8 +464,8 @@ class AdminPost(appengine_admin.ModelAdmin):
     readonlyFields = ('path', 'checksum', 'when_published', 'content_html', 'when_created', 'when_modified')
     listGql = 'order by when_published desc'
 
-appengine_admin.register(AdminFeedback, 
-    AdminSupplierInformation, 
+appengine_admin.register(AdminFeedback,
+    AdminSupplierInformation,
     AdminManager,
     AdminAssetLiabilityStatement,
     AdminIncomeStatement,
