@@ -171,14 +171,11 @@ SCRIPT_BUNDLES = (
         sources = Split(
         COMMON_SCRIPTS + 
         """
-            script/lib/chickoojs/src/quicksilver.js
             script/lib/chickoojs/src/jquery/defer/jquery.defer.js
             script/lib/chickoojs/src/jquery/liveFilter/jquery.liveFilter.js
             script/fleet.js
         """)
     ),
-    
-    
 )
 
 CSS_BUNDLES = (

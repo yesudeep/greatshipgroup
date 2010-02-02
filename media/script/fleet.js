@@ -1,6 +1,4 @@
 jQuery(function(){
-    //jQuery('#fleet').dataTable();
-    
     jQuery('#q').liveFilter('#fleet-list', {
         //useQuicksilver: true
     });

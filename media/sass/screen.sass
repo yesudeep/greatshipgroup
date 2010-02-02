@@ -3,8 +3,6 @@
 @import slickmap.sass
 @import google-site-search.sass
 
-!nav_left_offset = -691px
-
 =heading-icon(!height, !width)
     :height= !height
     :width= !width
@@ -185,7 +183,7 @@ table.classic
     :background= "transparent" !image_bg_nav "no-repeat -374px 0"
     :display block
     :position absolute
-    :margin-left 800px
+    :margin-left 650px
     
 #nav-links
     :float right
@@ -198,21 +196,39 @@ table.classic
             :display block
             :height 48px
             :width 48px
-            :background= "transparent" !image_bg_nav "no-repeat !nav_left_offset 0"
+            :background= "transparent" !image_bg_nav "no-repeat -691px 0"
+            span
+                +transition("-webkit-transform 0.6s ease")
+                :display none
+        > a:hover
+            span
+                +transform("scale(1.5)")
+                :font-family= !font_family_sans_serif
+                :font-size= "0.7em !important"
+                :display block
+                :position absolute
+                :margin-top 65px
+                :text-align center
+                :z-index 60
+                :background-color #000
+                :background-color rgba(0,0,0,0.8)
+                :color white
+                :padding 4px 10px
+                +border-radius("10px")
         #nav-fleet
-            :background-position= (!nav_left_offset - 48px) 0
+            :background-position= (-691px - 48px) 0
         #nav-logistics
-            :background-position= (!nav_left_offset - 48px * 2) 0
+            :background-position= (-691px - 48px * 2) 0
         #nav-construction
-            :background-position= (!nav_left_offset - 48px * 3) 0
+            :background-position= (-691px - 48px * 3) 0
         #nav-drilling
-            :background-position= (!nav_left_offset - 48px * 4) 0
+            :background-position= (-691px - 48px * 4) 0
         #nav-qhse
-            :background-position= (!nav_left_offset - 48px * 5) 0
+            :background-position= (-691px - 48px * 5) 0
         #nav-contact
-            :background-position= (!nav_left_offset - 48px * 6) 0
+            :background-position= (-691px - 48px * 6) 0
         #nav-we-are-hiring
-            :background-position= (!nav_left_offset - 48px * 7) 0
+            :background-position= (-691px - 48px * 7) 0
             :height 128px
             :width 128px
             :position absolute
