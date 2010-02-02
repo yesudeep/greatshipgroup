@@ -64,13 +64,14 @@ class Manager(SerializableModel):
     description = db.TextProperty()
     description_html = db.TextProperty()
     photo_url = db.URLProperty()
+    rank = db.IntegerProperty()
 
     @classmethod
     def get_all(cls, count=MAX_COUNT):
         cache_key = '%s.get_all()' % (cls.__name__,)
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
-            entities = Manager.all().order('when_created').fetch(count)
+            entities = Manager.all().order('rank').order('full_name').fetch(count)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
 
@@ -146,6 +147,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_logistics = ', True) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -157,6 +159,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_construction = ', True) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -168,6 +171,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_drilling = ', True) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -180,6 +184,7 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -192,6 +197,7 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -203,6 +209,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -381,8 +388,8 @@ class AdminSupplierInformation(appengine_admin.ModelAdmin):
 
 class AdminManager(appengine_admin.ModelAdmin):
     model = Manager
-    listFields = ('full_name', 'designation', 'photo_url')
-    editFields = ('full_name', 'designation', 'description', 'photo_url')
+    listFields = ('full_name', 'designation', 'photo_url', 'rank')
+    editFields = ('full_name', 'designation', 'description', 'photo_url', 'rank')
     readonlyFields = ('when_created', 'when_modified', 'description_html')
     listGql = 'order by full_name asc'
 

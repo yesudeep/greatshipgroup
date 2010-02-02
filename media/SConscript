@@ -176,6 +176,15 @@ SCRIPT_BUNDLES = (
             script/fleet.js
         """)
     ),
+    dict(
+        selector="fleet_status.js",
+        sources = Split(
+        COMMON_SCRIPTS + 
+        """
+            script/lib/chickoojs/src/jquery/tablesorter/jquery.tablesorter.js
+            script/fleet_status.js
+        """)
+    ),
 )
 
 CSS_BUNDLES = (

@@ -7,13 +7,13 @@
             <h2>Board of Directors</h2>
             <ul>
                 {% for board_director in board_directors %}
-                    <li>{{ board_director.full_name }}, {{ board_director.designation }}</li>
+                    <li>{{ board_director.full_name }}{% if board_director.designation %}, {{ board_director.designation }}{% end %}</li>
                 {% end %}
             </ul>
             <h2>Senior Management</h2>
             <ul>
                 {% for senior_manager in senior_managers %}
-                    <li>{{ senior_manager.full_name }}, {{ senior_manager.designation }}</li>
+                    <li>{{ senior_manager.full_name }}{% if senior_manager.designation %}, {{ senior_manager.designation }}{% end %}</li>
                 {% end %}
             </ul>
             <h2>Auditors</h2>

@@ -44,7 +44,7 @@ logging.basicConfig(level=logging.DEBUG)
 class IndexHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        posts = Post.get_latest(5)
+        posts = Post.get_latest(3)
         self.render('index.html', truncate=utils.truncate, posts=posts)
 
 # About

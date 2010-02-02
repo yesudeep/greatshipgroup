@@ -180,10 +180,13 @@ table.classic
 #nav-motto-link
     :width 317px
     :height 43px
-    :background= "transparent" !image_bg_nav "no-repeat -374px 0"
+    //:background= "transparent" !image_bg_nav "no-repeat -374px 0"
     :display block
     :position absolute
     :margin-left 650px
+    :font-family= !font_family_sans_serif
+    :font-weight bold
+    :color= !color_fg_motto
     
 #nav-links
     :float right
@@ -205,13 +208,13 @@ table.classic
                 +transform("scale(1.5)")
                 :font-family= !font_family_sans_serif
                 :font-size= "0.7em !important"
+                :font-weight bold
                 :display block
                 :position absolute
                 :margin-top 65px
                 :text-align center
                 :z-index 60
-                :background-color #000
-                :background-color rgba(0,0,0,0.8)
+                :background-color= !color_fg_motto
                 :color white
                 :padding 4px 10px
                 +border-radius("10px")
