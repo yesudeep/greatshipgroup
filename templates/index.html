@@ -3,21 +3,33 @@
 {% block tag_trunk_content %}
     <h1>Energy and offshore services. <strong>Worldwide.</strong></h1>
     <ul id="splash-presentation">
-        <li><a href="/services/qhse" id="landing-qhse" class="icon"></a></li>
+        <li><a href="/services/qhse" id="landing-qhse" class="icon">
+            <span>Quality, Health, Safety, and Environment</span>
+        </a></li>
         <li class="separator"></li>
-        <li><a href="/services/fleet/drilling" id="landing-drilling" class="icon"></a></li>
+        <li><a href="/services/fleet/drilling" id="landing-drilling" class="icon">
+            <span>Drilling</span>
+        </a></li>
         <li class="separator"></li>
-        <li><a href="/services/fleet" id="landing-fleet" class="icon"></a></li>
+        <li><a href="/services/fleet" id="landing-fleet" class="icon">
+            <span>Fleet status</span>
+        </a></li>
         <li class="separator"></li>        
-        <li><a href="/services/fleet/construction" id="landing-construction" class="icon"></a></li>
+        <li><a href="/services/fleet/construction" id="landing-construction" class="icon">
+            <span>Construction</span>
+        </a></li>
         <li class="separator"></li>
-        <li><a href="/services/fleet/logistics" id="landing-logistics" class="icon"></a></li>
+        <li><a href="/services/fleet/logistics" id="landing-logistics" class="icon">
+            <span>Logistics</span>
+        </a></li>
     </ul>
-{% endblock %}
+    <ul class="news-ticker">
+        {% for post in posts %}                    
+        <li>Headlines <a href="/press/feed/atom.xml"><img src="{{ MEDIA_URL }}image/icon/14x14/feed-icon-14x14.png"</a> | <a href="/press/post{{ post.path }}">{{ truncate(post.title, 100) }}</a></li>
+        {% end %}
+    </ul>
+{% end %}
 
-{% block tag_scripts_base %}
-{% endblock %}
-
-{#{% block tag_scripts %}
+{% block tag_scripts %}
 <script type="text/javascript">$SELECTOR_SCRIPT</script>
-{% endblock %}#}
+{% end %}

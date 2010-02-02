@@ -1,131 +1,22 @@
 {% extends "base.html" %}
 
 {% block tag_trunk_content %}
-    
-    <h1><span class="icon fleet"></span>Our fleet. <strong>Our assets.</strong></h1>
+    <h1><span class="icon fleet"></span>Fleet Status. <strong>What's available for you?</strong></h1>
     <div class="article plain">
-        <div class="header">
-            <h2>Browse our fleet.</h2>
-            <p>Type your search terms below or pick a filter. </p>
-            <ul id="fleet-actions" class="actions">
-                <li>
-                    <form id="form-filter-fleet" method="get" class="decorated-fields horizontal">
-                        <label for="q">
-                            <span class="prefix"><img src="{{ MEDIA_URL }}image/icon/16x16/magnifying-glass.png" /></span>
-                            <input type="search" placeholder="Search" name="q" id="q" value="" />
-                            <span class="suffix"></span>
-                        </label>
-                    </form>
-                </li>
-                <li>
-                    Kind: <a class="tag selected" href="#kind-all">all</a>
-                </li>
-                <li>
-                    <a class="tag" href="#kind-logistics">logistics</a>
-                </li>
-                <li>
-                    <a class="tag" href="#kind-construction">construction</a>
-                </li>
-                <li>
-                    <a class="tag" href="#kind-drilling">drilling</a>                    
-                </li>
-                <li class="separator"></li>
-                <li>
-                    Status: <a class="tag selected" href="#status-all">all</a>
-                </li>
-                <li>
-                    <a class="tag" href="#status-operating">operating</a>
-                </li>
-                <li>
-                    <a class="tag" href="#status-under-construction">under-construction</a>
-                </li>
-                <li>
-                    <a class="tag" href="#status-available">available</a>                    
-                </li>
-            </ul>
-        </div>
         <div class="content">
-            <ul id="fleet-list" class="info-list">
-                <li>
-                    <div class="title">
-                        <h2>Greatdrill Chetna <strong>March, 2012</strong></h2>
-                        <p><a href="/dl/fleet/specs/chetna.pdf">Specification Sheet (.pdf)</a></p>
-                    </div>
-                    <div class="info">
-                        <h3>Specifications</h3>
-                        <dl>
-                            <dt>Built</dt>
-                            <dd>2009</dd>
-                            <dt>Type</dt>
-                            <dd>350' IC JU rig</dd>
-                            <dt>Yard</dt>
-                            <dd>Keppel Fels</dd>
-                            <dt>Deadweight</dt>
-                            <dd>-</dd>
-                            <dt>Design</dt>
-                            <dd>KFELS B Class</dd>
-                            <dt>BP</dt>
-                            <dd>-</dd>
-                            <dt>DP</dt>
-                            <dd>-</dd>
-                            <dt>FiFi</dt>
-                            <dd>-</dd>
-                            <dt>Company</dt>
-                            <dd>GGES</dd>
-                        </dl>
-                    </div>
-                </li>
-                <li>
-                    <div class="title">
-                        <h2>Greatdrill Chitra <strong>October, 2014</strong></h2>
-                    </div>
-                    <div class="info">
-                        <h3>Specifications</h3>
-                        <dl>
-                            <dt>Built</dt>
-                            <dd>2009</dd>
-                            <dt>Type</dt>
-                            <dd>350' IC JU rig</dd>
-                            <dt>Yard</dt>
-                            <dd>Keppel Fels</dd>
-                            <dt>Deadweight</dt>
-                            <dd>-</dd>
-                            <dt>Design</dt>
-                            <dd>KFELS B Class</dd>
-                            <dt>BP</dt>
-                            <dd>-</dd>
-                            <dt>DP</dt>
-                            <dd>-</dd>
-                            <dt>FiFi</dt>
-                            <dd>-</dd>
-                            <dt>Company</dt>
-                            <dd>GGES</dd>
-                        </dl>
-                    </div>
-                </li>
-                <li>Greatdrill Chitra</li>
-                <li>Greatship Disha</li>
-                <li>Greatship Diya</li>
-                <li>Greatship Dipti</li>
-                <li>Greatship Anjali</li>
-                <li>Greatship Amrita</li>
-                <li>Greatship Dhriti</li>
-                <li>Greatship Dhwani</li>
-                <li>Greatship Abha</li>
-            </ul>
-        
+            <h2>Current fleet status.</h2>
+            <p>The information presented below is as on {{ previous_month }}, {{ previous_year }}. Prefer to <a href="/services/fleet">find a vessel</a> instead?</p>
             <table id="fleet" class="classic" border="0" cellspacing="0" cellpadding="0"> 
                 <caption>Fleet Status</caption> 
                 <thead> 
                     <tr> 
-                        <th>Sr.No.</th> 
                         <th>Vessel Name</th> 
                         <th>Built</th> 
                         <th>Type</th> 
                         <th>Yard</th> 
-                        <th>Deadweight</th> 
+                        <th>Deadweight (tons)</th> 
                         <th>Design</th> 
-                        <th>BP</th> 
+                        <th>BP (tons)</th> 
                         <th>DP</th> 
                         <th>FiFi</th> 
                         <th>Company</th> 
@@ -133,6 +24,68 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if operating_rigs %}                        
+                        <tr>
+                            <th colspan="11">Operating Rigs</th>
+                        </tr>
+                        {% for vessel in operating_rigs %}                        
+                            <tr> 
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
+                                <td>{{ vessel.built }}</td> 
+                                <td>{{ vessel.vessel_type }}</td> 
+                                <td>{{ vessel.yard }}</td> 
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td> 
+                                <td>{{ vessel.design }}</td> 
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td> 
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td> 
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td> 
+                                <td>{{ vessel.company }}</td> 
+                                <td>{{ vessel.when_available }}</td> 
+                            </tr>
+                        {% end %}
+                    {% end %}
+                    {% if operating_vessels %}                        
+                        <tr>
+                            <th colspan="11">Operating vessels</th>
+                        </tr>
+                        {% for vessel in operating_vessels %}                        
+                            <tr> 
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
+                                <td>{{ vessel.built }}</td> 
+                                <td>{{ vessel.vessel_type }}</td> 
+                                <td>{{ vessel.yard }}</td> 
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td> 
+                                <td>{{ vessel.design }}</td> 
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td> 
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td> 
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td> 
+                                <td>{{ vessel.company }}</td> 
+                                <td>{{ vessel.when_available }}</td> 
+                            </tr>
+                        {% end %}
+                    {% end %}
+                    {% if under_construction_vessels %}                        
+                        <tr>
+                            <th colspan="11">Under-construction vessels</th>
+                        </tr>
+                        {% for vessel in under_construction_vessels %}                        
+                            <tr> 
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
+                                <td>{{ vessel.built }}</td> 
+                                <td>{{ vessel.vessel_type }}</td> 
+                                <td>{{ vessel.yard }}</td> 
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td> 
+                                <td>{{ vessel.design }}</td> 
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td> 
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td> 
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td> 
+                                <td>{{ vessel.company }}</td> 
+                                <td>{{ vessel.when_available }}</td> 
+                            </tr>
+                        {% end %}
+                    {% end %}
+
+#*
                     <tr> 
                         <td>1</td> 
                         <td>Greatdrill Chetna</td> 
@@ -511,13 +464,11 @@
                         <td>GIL</td> 
                         <td>Mar, 2011</td> 
                     </tr>
+*#
                 </tbody> 
             </table>            
+
         </div>
     </div>
-
-{% endblock %}
-
-{% block tag_scripts %}
-    <script type="text/javascript">$SELECTOR_SCRIPT</script>
-{% endblock %}
+    
+{% end %}

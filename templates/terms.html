@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block tag_trunk_content %}
+    <h1><span class="icon legal"></span>Standard terms and conditions. <strong>{{ legal_terms.title }}</strong></h1>
+    <div class="article plain">
+        <div class="content">
+            {{ legal_terms.content_html }}
+        </div>
+    </div>
+{% end %}

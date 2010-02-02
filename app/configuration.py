@@ -63,6 +63,9 @@ SERVER_PORT = os.environ['SERVER_PORT']
 SERVER_NAME = os.environ['SERVER_NAME']
 SERVER_SOFTWARE = os.environ['SERVER_SOFTWARE']
 
+DEVELOPER_URL = "http://happychickoo.com"
+DEVELOPER_NAME = "happychickoo"
+
 # Analytics identifiers.
 CLICKY_ANALYTICS_ID = '154848'
 GOOGLE_ANALYTICS_ID = 'UA-11769464-1'
@@ -130,7 +133,8 @@ ga.src=('https:'==doc.location.protocol?'https://ssl':'http://www')+'.google-ana
 ga.setAttribute('async', 'true');doc.documentElement.firstChild.appendChild(ga);})();</script>
 """ % dict(GOOGLE_ANALYTICS_ID=GOOGLE_ANALYTICS_ID)
 
-JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/AFORM.pdf"
+#JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/AFORM.pdf"
+JOB_APPLICATION_FORM_URL = "http://dl.dropbox.com/u/2713328/website/download/careers/job_application_form.pdf"
 RECAPTCHA_PUBLIC_KEY = "6LfjowkAAAAAAL5Jiz44D3P0OjNPLh29z4ShPh_T"
 RECAPTCHA_PRIVATE_KEY = "6LfjowkAAAAAAMF5GKrFzjdRnsp-ZYLaS1LfHeqU"
 
@@ -162,6 +166,8 @@ TEMPLATE_BUILTINS = {
 }
 
 # Directories in which to search for templates.
-TEMPLATE_DIRS = (
-    path_join(DIR_PATH, 'templates'),
-)
+#TEMPLATE_DIRS = (
+#    path_join(DIR_PATH, 'templates'),
+#)
+
+TEMPLATE_PATH = path_join(DIR_PATH, 'templates')

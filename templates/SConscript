@@ -21,24 +21,27 @@ env.Cheetah(TEMPLATE_BUILD_DIR + 'admin/base_site.html', 'base_site.html.tmpl', 
 # These files have page scripts.
 PAGE_TEMPLATE_FILES = Split("""
     index.html
-    about/financial.html
-    services/fleet.html
+    financial.html
+    fleet.html
 """)
 
 BASE_TEMPLATE_FILES = Split("""
     base.html
-    about/management.html
-    about/mission.html
-    about/offices.html
-    about/overseas.html
-    about/suppliers.html
-    about/feedback.html
+    management.html
+    mission.html
+    offices.html
+    overseas.html
+    suppliers.html
+    feedback.html
     press.html
-    careers/careers.html
-    careers/tour.html
-    legal/policy.html
-    services/qhse.html
+    careers.html
+    tour.html
+    policy.html
+    terms.html
+    qhse.html
+    fleet_status.html
     sitemap.html
+    feeds/atom.xml
 """)
 
 TEMPLATE_FILES = BASE_TEMPLATE_FILES + Split("""
@@ -70,6 +73,11 @@ for f in set(PLAIN_COPIES):
 for f in set(MINIFIABLE_FILES):
     # Disable the minifier for HTML and enable the following copy command if you
     # want to debug markup.
-    env.HTMLMinify(TEMPLATE_MINIFIED_DIR + f, TEMPLATE_BUILD_DIR + f, HTML_MINIFY_INLINE=True)
-    #env.Command(TEMPLATE_MINIFIED_DIR + f, TEMPLATE_BUILD_DIR + f, Copy("$TARGET", "$SOURCE"))
-    env.Jinja2Compile(DEST_DIR + f, TEMPLATE_MINIFIED_DIR + f, jinja2_base_dir='_build_min/')
+    
+    # Not jinja.  plain copies.
+    #env.Command(DEST_DIR + f, TEMPLATE_BUILD_DIR + f, Copy("$TARGET", "$SOURCE"))
+    env.HTMLMinify(DEST_DIR + f, TEMPLATE_BUILD_DIR + f, HTML_MINIFY_INLINE=True)
+    
+    # No longer using jinja
+    #env.HTMLMinify(TEMPLATE_MINIFIED_DIR + f, TEMPLATE_BUILD_DIR + f, HTML_MINIFY_INLINE=True)
+    #env.Jinja2Compile(DEST_DIR + f, TEMPLATE_MINIFIED_DIR + f, jinja2_base_dir='_build_min/')

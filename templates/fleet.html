@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block tag_trunk_content %}
+    
+    <h1><span class="icon fleet"></span>Our fleet. <strong>Our assets.</strong></h1>
+    <div class="article">
+        <div class="content">
+            <h2>{{ content_title }}</h2>
+            <p>Hover over an item to view more information or <a href="/services/fleet/status">view the entire fleet status</a> as a table.</p>
+            <ul id="fleet-list" class="list-view">
+                {% for vessel in vessels %}
+                    <li class="{{ vessel.generic_type }}">
+                        <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
+                        <div class="title">
+                            <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
+                            <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
+                        </div>
+                        <div class="info">
+                            <h3>Specifications</h3>
+                            <dl>
+                                <dt>Specification Sheet</dt><dd><a href="{{ vessel.specification_url }}">Download PDF</a></dd>
+                                <dt>Availability</dt><dd>{{ vessel.when_available }}</dd>
+                                <dt>Built</dt><dd>{{ vessel.built }}</dd>
+                                <dt>Type</dt><dd>{{ vessel.vessel_type }}</dd>
+                                <dt>Yard</dt><dd>{{ vessel.yard }}</dd>
+                                <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% end %}</dd>
+                                <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% end %}</dd>
+                                <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% end %}</dd>
+                                <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% end %}</dd>
+                                <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% end %}</dd>
+                                <dt>Company</dt><dd>{{ vessel.company }}</dd>
+                            </dl>
+                        </div>
+                    </li>
+                {% end %}
+            </ul>
+        </div>
+        <div class="aside">
+            <h2>Search this fleet.</h2>
+            <p>Type your search terms below or pick a filter. </p>
+            <ul class="actions">
+                <li>
+                    <form id="form-filter-fleet" method="get" class="decorated-fields horizontal">
+                        <label for="q">
+                            <span class="prefix"><img src="{{ MEDIA_URL }}image/icon/16x16/magnifying-glass.png" /></span>
+                            <input type="search" placeholder="Search" name="q" id="q" value="" />
+                            <span class="suffix"></span>
+                        </label>
+                    </form>
+                </li>
+            </ul>
+            <h2>Pick a vessel category.</h2>
+            <p>Click on one of the links below to see vessels in a specific category.</p>
+            <ul class="actions">
+                <li class="separator"></li>
+                <li>
+                    Kind: <a class="tag" href="/services/fleet">all</a>
+                </li>
+                <li>
+                    <a class="tag" href="/services/fleet/logistics">logistics</a>
+                </li>
+                <li>
+                    <a class="tag" href="/services/fleet/construction">construction</a>
+                </li>
+                <li>
+                    <a class="tag" href="/services/fleet/drilling">drilling</a>                    
+                </li>
+            </ul>
+            
+            <p>GIL and its subsidiaries operate in three main segments&mdash;Drilling Services, Offshore Logistics and Offshore Construction. The average age of our vessels is approximately 2.51 years.</p>
+            <h3>Logistics</h3>
+            <p>We aim to provide safe, efficient and versatile vessels in order to fulfill the demanding needs of exploration and production companies, the world over. All our vessels are young, state-of-the-art technology, dynamically positioned with redundancy, capable of carrying multiple products (including liquid mud, dry-bulk, etc.), and capable of carrying out multiple operations.</p>
+            <h3>Drilling</h3>
+            <p>We aim to provide safe and efficient drilling operations to E&P operators worldwide. We have made our beginning with our under-construction Jack-Up Rig at Keppel Fels in Singapore.</p>
+            <h3>Construction</h3>
+            <p>We aim to provide safe, efficient and versatile vessels in order to fulfill the demanding needs of offshore construction companies to support offshore construction, maintenance, modifications and other sub-sea operations, world wide.</p>
+            <p>DOF subsea ASA & GIL have joined hands to form a JV partnership to cater to various subsea project requirements in the Indian subcontinent.</p>
+            <h3>In-Chartering</h3>
+            <p>GIL has entered into alliances/partnerships with global service providers to in-charter Rigs and Offshore Supply Vessels of diverse types to service prospective requirements in India.</p>
+        </div>
+    </div>
+
+{% end %}
+
+{% block tag_scripts %}
+    <script type="text/javascript">$SELECTOR_SCRIPT</script>
+{% end %}

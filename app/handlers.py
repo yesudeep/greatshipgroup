@@ -24,110 +24,147 @@
 # THE SOFTWARE.
 
 import configuration
-from google.appengine.ext import db, webapp
-from google.appengine.api import memcache
-from google.appengine.ext.webapp.util import run_wsgi_app
-from utils import render_template, render_cached_template, RequestHandler, CachingRequestHandler
-from recaptcha.client import captcha
-from models import Feedback, SupplierInformation
+
 import logging
-import appengine_admin
+import utils
+import tornado.web
+import tornado.wsgi
+
+from google.appengine.api import memcache
+from google.appengine.ext import db, webapp
+from google.appengine.ext.webapp.util import run_wsgi_app
+
+
+from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms
+from utils import BaseRequestHandler
 
 # Set up logging.
 logging.basicConfig(level=logging.DEBUG)
 
-class IndexHandler(CachingRequestHandler):
+class IndexHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('index.html')
+        posts = Post.get_latest(5)
+        self.render('index.html', truncate=utils.truncate, posts=posts)
 
 # About
-class AboutHandler(CachingRequestHandler):
+class AboutHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('about/mission.html')
+        self.render('mission.html')
 
-class ManagementHandler(CachingRequestHandler):
+class ManagementHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('about/management.html')
+        from models import Manager, BoardDirector, Auditor, SeniorManagement
+        managers = Manager.get_all()
+        board_directors = BoardDirector.get_all()
+        auditors = Auditor.get_all()
+        senior_managers = SeniorManagement.get_all()
+        self.render('management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
 
-class OverseasHandler(CachingRequestHandler):
+class OverseasHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('about/overseas.html')
+        self.render('overseas.html')
 
-class FinancialHandler(CachingRequestHandler):
+class FinancialHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('about/financial.html')
+        from models import AnnualReport
+        annual_reports = AnnualReport.get_all()
+        self.render('financial.html', annual_reports=annual_reports)
 
-class SitemapHandler(CachingRequestHandler):
+class SitemapHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('sitemap.html')
+        self.render('sitemap.html')
 
 # Services
-class FleetHandler(CachingRequestHandler):
+class FleetHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/fleet.html')
+        vessels = Vessel.get_all()
+        self.render('fleet.html', vessels=vessels, content_title="Fleet browser.")
 
-        
-class LogisticsHandler(CachingRequestHandler):
-    """Handles the home page requests."""
+class FleetStatusHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('services/logistics.html')                     
-        
-class ConstructionHandler(CachingRequestHandler):
-    """Handles the home page requests."""
-    def get(self):
-        self.render_to_response('services/construction.html')           
+        operating_vessels = Vessel.get_operating_vessels()
+        operating_rigs = Vessel.get_operating_rigs()
+        under_construction_vessels = Vessel.get_under_construction_vessels()
+        d = utils.get_previous_month()
+        previous_month = utils.datetimeformat(d, format="%B")
+        previous_year = utils.datetimeformat(d, format="%Y")
+        self.render("fleet_status.html", operating_vessels=operating_vessels, 
+            operating_rigs=operating_rigs, 
+            under_construction_vessels=under_construction_vessels,
+            previous_month=previous_month,
+            previous_year=previous_year)
 
-class DrillingHandler(CachingRequestHandler):
-    """Handles the home page requests."""
+class LogisticsHandler(BaseRequestHandler):
     def get(self):
-        self.render_to_response('services/drilling.html')
+        vessels = Vessel.get_all_logistics()
+        self.render('fleet.html', vessels=vessels,
+            content_title="Logistics fleet browser.")             
         
-class QhseHandler(CachingRequestHandler):
+class ConstructionHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('services/qhse.html')
+        vessels = Vessel.get_all_construction()
+        self.render('fleet.html', vessels=vessels,
+            content_title='Construction fleet browser.')             
+
+class DrillingHandler(BaseRequestHandler):
+    """Handles the home page requests."""
+    def get(self):
+        vessels = Vessel.get_all_drilling()
+        self.render('fleet.html', vessels=vessels,
+            content_title='Drilling fleet browser.')             
+        
+class QhseHandler(BaseRequestHandler):
+    """Handles the home page requests."""
+    def get(self):
+        self.render('qhse.html')
 
 
 # Corporate relations
-class OfficesHandler(CachingRequestHandler):
+class OfficesHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('about/offices.html')
+        self.render('offices.html')
 
-class SuppliersHandler(CachingRequestHandler):
+class SuppliersHandler(BaseRequestHandler):
     def get(self):
-        captcha_error_code = self.request.get('captcha_error')
-        if not captcha_error_code:
-            captcha_error_code = None
+        from recaptcha.client import captcha
+        captcha_error_code = self.get_argument('captcha_error', None)
 
         captcha_html = captcha.displayhtml(
             public_key = configuration.RECAPTCHA_PUBLIC_KEY,
             use_ssl = False,
             error = captcha_error_code
             )
-        self.render_to_response('about/suppliers.html', captcha_html=captcha_html)
+        from models import LegalTerms
+        legal_terms_list = LegalTerms.get_all()
+        
+        self.render('suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
 
     def post(self):
-        captcha_challenge_field = self.request.get('recaptcha_challenge_field')
-        captcha_response_field = self.request.get('recaptcha_response_field')
+        from recaptcha.client import captcha
+        captcha_challenge_field = self.get_argument('recaptcha_challenge_field')
+        captcha_response_field = self.get_argument('recaptcha_response_field')
         captcha_response = captcha.submit(
             captcha_challenge_field,
             captcha_response_field,
             configuration.RECAPTCHA_PRIVATE_KEY,
-            self.request.remote_addr
+            self.request.remote_ip
         )
         if captcha_response.is_valid:
-            full_name = self.request.get('name')
-            email = self.request.get('email')
-            subject = self.request.get('subject')
-            content = self.request.get('content')
-            designation = self.request.get('designation')
+            full_name = self.get_argument('name')
+            email = self.get_argument('email')
+            subject = self.get_argument('subject')
+            content = self.get_argument('content')
+            designation = self.get_argument('designation')
+            website_url = self.get_argument('website_url')
             
             supplier_info = SupplierInformation()
             supplier_info.full_name = full_name
             supplier_info.email = email
+            supplier_info.website_url = website_url
             supplier_info.designation = designation
             supplier_info.subject = subject
             supplier_info.content = content
@@ -139,34 +176,34 @@ class SuppliersHandler(CachingRequestHandler):
             self.redirect('/contact/suppliers?captcha_error=%s' % error)
 
 
-class FeedbackHandler(CachingRequestHandler):
+class FeedbackHandler(BaseRequestHandler):
     def get(self):
-        captcha_error_code = self.request.get('captcha_error')
-        if not captcha_error_code:
-            captcha_error_code = None
-
+        from recaptcha.client import captcha
+        captcha_error_code = self.get_argument('captcha_error', None)
+        
         captcha_html = captcha.displayhtml(
             public_key = configuration.RECAPTCHA_PUBLIC_KEY,
             use_ssl = False,
             error = captcha_error_code
             )
-        self.render_to_response('about/feedback.html', captcha_html=captcha_html)
+        self.render('feedback.html', captcha_html=captcha_html)
 
     
     def post(self):
-        captcha_challenge_field = self.request.get('recaptcha_challenge_field')
-        captcha_response_field = self.request.get('recaptcha_response_field')
+        from recaptcha.client import captcha
+        captcha_challenge_field = self.get_argument('recaptcha_challenge_field')
+        captcha_response_field = self.get_argument('recaptcha_response_field')
         captcha_response = captcha.submit(
             captcha_challenge_field,
             captcha_response_field,
             configuration.RECAPTCHA_PRIVATE_KEY,
-            self.request.remote_addr
+            self.request.remote_ip
         )
         if captcha_response.is_valid:
-            full_name = self.request.get('name')
-            email = self.request.get('email')
-            subject = self.request.get('subject')
-            content = self.request.get('content')
+            full_name = self.get_argument('name')
+            email = self.get_argument('email')
+            subject = self.get_argument('subject')
+            content = self.get_argument('content')
             
             feedback = Feedback()
             feedback.full_name = full_name
@@ -180,27 +217,60 @@ class FeedbackHandler(CachingRequestHandler):
             error = captcha_response.error_code
             self.redirect('/contact/feedback?captcha_error=%s' % error)
 
-class CareersHandler(CachingRequestHandler):
+class CareersHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('careers/careers.html')
+        self.render('careers.html')
 
-class TourHandler(CachingRequestHandler):
+class TourHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('careers/tour.html')
+        self.render('tour.html')
 
-class PolicyHandler(CachingRequestHandler):
+class PressReleasesHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('legal/policy.html')
+        posts = Post.get_latest(40)
+        self.render('press.html', datetimeformat=utils.datetimeformat, posts=posts)
 
-class PressReleasesHandler(CachingRequestHandler):
+# Note singular
+class PressReleaseHandler(BaseRequestHandler):
+    def get(self, path):
+        post = Post.get_by_path(path)
+        if post:
+            self.render('press.html', datetimeformat=utils.datetimeformat, posts=[post])
+        else:
+            self.redirect('/press')
+
+# Legal
+class PolicyHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render_to_response('press.html')
+        self.render('policy.html')
 
+class TermsHandler(BaseRequestHandler):
+    def get(self, slug):
+        legal_terms = LegalTerms.get_by_slug(slug)        
+        self.render('terms.html', legal_terms=legal_terms)
 
+# Feeds
+class PressFeedAtomHandler(BaseRequestHandler):
+    def get(self):
+        from datetime import datetime
+        posts = Post.get_latest()
+        config = dict(host=configuration.HOST_NAME, 
+            subtitle="Press Releases",
+            title=configuration.APPLICATION_TITLE,
+            developer_url=configuration.DEVELOPER_URL,
+            developer_name=configuration.DEVELOPER_NAME)
+        self.set_header("Content-Type", "application/atom+xml")
+        self.render('feeds/atom.xml', posts=posts, datetimeformat=utils.datetimeformat, **config)
+
+settings = {
+    "debug": configuration.DEBUG,
+    #"xsrf_cookies": True,
+    "template_path": configuration.TEMPLATE_PATH,
+}
 urls = (
     (r'/', IndexHandler),
     (r'/about/?', AboutHandler),
@@ -215,17 +285,21 @@ urls = (
     (r'/contact/suppliers/?', SuppliersHandler),
     (r'/contact/feedback/?', FeedbackHandler),
     (r'/legal/policy/?', PolicyHandler),
+    (r'/legal/terms/(.*)/?', TermsHandler),
     (r'/press/?', PressReleasesHandler),
+    (r'/press/post(.*)', PressReleaseHandler),
     (r'/services/?', FleetHandler),
     (r'/services/fleet/?', FleetHandler),
-    (r'/services/construction/?', ConstructionHandler),
-    (r'/services/drilling/?', DrillingHandler),
-    (r'/services/logistics/?', LogisticsHandler),
+    (r'/services/fleet/status/?', FleetStatusHandler),
+    (r'/services/fleet/construction/?', ConstructionHandler),
+    (r'/services/fleet/drilling/?', DrillingHandler),
+    (r'/services/fleet/logistics/?', LogisticsHandler),
     (r'/services/qhse/?', QhseHandler),
     (r'/sitemap/?', SitemapHandler),
-    (r'(/admin)(.*)$', appengine_admin.Admin),
+    (r'/press/feed/atom.xml?', PressFeedAtomHandler),
+    #(r'/press/feed/rss.xml?', PressFeedRssHandler),
 )
-application = webapp.WSGIApplication(urls, debug=configuration.DEBUG)
+application = tornado.wsgi.WSGIApplication(urls, **settings)
 
 def main():
     from gaefy.db.datastore_cache import DatastoreCachingShim
