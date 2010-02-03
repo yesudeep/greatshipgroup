@@ -8,31 +8,64 @@
             <h2>{{ content_title }}</h2>
             <p>Hover over an item to view more information or <a href="/services/fleet/status">view the entire fleet status</a> as a table.</p>
             <ul id="fleet-list" class="list-view">
-                {% for vessel in vessels %}
-                    <li class="{{ vessel.generic_type }}">
-                        <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
-                        <div class="title">
-                            <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
-                            <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
-                        </div>
-                        <div class="info">
-                            <h3>Specifications</h3>
-                            <dl>
-                                <dt>Specification Sheet</dt><dd><a href="{{ vessel.specification_url }}">Download PDF</a></dd>
-                                <dt>Availability</dt><dd>{{ vessel.when_available.strftime("%B, %Y") }}</dd>
-                                <dt>Built</dt><dd>{{ vessel.built }}</dd>
-                                <dt>Type</dt><dd>{{ vessel.vessel_type }} ({{ vessel.vessel_type.vessel_type_shortname }})</dd>
-                                <dt>Yard</dt><dd>{{ vessel.yard }}</dd>
-                                <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% end %}</dd>
-                                <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% end %}</dd>
-                                <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% end %}</dd>
-                                <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% end %}</dd>
-                                <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% end %}</dd>
-                                <dt>Company</dt><dd>{{ vessel.company }}</dd>
-                                <dt>Categories</dt><dd>{% if vessel.is_logistics %}logistics, {% end %} {% if vessel.is_construction %}construction,{% end %}{% if vessel.is_drilling %}drilling{% end %}</dd>
-                            </dl>
-                        </div>
-                    </li>
+                {% if vessels %}
+                    {% for vessel in vessels %}
+                        <li class="{{ vessel.generic_type }}">
+                            <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
+                            <div class="title">
+                                <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
+                                <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
+                            </div>
+                            <div class="info">
+                                <h3>Specifications</h3>
+                                <dl>
+                                    <dt>Specification Sheet</dt><dd><a href="{{ vessel.specification_url }}">Download PDF</a></dd>
+                                    <dt>Availability</dt><dd>{{ vessel.when_available.strftime("%B, %Y") }}</dd>
+                                    <dt>Built</dt><dd>{{ vessel.built }}</dd>
+                                    <dt>Type</dt><dd>{{ vessel.vessel_type }} ({{ vessel.vessel_type.vessel_type_shortname }})</dd>
+                                    <dt>Yard</dt><dd>{{ vessel.yard }}</dd>
+                                    <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% end %}</dd>
+                                    <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% end %}</dd>
+                                    <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% end %}</dd>
+                                    <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% end %}</dd>
+                                    <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% end %}</dd>
+                                    <dt>Company</dt><dd>{{ vessel.company }}</dd>
+                                    <dt>Categories</dt><dd>{% if vessel.is_logistics %}logistics, {% end %} {% if vessel.is_construction %}construction,{% end %}{% if vessel.is_drilling %}drilling{% end %}</dd>
+                                </dl>
+                            </div>
+                        </li>
+                    {% end %}
+                {% else %}    
+                  {% for vessel_type in vessel_types %}
+                          <li class="heading"><h3>{{ vessel_type.vessel_type_name }}</h3></li>
+                          {% for vessel in vessel_type.vessels %}
+                          <li class="{{ vessel.generic_type }}">
+                              <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
+                              <div class="title">
+                                  <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
+                                  <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
+                              </div>
+                              <div class="info">
+                                  <h3>Specifications</h3>
+                                  <dl>
+                                      <dt>Specification Sheet</dt><dd><a href="{{ vessel.specification_url }}">Download PDF</a></dd>
+                                      <dt>Availability</dt><dd>{{ vessel.when_available.strftime("%B, %Y") }}</dd>
+                                      <dt>Built</dt><dd>{{ vessel.built }}</dd>
+                                      <dt>Type</dt><dd>{{ vessel.vessel_type }} ({{ vessel.vessel_type.vessel_type_shortname }})</dd>
+                                      <dt>Yard</dt><dd>{{ vessel.yard }}</dd>
+                                      <dt>Deadweight</dt><dd>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }} tons{% else %}-{% end %}</dd>
+                                      <dt>Design</dt><dd>{% if vessel.design %}{{ vessel.design }}{% else %}-{% end %}</dd>
+                                      <dt>BP</dt><dd>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }} tons{% else %}-{% end %}</dd>
+                                      <dt>DP</dt><dd>{% if vessel.dp %}{{ vessel.dp }}{% else %}-{% end %}</dd>
+                                      <dt>FiFi</dt><dd>{% if vessel.fifi %}{{ vessel.fifi }}{% else %}-{% end %}</dd>
+                                      <dt>Company</dt><dd>{{ vessel.company }}</dd>
+                                      <dt>Categories</dt><dd>{% if vessel.is_logistics %}logistics, {% end %} {% if vessel.is_construction %}construction,{% end %}{% if vessel.is_drilling %}drilling{% end %}</dd>
+                                  </dl>
+                              </div>
+                          </li>
+                          {% end %}
+                      </li>
+                  {% end %}
                 {% end %}
             </ul>
         </div>

@@ -38,7 +38,7 @@
 		    {% end %}
 		    </div>
             <div id="header-content">
-			{% block tag_header_content %}
+			      {% block tag_header_content %}
             {% end %}
             </div>
         </div>
@@ -46,6 +46,9 @@
 		{% block tag_trunk %}
 		<div id="trunk">
 			<div id="trunk-content">
+			<!--[if lt IE 7]>
+      <p>You are currently using a very old and unsupported Web browser.  Kindly upgrade to a newer browser.</p>
+      <![endif]-->
 			{% block tag_trunk_content %}
 			{% end %}
 			</div>
@@ -55,7 +58,7 @@
 		<div id="footer">
 			<div id="footer-content">
 			{% block tag_footer_content %}
-		    <h2><a id="nav-motto-link" href="/about/mission">Passion Fuels Performance<a></h2>
+		    <h2><a id="nav-motto-link" href="/about/mission">Passion Fuels Performance</a></h2>
             <ul class="footer-menu"> 
                     <li>
                         <h2>About</h2> 
@@ -108,9 +111,14 @@
 	{% end %}
 {% end %}
 {% block tag_scripts_base %}
-<script type="text/javascript">window.__hc_scripts = ["{{ JQUERY_URL }}"];</script>
+<script type="text/javascript">window.__hc_scripts = ["{{ JQUERY_URL }}"];
+var IE6UPDATE_OPTIONS = {'icons_path': "{{ MEDIA_URL }}image/ie6update/"};
+</script>
 {% end %}
 {% block tag_scripts_other %}
+<!--[if lt IE 7]>
+<script type="text/javascript" src="{{ MEDIA_URL }}script/ie6update/ie6update{{ JS_MINIFIED }}.js"></script>
+<![endif]-->
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 <script type="text/javascript">
   google.load('search', '1', {language : 'en'});

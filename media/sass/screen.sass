@@ -177,16 +177,7 @@ table.classic
     :height 64px
     :display block
     :margin-left 1em
-#nav-motto-link
-    :width 317px
-    :height 43px
-    //:background= "transparent" !image_bg_nav "no-repeat -374px 0"
-    :display block
-    :position absolute
-    :margin-left 650px
-    :font-family= !font_family_sans_serif
-    :font-weight bold
-    :color= !color_fg_motto
+
     
 #nav-links
     :float right
@@ -214,7 +205,7 @@ table.classic
                 :margin-top 65px
                 :text-align center
                 :z-index 60
-                :background-color= !color_fg_motto
+                :background-color= !color_bg_nav_description
                 :color white
                 :padding 4px 10px
                 +border-radius("10px")
@@ -269,6 +260,9 @@ table.classic
             :display block
     ul.list-view
         :list-style none
+        > li.heading
+            :display block
+            :clear both
         > li
             +display-inline-block()
             :overflow hidden
@@ -426,7 +420,16 @@ table.classic
 
         &:hover
             color: #cccccc
-
+    #nav-motto-link
+        //:width 317px
+        //:height 43px
+        //:background= "transparent" !image_bg_nav "no-repeat -374px 0"
+        :display block
+        :position absolute
+        :margin-left 650px
+        :font-family= !font_family_sans_serif
+        :font-weight bold
+        :color= !color_bg_nav_description
     .footer-menu
         a
             &:hover
@@ -473,7 +476,10 @@ table.classic
                         :background= "#f5f5f5" !image_favicon "no-repeat 20px 16px"
                         :border-bottom 1px solid silver
                         :padding 5px 40px
-                
+        #fleet-list
+            > li
+                :list-style none
+
                 
 ul.gallery
     :width 800px
@@ -645,8 +651,7 @@ ul.gallery:hover
             :width 128px
             :text-align center
             :z-index 20
-            :background-color #000
-            :background-color rgba(0,0,0,0.8)
+            :background-color= !color_bg_nav_description
             :border 1px solid #ccc
             :color white
             :padding 10px
@@ -662,6 +667,8 @@ ul.gallery:hover
         :background= "transparent" !image_landing_icons "no-repeat" (-128px * 3) 0
     #landing-logistics
         :background= "transparent" !image_landing_icons "no-repeat" (-128px * 4) 0
+
+
 
 #form-filter-fleet
     input[type="search"]

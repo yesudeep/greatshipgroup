@@ -102,7 +102,6 @@ class IncomeStatement(SerializableModel):
     pat = db.StringProperty()
     eps = db.StringProperty()
 
-
 class VesselType(SerializableModel):
     vessel_type_name = db.StringProperty()
     vessel_type_shortname = db.StringProperty()

@@ -35,7 +35,7 @@ from google.appengine.ext import db, webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
 
 
-from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms
+from models import Post, Vessel, Feedback, SupplierInformation, LegalTerms, VesselType
 from utils import BaseRequestHandler
 
 # Set up logging.
@@ -79,8 +79,9 @@ class SitemapHandler(BaseRequestHandler):
 class FleetHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
+        vessel_types = VesselType.get_all()
         vessels = Vessel.get_all()
-        self.render('fleet.html', vessels=vessels, content_title="Fleet browser.")
+        self.render('fleet.html', vessels=None, vessel_types=vessel_types, content_title="Fleet browser.")
 
 class FleetStatusHandler(BaseRequestHandler):
     def get(self):

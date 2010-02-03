@@ -20,6 +20,7 @@ SCRIPT_FILES = Split("""
     script/lib/chickoojs/src/jquery/jquery-1.3.2.js
     script/lib/chickoojs/src/jquery/jquery-1.4a1.min.js
     script/lib/chickoojs/src/jquery/jquery-1.4.min.js
+    script/ie6update/ie6update.js
 """)
 
 IMAGE_FILES = Split("""
@@ -88,6 +89,10 @@ IMAGE_FILES = Split("""
     image/icon/128x128/construction.png
     image/icon/128x128/logistics.png
     
+    image/ie6update/close-over.png
+    image/ie6update/close.png
+    image/ie6update/icon-over.png
+    image/ie6update/icon.png
 """)
 
 CSS_FILES = Split("""
