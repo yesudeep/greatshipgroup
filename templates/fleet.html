@@ -37,6 +37,7 @@
                     {% end %}
                 {% else %}    
                   {% for vessel_type in vessel_types %}
+                    {% if vessel_type.vessels.count() %}
                           <li class="heading"><h3>{{ vessel_type.vessel_type_name }}</h3></li>
                           {% for vessel in vessel_type.vessels %}
                           <li class="{{ vessel.generic_type }}">
@@ -65,6 +66,7 @@
                           </li>
                           {% end %}
                       </li>
+                      {% end %}
                   {% end %}
                 {% end %}
             </ul>
