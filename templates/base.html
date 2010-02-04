@@ -46,9 +46,6 @@
 		{% block tag_trunk %}
 		<div id="trunk">
 			<div id="trunk-content">
-			<!--[if lt IE 7]>
-      <p>You are currently using a very old and unsupported Web browser.  Kindly upgrade to a newer browser.</p>
-      <![endif]-->
 			{% block tag_trunk_content %}
 			{% end %}
 			</div>
@@ -111,14 +108,15 @@
 	{% end %}
 {% end %}
 {% block tag_scripts_base %}
-<script type="text/javascript">window.__hc_scripts = ["{{ JQUERY_URL }}"];
-var IE6UPDATE_OPTIONS = {'icons_path': "{{ MEDIA_URL }}image/ie6update/"};
+<script type="text/javascript">
+window.__hc_scripts = ["{{ JQUERY_URL }}"];
 </script>
+<!--[if lt IE 7]>
+<script type="text/javascript">window.IE6UPDATE_OPTIONS = {'icons_path': "{{ MEDIA_URL }}image/ie6update/"};
+window.__hc_scripts.push("{{ MEDIA_URL }}script/ie6update/ie6update{{ JS_MINIFIED }}.js");</script>
+<![endif]-->
 {% end %}
 {% block tag_scripts_other %}
-<!--[if lt IE 7]>
-<script type="text/javascript" src="{{ MEDIA_URL }}script/ie6update/ie6update{{ JS_MINIFIED }}.js"></script>
-<![endif]-->
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
 <script type="text/javascript">
   google.load('search', '1', {language : 'en'});

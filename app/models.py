@@ -125,12 +125,12 @@ class Vessel(SerializableModel):
     company = db.StringProperty()
     when_available = db.DateProperty()
     specification_url = db.URLProperty()
-    
+
     # Delivery status
     is_delivered = db.BooleanProperty(default=False)
     when_delivered = db.DateProperty()
     when_expected = db.StringProperty()
-    
+
     # Classification in table.
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
@@ -162,7 +162,7 @@ class Vessel(SerializableModel):
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-        
+
     @classmethod
     def get_all_drilling(cls):
         cache_key = 'Vessel.get_all_drilling()'
@@ -200,7 +200,7 @@ class Vessel(SerializableModel):
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-        
+
     @classmethod
     def get_under_construction_vessels(cls):
         cache_key = 'Vessel.get_under_construction_vessels()'
@@ -212,7 +212,6 @@ class Vessel(SerializableModel):
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-
 
 class AnnualReport(SerializableModel):
     title = db.StringProperty()
@@ -238,11 +237,10 @@ class LegalTerms(SerializableModel):
             entity = LegalTerms.all().filter('slug =', slug).get()
             memcache.set(cache_key, serialize_entities(entity), CACHE_DURATION)
         return entity
-    
+
     def put(self):
         self.content_html = render_markup(self.content)
         super(LegalTerms, self).put()
-
 
 class BoardDirector(SerializableModel):
     full_name = db.StringProperty()
@@ -251,11 +249,11 @@ class BoardDirector(SerializableModel):
 class SeniorManagement(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
-    
+
 class Auditor(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
-    
+
 class Post(SerializableModel):
     path = db.StringProperty()
     checksum = db.StringProperty()
@@ -267,7 +265,7 @@ class Post(SerializableModel):
     content = db.TextProperty()
     content_html = db.TextProperty()
     #markup_type = db.StringProperty(choices=set(markup.MARKUP_MAP), default=DEFAULT_MARKUP)
-    
+
     @classmethod
     def get_latest(cls, count=20):
         cache_key = 'Post.get_latest(count=%d)' % count
@@ -276,12 +274,12 @@ class Post(SerializableModel):
             entities = Post.all().filter('is_published = ', True).order('-when_published').fetch(count)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-    
+
     def put(self):
         if self.is_published:
             self.publish()
         super(Post, self).put()
-    
+
     def format_post_path(self, num=0, format='/%(year)d/%(month)02d/%(slug)s'):
         slug = utils.slugify(self.title.lower())
         if num > 0:
@@ -292,7 +290,7 @@ class Post(SerializableModel):
             'month': self.when_published.month,
             'day': self.when_published.day,
             }
-    
+
     def publish(self):
         if not self.checksum or self.checksum != self.hash:
             if not self.when_published:
