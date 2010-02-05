@@ -64,13 +64,14 @@ class Manager(SerializableModel):
     description = db.TextProperty()
     description_html = db.TextProperty()
     photo_url = db.URLProperty()
+    rank = db.IntegerProperty()
 
     @classmethod
     def get_all(cls, count=MAX_COUNT):
         cache_key = '%s.get_all()' % (cls.__name__,)
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
-            entities = Manager.all().order('when_created').fetch(count)
+            entities = Manager.all().order('rank').order('full_name').fetch(count)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
 
@@ -101,7 +102,6 @@ class IncomeStatement(SerializableModel):
     pat = db.StringProperty()
     eps = db.StringProperty()
 
-
 class VesselType(SerializableModel):
     vessel_type_name = db.StringProperty()
     vessel_type_shortname = db.StringProperty()
@@ -125,12 +125,12 @@ class Vessel(SerializableModel):
     company = db.StringProperty()
     when_available = db.DateProperty()
     specification_url = db.URLProperty()
-    
+
     # Delivery status
     is_delivered = db.BooleanProperty(default=False)
     when_delivered = db.DateProperty()
     when_expected = db.StringProperty()
-    
+
     # Classification in table.
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
     generic_type = db.StringProperty(choices=VESSEL_GENERIC_TYPE_CHOICES)
@@ -146,6 +146,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_logistics = ', True) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -157,10 +158,11 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_construction = ', True) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-        
+
     @classmethod
     def get_all_drilling(cls):
         cache_key = 'Vessel.get_all_drilling()'
@@ -168,6 +170,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_drilling = ', True) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -180,6 +183,7 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
@@ -192,10 +196,11 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-        
+
     @classmethod
     def get_under_construction_vessels(cls):
         cache_key = 'Vessel.get_under_construction_vessels()'
@@ -203,10 +208,10 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
+                .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-
 
 class AnnualReport(SerializableModel):
     title = db.StringProperty()
@@ -232,11 +237,10 @@ class LegalTerms(SerializableModel):
             entity = LegalTerms.all().filter('slug =', slug).get()
             memcache.set(cache_key, serialize_entities(entity), CACHE_DURATION)
         return entity
-    
+
     def put(self):
         self.content_html = render_markup(self.content)
         super(LegalTerms, self).put()
-
 
 class BoardDirector(SerializableModel):
     full_name = db.StringProperty()
@@ -245,11 +249,11 @@ class BoardDirector(SerializableModel):
 class SeniorManagement(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
-    
+
 class Auditor(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
-    
+
 class Post(SerializableModel):
     path = db.StringProperty()
     checksum = db.StringProperty()
@@ -261,7 +265,7 @@ class Post(SerializableModel):
     content = db.TextProperty()
     content_html = db.TextProperty()
     #markup_type = db.StringProperty(choices=set(markup.MARKUP_MAP), default=DEFAULT_MARKUP)
-    
+
     @classmethod
     def get_latest(cls, count=20):
         cache_key = 'Post.get_latest(count=%d)' % count
@@ -270,12 +274,12 @@ class Post(SerializableModel):
             entities = Post.all().filter('is_published = ', True).order('-when_published').fetch(count)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
         return entities
-    
+
     def put(self):
         if self.is_published:
             self.publish()
         super(Post, self).put()
-    
+
     def format_post_path(self, num=0, format='/%(year)d/%(month)02d/%(slug)s'):
         slug = utils.slugify(self.title.lower())
         if num > 0:
@@ -286,7 +290,7 @@ class Post(SerializableModel):
             'month': self.when_published.month,
             'day': self.when_published.day,
             }
-    
+
     def publish(self):
         if not self.checksum or self.checksum != self.hash:
             if not self.when_published:
@@ -381,8 +385,8 @@ class AdminSupplierInformation(appengine_admin.ModelAdmin):
 
 class AdminManager(appengine_admin.ModelAdmin):
     model = Manager
-    listFields = ('full_name', 'designation', 'photo_url')
-    editFields = ('full_name', 'designation', 'description', 'photo_url')
+    listFields = ('full_name', 'designation', 'photo_url', 'rank')
+    editFields = ('full_name', 'designation', 'description', 'photo_url', 'rank')
     readonlyFields = ('when_created', 'when_modified', 'description_html')
     listGql = 'order by full_name asc'
 

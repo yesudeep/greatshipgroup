@@ -23,6 +23,7 @@ PAGE_TEMPLATE_FILES = Split("""
     index.html
     financial.html
     fleet.html
+    fleet_status.html
 """)
 
 BASE_TEMPLATE_FILES = Split("""
@@ -39,7 +40,6 @@ BASE_TEMPLATE_FILES = Split("""
     policy.html
     terms.html
     qhse.html
-    fleet_status.html
     sitemap.html
     feeds/atom.xml
 """)
