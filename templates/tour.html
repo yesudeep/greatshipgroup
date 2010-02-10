@@ -5,8 +5,8 @@
     <ul id="careers-gallery" class="gallery">
         {% for tour_picture in tour_pictures %}
         <li>
-            <a href="{{ tour_picture.image_url }}">
-                <img src="{{ tour_picture.thumb_url }}" />
+            <a target="_blank" href="{{ tour_picture.image_url }}">
+                <img src="{{ tour_picture.thumb_url }}" title="{% if tour_picture.caption %}{{ tour_picture.caption }}{% end %}" />
                 <span>{% if tour_picture.caption %}{{ tour_picture.caption }}{% end %}</span>
             </a>
             #*<div class="info">
