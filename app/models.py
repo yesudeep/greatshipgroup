@@ -57,6 +57,14 @@ VESSEL_GENERIC_TYPE_CHOICES = (
     VESSEL_GENERIC_TYPE_RIG,
     VESSEL_GENERIC_TYPE_VESSEL,
     )
+    
+# This is INR.
+UNIT_CATEGORY_THOUSANDS = 'thousands'
+UNIT_CATEGORY_MILLIONS = 'millions'
+UNIT_CATEGORY_CHOICES = (
+    UNIT_CATEGORY_THOUSANDS,
+    UNIT_CATEGORY_MILLIONS,
+)
 
 class Manager(SerializableModel):
     full_name = db.StringProperty()
@@ -90,6 +98,7 @@ class AssetLiabilityStatement(SerializableModel):
     investments = db.StringProperty()
     net_current_assets = db.StringProperty()
     total_assets = db.StringProperty()
+    unit_category = db.StringProperty(choices=UNIT_CATEGORY_CHOICES)
 
 class IncomeStatement(SerializableModel):
     start_year = db.StringProperty()
@@ -101,6 +110,20 @@ class IncomeStatement(SerializableModel):
     tax_provision = db.StringProperty()
     pat = db.StringProperty()
     eps = db.StringProperty()
+    unit_category = db.StringProperty(choices=UNIT_CATEGORY_CHOICES)
+
+class TourPicture(SerializableModel):
+    image_url = db.URLProperty()
+    thumb_url = db.URLProperty()
+    caption = db.StringProperty()
+    description = db.TextProperty()
+
+    def __str__(self):
+        desc = self.caption if self.caption else self.image_url
+        return desc
+
+    def __unicode__(self):
+        return self.__str__()
 
 class VesselType(SerializableModel):
     vessel_type_name = db.StringProperty()
@@ -450,6 +473,14 @@ class AdminFleetSearchTerms(appengine_admin.ModelAdmin):
     readonlyFields = ('search_terms', 'remote_addr', 'user_agent', 'when_created', 'when_modified')
     listGql = 'order by when_created desc'
 
+class AdminTourPicture(appengine_admin.ModelAdmin):
+    model = TourPicture
+    listFields = ('caption', 'image_url', 'description', 'thumb_url')
+    editFields = ('caption', 'image_url', 'description', 'thumb_url')
+    readonlyFields = ('when_created', 'when_modified',)
+    listGql = 'order by caption asc'
+    
+
 class AdminPost(appengine_admin.ModelAdmin):
     model = Post
     
@@ -480,4 +511,5 @@ appengine_admin.register(AdminFeedback,
     AdminBoardDirector,
     AdminSeniorManagement,
     AdminAuditor,
-    AdminPost)
+    AdminPost,
+    AdminTourPicture)

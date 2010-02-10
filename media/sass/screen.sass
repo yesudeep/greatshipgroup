@@ -457,6 +457,7 @@ table.classic
                 float: none
                 line-height: 1.3
 
+
 #trunk-content
     .article
         #management-gallery
@@ -482,12 +483,20 @@ table.classic
 
                 
 ul.gallery
-    :width 800px
+    :width 960px
+    :margin-left 20px
+    > li:nth-child(2n)
+        +transform("rotate(-1deg)")
+    > li:nth-child(5n)
+        +transform("rotate(-4deg)")
     > li
+        :position relative
+        :z-index 40
+        +transform("rotate(2deg)")
         +display-inline-block()
         :margin-right 10px
         :margin-bottom 10px
-        :border 5px solid black
+        :border 8px solid white
         // Required to keep all the li's aligned.
         :vertical-align top
         > a
@@ -498,6 +507,7 @@ ul.gallery
                 :font-family= !font_family_sans_serif_medium
                 :font-weight bold
                 :text-align center
+                :font-size 0.9em
                 :background-color #000
                 :background-color rgba(0,0,0,0.5)
                 :color white
@@ -533,9 +543,11 @@ ul.gallery:hover
         +opacity(0.08)
         +transition("opacity .45s ease")
     > li:hover
+        +transform("scale(1.25)")
+        +transition("-webkit-transform .85 ease")
         +opacity(1)
         +box-shadow("1px 1px 25px #000")
-        a span
+        //a span
             :display none
         > .info
             :display block

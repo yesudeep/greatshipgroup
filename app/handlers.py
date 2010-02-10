@@ -226,7 +226,9 @@ class CareersHandler(BaseRequestHandler):
 class TourHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('tour.html')
+        from models import TourPicture
+        tour_pictures = TourPicture.get_all(200)
+        self.render('tour.html', tour_pictures=tour_pictures)
 
 class PressReleasesHandler(BaseRequestHandler):
     """Handles the home page requests."""

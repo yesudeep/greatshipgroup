@@ -295,3 +295,76 @@ def import_posts():
         post.checksum = post.hash
         save_posts.append(post)
     db.put(save_posts)
+
+def import_tour_photos():
+    thumbs = ['http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/01.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/02.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/03.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/04.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/05.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/06.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/07.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/08.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/09.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/10.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/11.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/12.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/13.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/14.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/15.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/16.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/17.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/18.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/19.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/20.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/21.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/22.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/23.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/24.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/25.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/26.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/27.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/28.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/29.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/30.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/31.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/thumbs/32.jpg']
+    images = ['http://dl.dropbox.com/u/2713328/website/image/photo/careers/01.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/02.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/03.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/04.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/05.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/06.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/07.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/08.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/09.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/10.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/11.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/12.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/13.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/14.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/15.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/16.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/17.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/18.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/19.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/20.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/21.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/22.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/23.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/24.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/25.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/26.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/27.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/28.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/29.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/30.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/31.jpg',
+        'http://dl.dropbox.com/u/2713328/website/image/photo/careers/32.jpg']
+    from models import TourPicture
+    data = []
+    for (image_url, thumb_url) in zip(images, thumbs):
+        tourPicture = TourPicture(image_url=image_url, thumb_url=thumb_url)
+        data.append(tourPicture)
+    db.put(data)
+    
