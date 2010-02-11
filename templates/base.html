@@ -9,6 +9,12 @@
     <!--[if lt IE 7]>
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/ie6{{CSS_MINIFIED}}.css" type="text/css" media="screen,projection" charset="utf-8" />
     <![endif]-->
+    <!--[if lt IE 8]>
+    <style>
+      
+    </style>
+    <![endif]-->
+    
 	{% end %}
 	{% block tag_additional_stylesheets %}{% end %}
 {% end %}
@@ -25,16 +31,28 @@
                 <li><a id="nav-logo-link" href="/"></a></li>
             </ul>
             <ul id="nav-links">
-		        <li><a id="nav-home" href="/"><span>Home</span></a></li>
-		        <li><a id="nav-fleet" href="/services/fleet"><span>Fleet</span></a></li>
-		        <li><a id="nav-logistics" href="/services/fleet/logistics"><span>Offshore Logistics</span></a></li>
-		        <li><a id="nav-construction" href="/services/fleet/construction"><span>Offshore Construction</span></a></li>
-		        <li><a id="nav-drilling" href="/services/fleet/drilling"><span>Offshore Drilling</span></a></li>
-		        <li><a id="nav-qhse" href="/services/qhse"><span>Quality, Health, Safety, and Environment</span></a></li>
-		        <li><a id="nav-contact" href="/contact"><span>Contact</span></a></li>
-		        <li><div id="cse"></div></li>
-		        <li><a id="nav-we-are-hiring" href="/careers"></a></li>		      
-		    </ul>
+  		        <li><a id="nav-home" href="/"><span>Home</span></a></li>
+  		        <li><a id="nav-fleet" href="/services/fleet"><span>Fleet</span></a></li>
+  		        <li><a id="nav-logistics" href="/services/fleet/logistics"><span>Offshore Logistics</span></a></li>
+  		        <li><a id="nav-construction" href="/services/fleet/construction"><span>Offshore Construction</span></a></li>
+  		        <li><a id="nav-drilling" href="/services/fleet/drilling"><span>Offshore Drilling</span></a></li>
+  		        <li><a id="nav-qhse" href="/services/qhse"><span>Quality, Health, Safety, and Environment</span></a></li>
+  		        <li><a id="nav-contact" href="/contact"><span>Contact</span></a></li>
+  		        <li><div id="cse"></div></li>
+  		        <li><a id="nav-we-are-hiring" href="/careers"></a></li>		      
+		        </ul>
+        <!--[if lt IE 7]>
+            <div id="navigation">
+              <a id="nav-home" href="/"><img src="{{ MEDIA_URL }}image/icon/nav/home.png" title="Home" width="48px" height="48px" /></a>
+              <a id="nav-fleet" href="/services/fleet"><img src="{{ MEDIA_URL }}image/icon/nav/fleet.png" title="Fleet" width="48px" height="48px" /></a>
+              <a id="nav-logistics" href="/services/fleet/logistics"><img src="{{ MEDIA_URL }}image/icon/nav/logistics.png" title="Offshore Logistics" width="48px" height="48px" /></a>
+              <a id="nav-construction" href="/services/fleet/construction"><img src="{{ MEDIA_URL }}image/icon/nav/construction.png" title=" Offshore Construction" width="48px" height="48px" /></a>
+              <a id="nav-drilling" href="/services/fleet/drilling"><img src="{{ MEDIA_URL }}image/icon/nav/drilling.png" title="Offshore Drilling" width="48px" height="48px" /></a>
+              <a id="nav-qhse" href="/services/qhse"><img src="{{ MEDIA_URL }}image/icon/nav/qhse.png" title="Quality, Health, Safety and Environment" width="48px" height="48px" /></a>
+              <a id="nav-contact" href="/contact"><img src="{{ MEDIA_URL }}image/icon/nav/contact.png" title="Contact Us" width="48px" height="48px" /></a>
+              <a id="nav-we-are-hiring" href="/careers"><img src="{{ MEDIA_URL }}image/icon/we-are-hiring.png" title="We are hiring" width="128px" height="128px" /></a>
+            </div>
+        <![endif]-->
 		    {% end %}
 		    </div>
             <div id="header-content">

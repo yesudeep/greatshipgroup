@@ -1,8 +1,10 @@
 
 @import colors-and-images.sass
 
-#nav
-    :background-color= !color_bg_nav
+#wrapper
+    #header
+        #nav
+            :background-color= !color_bg_nav
 
 #splash-presentation
     #landing-qhse
@@ -15,3 +17,18 @@
         :background= "transparent" !image_icon_construction "no-repeat 0 0"
     #landing-logistics
         :background= "transparent" !image_icon_logistics "no-repeat 0 0"
+
+
+#footer
+    :background none
+
+#nav-links
+    :display none
+    
+    
+#navigation
+    :float right
+    #we-are-hiring
+        :position absolute
+        :top 30px
+        :right 20px
