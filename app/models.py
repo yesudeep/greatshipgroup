@@ -149,6 +149,8 @@ class Vessel(SerializableModel):
     when_available = db.DateProperty()
     specification_url = db.URLProperty()
 
+    rank = db.IntegerProperty()
+
     # Delivery status
     is_delivered = db.BooleanProperty(default=False)
     when_delivered = db.DateProperty()
@@ -169,6 +171,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_logistics = ', True) \
+                .order('rank') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -181,6 +184,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_construction = ', True) \
+                .order('rank') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -193,6 +197,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_drilling = ', True) \
+                .order('rank') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -206,6 +211,7 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
+                .order('rank') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -219,6 +225,7 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
+                .order('rank') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -231,6 +238,7 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
+                .order('rank') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -268,7 +276,17 @@ class LegalTerms(SerializableModel):
 class BoardDirector(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
+    rank = db.IntegerProperty()
 
+    @classmethod
+    def get_all(cls, count=MAX_COUNT):
+        cache_key = '%s.get_all()' % (cls.__name__,)
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = BoardDirector.all().order('rank').order('full_name').fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+        
 class SeniorManagement(SerializableModel):
     full_name = db.StringProperty()
     designation = db.StringProperty()
@@ -415,10 +433,10 @@ class AdminManager(appengine_admin.ModelAdmin):
 
 class AdminBoardDirector(appengine_admin.ModelAdmin):
     model = BoardDirector
-    listFields = ('full_name', 'designation')
-    editFields = ('full_name', 'designation')
+    listFields = ('full_name', 'designation', 'rank')
+    editFields = ('full_name', 'designation', 'rank')
     readonlyFields = ('when_created', 'when_modified')
-    listGql = 'order by full_name asc'
+    #listGql = 'order by rank asc'
 
 class AdminSeniorManagement(appengine_admin.ModelAdmin):
     model = SeniorManagement
@@ -456,15 +474,16 @@ class AdminVesselType(appengine_admin.ModelAdmin):
 
 class AdminVessel(appengine_admin.ModelAdmin):
     model = Vessel
-    listFields = ('name', 'built', 'vessel_type', 'generic_type', 'yard',
+    listFields = ('name', 'rank', 'built', 'vessel_type', 'generic_type', 'yard',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
         'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
-        'is_construction', 'is_drilling', 'is_logistics')
-    editFields = ('name', 'built', 'vessel_type', 'generic_type', 'yard', 'specification_url',
+        'is_construction', 'is_drilling', 'is_logistics', )
+    editFields = ('name', 'rank', 'built', 'vessel_type', 'generic_type', 'yard', 'specification_url',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
         'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
-        'is_construction', 'is_drilling', 'is_logistics')
+        'is_construction', 'is_drilling', 'is_logistics', )
     readonlyFields = ('when_created', 'when_modified')
+    #listGql = 'order by rank asc'
 
 class AdminFleetSearchTerms(appengine_admin.ModelAdmin):
     model = FleetSearchTerms

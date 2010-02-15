@@ -50,7 +50,7 @@
     <![endif]-->
     <ul class="news-ticker">
         {% for post in posts %}                    
-        <li>Happenings <a href="/press/feed/atom.xml"><img src="{{ MEDIA_URL }}image/icon/14x14/feed-icon-14x14.png"</a> | <a href="/press/post{{ post.path }}">{{ truncate(post.title, 100) }}</a></li>
+        <li>Happenings <a href="/press/feed/atom.xml"><img src="{{ MEDIA_URL }}image/icon/14x14/feed-icon-14x14.png" width="14px" height="14px" /></a> | <a href="/press/post{{ post.path }}">{{ truncate(post.title, 100) }}</a></li>
         {% end %}
     </ul>
 {% end %}
