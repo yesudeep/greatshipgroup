@@ -436,7 +436,7 @@ class AdminBoardDirector(appengine_admin.ModelAdmin):
     listFields = ('full_name', 'designation', 'rank')
     editFields = ('full_name', 'designation', 'rank')
     readonlyFields = ('when_created', 'when_modified')
-    #listGql = 'order by rank asc'
+    listGql = 'order by rank asc'
 
 class AdminSeniorManagement(appengine_admin.ModelAdmin):
     model = SeniorManagement
@@ -483,7 +483,7 @@ class AdminVessel(appengine_admin.ModelAdmin):
         'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
         'is_construction', 'is_drilling', 'is_logistics', )
     readonlyFields = ('when_created', 'when_modified')
-    #listGql = 'order by rank asc'
+    listGql = 'order by rank asc'
 
 class AdminFleetSearchTerms(appengine_admin.ModelAdmin):
     model = FleetSearchTerms

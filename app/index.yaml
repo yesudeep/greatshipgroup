@@ -2,6 +2,12 @@ indexes:
 
 - kind: Vessel
   properties:
+  - name: operational_status
+  - name: rank
+  - name: name
+    
+- kind: Vessel
+  properties:
   - name: generic_type
   - name: operational_status
   - name: rank
