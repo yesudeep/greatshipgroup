@@ -2,26 +2,45 @@
 
 {% block tag_trunk_content %}
     <h1><span class="icon management"></span>Our visionaries. <strong>The Management.</strong></h1>
-    <div class="article plain columns">
+    <div class="article plain">
         <div class="content">
-            <h2>Board of Directors</h2>
-            <ul>
-                {% for board_director in board_directors %}
-                    <li>{{ board_director.full_name }}{% if board_director.designation %}, {{ board_director.designation }}{% end %}</li>
-                {% end %}
-            </ul>
-            <h2>Senior Management</h2>
-            <ul>
-                {% for senior_manager in senior_managers %}
-                    <li>{{ senior_manager.full_name }}{% if senior_manager.designation %}, {{ senior_manager.designation }}{% end %}</li>
-                {% end %}
-            </ul>
-            <h2>Auditors</h2>
-            <ul>
-                {% for auditor in auditors %}
-                    <li>{{ auditor.full_name }}</li>
-                {% end %}
-            </ul>
+            <div class="two_column">
+              <h2>Board of Directors</h2>
+              <ul>
+                  {% for board_director in board_directors %}
+                      <li>{{ board_director.full_name }}{% if board_director.designation %}, {{ board_director.designation }}{% end %}</li>
+                  {% end %}
+                  <li>Bharat K Sheth, Chairman</li>
+                  <li>Ravi K Sheth, Managing Director</li>
+                  <li>P R Naware, Executive Director</li>
+                  <li>Keki M Mistry</li>
+                  <li>Berjis Desai</li>
+                  <li>Vineet Nayyar</li>
+                  <li>K J Vesuna</li>
+                  <li>Tapas Icot</li>
+              </ul>
+            </div>
+            <div class="two_column">
+              <h2>Senior Management</h2>
+              <ul>
+                  {% for senior_manager in senior_managers %}
+                      <li>{{ senior_manager.full_name }}{% if senior_manager.designation %}, {{ senior_manager.designation }}{% end %}</li>
+                  {% end %}
+                  <li>Bharat K Sheth, Chairman</li>
+                  <li>Ravi K Sheth, Managing Director</li>
+                  <li>P R Naware, Executive Director</li>           
+                  
+              </ul>
+              <h2>Auditors</h2>
+              <ul>
+                  {% for auditor in auditors %}
+                      <li>{{ auditor.full_name }}</li>
+                  {% end %}
+                  <li>Vineet Nayyar</li>
+                  <li>K J Vesuna</li>
+                  <li>Tapas Icot</li>
+              </ul>
+            </div>
         </div>
     </div>
     <div class="article plain">
