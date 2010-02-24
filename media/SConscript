@@ -103,6 +103,12 @@ IMAGE_FILES = Split("""
     image/ie6update/close.png
     image/ie6update/icon-over.png
     image/ie6update/icon.png
+    
+    image/lightbox/lightbox-blank.gif
+    image/lightbox/lightbox-btn-close.gif
+    image/lightbox/lightbox-btn-next.gif
+    image/lightbox/lightbox-btn-prev.gif
+    image/lightbox/lightbox-ico-loading.gif
 """)
 
 CSS_FILES = Split("""
@@ -198,6 +204,16 @@ SCRIPT_BUNDLES = (
         """
             script/lib/chickoojs/src/jquery/tablesorter/jquery.tablesorter.js
             script/fleet_status.js
+        """)
+    ),
+)
+dict(
+        selector="tour.js",
+        sources = Split(
+        COMMON_SCRIPTS + 
+        """
+            script/lib/chickoojs/src/jquery/lightbox/0.5/js/jquery.lightbox-0.5.js
+            script/tour.js
         """)
     ),
 )
