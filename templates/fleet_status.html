@@ -6,90 +6,94 @@
         <div class="content">
             <h2>Current fleet status.</h2>
             <p>The information presented below is as on {{ previous_month }}, {{ previous_year }}. Prefer to <a href="/services/fleet">find a vessel</a> instead?</p>
-            <table id="fleet" class="classic" border="0" cellspacing="0" cellpadding="0"> 
-                <caption>Fleet Status</caption> 
-                <thead> 
-                    <tr> 
-                        <th>Vessel Name</th> 
-                        <th>Built</th> 
-                        <th>Type</th> 
-                        <th>Yard</th> 
-                        <th>Deadweight (tons)</th> 
-                        <th>Design</th> 
-                        <th>BP (tons)</th> 
-                        <th>DP</th> 
-                        <th>FiFi</th> 
-                        <th>Company</th> 
-                        <th>Availability</th> 
+            <table id="fleet" class="classic" border="0" cellspacing="0" cellpadding="0">
+                <caption>Fleet Status</caption>
+                <thead>
+                    <tr>
+                        <th>Serial Number</th>
+                        <th>Vessel Name</th>
+                        <th>Built</th>
+                        <th>Type</th>
+                        <th>Yard</th>
+                        <th>Deadweight (tons)</th>
+                        <th>Design</th>
+                        <th>BP (tons)</th>
+                        <th>DP</th>
+                        <th>FiFi</th>
+                        <th>Company</th>
+                        <th>Availability</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% if operating_rigs %}                        
+                    {% if operating_rigs %}
                         <tr>
-                            <th colspan="11">Operating Rigs</th>
+                            <th colspan="12">Operating Rigs</th>
                         </tr>
-                        {% for vessel in operating_rigs %}                        
-                            <tr> 
-                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
-                                <td>{{ vessel.built }}</td> 
-                                <td>{{ vessel.vessel_type }}</td> 
-                                <td>{{ vessel.yard }}</td> 
-                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td> 
-                                <td>{{ vessel.design }}</td> 
-                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td> 
-                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td> 
-                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td> 
-                                <td>{{ vessel.company }}</td> 
-                                <td>{{ vessel.when_available.strftime("%B, %Y") }}</td> 
+                        {% for index, vessel in enumerate(operating_rigs) %}
+                            <tr>
+                                <td>{{ index + 1 }}</td>
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td>
+                                <td>{{ vessel.built }}</td>
+                                <td>{{ vessel.vessel_type }}</td>
+                                <td>{{ vessel.yard }}</td>
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td>
+                                <td>{{ vessel.design }}</td>
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td>
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td>
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td>
+                                <td>{{ vessel.company }}</td>
+                                <td>{{ vessel.when_available.strftime("%B, %Y") }}</td>
                             </tr>
                         {% end %}
                     {% end %}
-                    {% if operating_vessels %}                        
+                    {% if operating_vessels %}
                         <tr>
-                            <th colspan="11">Operating vessels</th>
+                            <th colspan="12">Operating vessels</th>
                         </tr>
-                        {% for vessel in operating_vessels %}                        
-                            <tr> 
-                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
-                                <td>{{ vessel.built }}</td> 
-                                <td>{{ vessel.vessel_type }}</td> 
-                                <td>{{ vessel.yard }}</td> 
-                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td> 
-                                <td>{{ vessel.design }}</td> 
-                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td> 
-                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td> 
-                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td> 
-                                <td>{{ vessel.company }}</td> 
-                                <td>{{ vessel.when_available.strftime("%B, %Y") }}</td> 
+                        {% for index, vessel in enumerate(operating_vessels) %}
+                            <tr>
+                                <td>{{ index + len(operating_rigs+1)}}</td>
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td>
+                                <td>{{ vessel.built }}</td>
+                                <td>{{ vessel.vessel_type }}</td>
+                                <td>{{ vessel.yard }}</td>
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td>
+                                <td>{{ vessel.design }}</td>
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td>
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td>
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td>
+                                <td>{{ vessel.company }}</td>
+                                <td>{{ vessel.when_available.strftime("%B, %Y") }}</td>
                             </tr>
                         {% end %}
                     {% end %}
-                    {% if under_construction_vessels %}                        
+                    {% if under_construction_vessels %}
                         <tr>
-                            <th colspan="11">Under-construction vessels</th>
+                            <th colspan="12">Under-construction vessels</th>
                         </tr>
-                        {% for vessel in under_construction_vessels %}                        
-                            <tr> 
-                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td> 
-                                <td>{{ vessel.built }}</td> 
-                                <td>{{ vessel.vessel_type }}</td> 
-                                <td>{{ vessel.yard }}</td> 
-                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td> 
-                                <td>{{ vessel.design }}</td> 
-                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td> 
-                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td> 
-                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td> 
-                                <td>{{ vessel.company }}</td> 
-                                <td>{{ vessel.when_available.strftime("%B, %Y") }}</td> 
+                        {% for index, vessel in enumerate(under_construction_vessels) %}
+                            <tr>
+                                <td>{{ index + len(operating_rigs)+len(operating_vessels)+1 }}</td>
+                                <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td>
+                                <td>{{ vessel.built }}</td>
+                                <td>{{ vessel.vessel_type }}</td>
+                                <td>{{ vessel.yard }}</td>
+                                <td>{% if vessel.deadweight_in_tons %}{{ vessel.deadweight_in_tons }}{% end %}</td>
+                                <td>{{ vessel.design }}</td>
+                                <td>{% if vessel.bp_in_tons %}{{ vessel.bp_in_tons }}{% end %}</td>
+                                <td>{% if vessel.dp %}{{ vessel.dp }}{% end %}</td>
+                                <td>{% if vessel.fifi %}{{ vessel.fifi }}{% end %}</td>
+                                <td>{{ vessel.company }}</td>
+                                <td>{{ vessel.when_available.strftime("%B, %Y") }}</td>
                             </tr>
                         {% end %}
                     {% end %}
-                </tbody> 
-            </table>            
+                </tbody>
+            </table>
 
         </div>
     </div>
-    
+
 {% end %}
 
 {#{% block tag_scripts %}
