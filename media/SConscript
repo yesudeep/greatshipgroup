@@ -220,6 +220,7 @@ CSS_BUNDLES = (
     dict(
         target="css/screen-all.css",
         sources = Split("""
+            script/lib/chickoojs/src/jquery/lightbox/0.5/css/jquery.lightbox-0.5.css
             css/screen.css
         """)
     ),
