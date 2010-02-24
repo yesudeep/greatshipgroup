@@ -56,7 +56,7 @@ NAKED_DOMAIN = 'greatshipglobal.com'
 ADMIN_EMAIL = "administrator@%s" % (NAKED_DOMAIN, )
 CONTACT_EMAIL = ADMIN_EMAIL
 APPLICATION_ID = os.environ['APPLICATION_ID']
-APPLICATION_TITLE = "Greatship Global"
+APPLICATION_TITLE = "The Greatship Group"
 MODE_DEVELOPMENT = 'development'
 MODE_PRODUCTION = 'production'
 SERVER_PORT = os.environ['SERVER_PORT']
@@ -74,7 +74,7 @@ OWNER_NAME = 'Greatship (India) Limited.'
 OWNER_ADDRESS = '#101, Marathon Innova B2, Off. Ganpatrao Kadam Marg, West Lower Parel, Mumbai, MH 400013, India.'
 OWNER_URL = '/'
 OWNER_COMPANY = 'Greatship (India) Limited.'
-COPYRIGHT_YEARS = '2008, 2009'
+COPYRIGHT_YEARS = '2008, 2009, 2010'
 
 DEFAULT_MARKUP = 'html'
 
@@ -116,7 +116,7 @@ ROOT_URL = 'http://%s/' % (HOST_NAME,)
 cdn_urls = {
     'microsoft.jquery-1.3.2': "http://ajax.microsoft.com/ajax/jQuery/jquery-1.3.2.min.js",
     'google.jquery-1.3.2': "http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js",
-    'google.jquery-1.4': 'http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js',
+    'google.jquery-1.4': 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js',
     'jquery.jquery-1.4': "http://code.jquery.com/jquery-1.4.min.js",
     'local.jquery-1.4': "%sscript/lib/chickoojs/src/jquery/jquery-1.4.min.js" % (MEDIA_URL,),
     'local.jquery-1.3.2': "%sscript/lib/chickoojs/src/jquery/jquery-1.3.2.min.js" % (MEDIA_URL,),

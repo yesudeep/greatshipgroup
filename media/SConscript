@@ -89,6 +89,15 @@ IMAGE_FILES = Split("""
     image/icon/128x128/construction.png
     image/icon/128x128/logistics.png
     
+    image/icon/nav/home.png
+    image/icon/nav/fleet.png
+    image/icon/nav/logistics.png
+    image/icon/nav/construction.png
+    image/icon/nav/drilling.png
+    image/icon/nav/qhse.png
+    image/icon/nav/contact.png
+    image/icon/we-are-hiring.png
+    
     image/ie6update/close-over.png
     image/ie6update/close.png
     image/ie6update/icon-over.png

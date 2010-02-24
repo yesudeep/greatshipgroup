@@ -91,7 +91,7 @@ class FleetStatusHandler(BaseRequestHandler):
         d = utils.get_previous_month()
         previous_month = utils.datetimeformat(d, format="%B")
         previous_year = utils.datetimeformat(d, format="%Y")
-        self.render("fleet_status.html", operating_vessels=operating_vessels, 
+        self.render("fleet_status.html", operating_vessels=operating_vessels,
             operating_rigs=operating_rigs, 
             under_construction_vessels=under_construction_vessels,
             previous_month=previous_month,
@@ -101,21 +101,21 @@ class LogisticsHandler(BaseRequestHandler):
     def get(self):
         vessels = Vessel.get_all_logistics()
         self.render('fleet.html', vessels=vessels,
-            content_title="Logistics fleet browser.")             
+            content_title="Logistics fleet browser.")
         
 class ConstructionHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_construction()
         self.render('fleet.html', vessels=vessels,
-            content_title='Construction fleet browser.')             
+            content_title='Construction fleet browser.')
 
 class DrillingHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
         vessels = Vessel.get_all_drilling()
         self.render('fleet.html', vessels=vessels,
-            content_title='Drilling fleet browser.')             
+            content_title='Drilling fleet browser.')
         
 class QhseHandler(BaseRequestHandler):
     """Handles the home page requests."""
@@ -226,7 +226,9 @@ class CareersHandler(BaseRequestHandler):
 class TourHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
-        self.render('tour.html')
+        from models import TourPicture
+        tour_pictures = TourPicture.get_all(200)
+        self.render('tour.html', tour_pictures=tour_pictures)
 
 class PressReleasesHandler(BaseRequestHandler):
     """Handles the home page requests."""
