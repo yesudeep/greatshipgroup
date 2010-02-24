@@ -24,6 +24,7 @@ PAGE_TEMPLATE_FILES = Split("""
     financial.html
     fleet.html
     fleet_status.html
+    tour.html
 """)
 
 BASE_TEMPLATE_FILES = Split("""
@@ -36,7 +37,6 @@ BASE_TEMPLATE_FILES = Split("""
     feedback.html
     press.html
     careers.html
-    tour.html
     policy.html
     terms.html
     qhse.html

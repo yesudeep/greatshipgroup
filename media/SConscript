@@ -206,8 +206,7 @@ SCRIPT_BUNDLES = (
             script/fleet_status.js
         """)
     ),
-)
-dict(
+    dict(
         selector="tour.js",
         sources = Split(
         COMMON_SCRIPTS + 
@@ -217,7 +216,6 @@ dict(
         """)
     ),
 )
-
 CSS_BUNDLES = (
     dict(
         target="css/screen-all.css",

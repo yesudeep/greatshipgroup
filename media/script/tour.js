@@ -11,3 +11,4 @@ jQuery(function(){
   jQuery('#careers-gallery a').lightBox(lightboxOptions);
   
 });
+
