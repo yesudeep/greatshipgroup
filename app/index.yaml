@@ -2,33 +2,58 @@ indexes:
 
 - kind: Vessel
   properties:
-  - name: operational_status
-  - name: rank
+  - name: vessel_type
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
   - name: name
-    
+
 - kind: Vessel
   properties:
   - name: generic_type
   - name: operational_status
-  - name: rank
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
+  - name: name
+
+- kind: Vessel
+  properties:
+  - name: operational_status
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
+  - name: name
+
+- kind: Vessel
+  properties:
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
   - name: name
 
 - kind: Vessel
   properties:
   - name: is_construction
-  - name: rank
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
   - name: name
 
 - kind: Vessel
   properties:
   - name: is_logistics
-  - name: rank
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
   - name: name
 
 - kind: Vessel
   properties:
   - name: is_drilling
-  - name: rank
+  - name: when_delivered
+  - name: when_expected_year
+  - name: when_expected
   - name: name
 
 - kind: BoardDirector

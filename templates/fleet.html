@@ -14,7 +14,7 @@
                             <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
                             <div class="title">
                                 <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
-                                <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
+                                <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }} {{ vessel.when_expected_year }}{% end %}</p>
                             </div>
                             <div class="info">
                                 <h3>Specifications</h3>
@@ -39,12 +39,12 @@
                   {% for vessel_type in vessel_types %}
                     {% if vessel_type.vessels.count() %}
                           <li class="heading"><h3>{{ vessel_type.vessel_type_name }}</h3></li>
-                          {% for vessel in vessel_type.vessels %}
+                          {% for vessel in vessel_type.get_all_vessels() %}
                           <li class="{{ vessel.generic_type }}">
                               <a href="{{ vessel.specification_url }}"><img class="icon" src="{{ MEDIA_URL }}image/icon/48x48/{{ vessel.generic_type }}_document.png" /></a>
                               <div class="title">
                                   <h2><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a><strong>{{ vessel.vessel_type }}</strong></h2>
-                                  <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }}{% end %}</p>
+                                  <p class="dateline">{% if vessel.is_delivered %}Delivered on {{ vessel.when_delivered.strftime("%B %d, %Y") }}{% else %}Expected: {{ vessel.when_expected }} {{ vessel.when_expected_year }}{% end %}</p>
                               </div>
                               <div class="info">
                                   <h3>Specifications</h3>

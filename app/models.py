@@ -128,7 +128,21 @@ class TourPicture(SerializableModel):
 class VesselType(SerializableModel):
     vessel_type_name = db.StringProperty()
     vessel_type_shortname = db.StringProperty()
-    
+
+    def get_all_vessels(self, count=MAX_COUNT):
+        cache_key = 'VesselType.get_all_vessels(%s,%d)' % (str(self), count)
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .filter('vessel_type =', self) \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
+                .order('name') \
+                .fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
     def __str__(self):
         return self.vessel_type_name
     
@@ -155,6 +169,7 @@ class Vessel(SerializableModel):
     is_delivered = db.BooleanProperty(default=False)
     when_delivered = db.DateProperty()
     when_expected = db.StringProperty()
+    when_expected_year = db.IntegerProperty()
 
     # Classification in table.
     operational_status = db.StringProperty(choices=VESSEL_STATUS_CHOICES)
@@ -165,13 +180,29 @@ class Vessel(SerializableModel):
     is_drilling = db.BooleanProperty(default=False)
 
     @classmethod
+    def get_all(cls, count=MAX_COUNT):
+        cache_key = '%s.get_all()_' % (cls.__name__,)
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = Vessel.all() \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
+                .order('name') \
+                .fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
+    @classmethod
     def get_all_logistics(cls):
         cache_key = 'Vessel.get_all_logistics()'
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
                 .filter('is_logistics = ', True) \
-                .order('rank') \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -184,7 +215,9 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_construction = ', True) \
-                .order('rank') \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -197,7 +230,9 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('is_drilling = ', True) \
-                .order('rank') \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -211,7 +246,9 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
-                .order('rank') \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -225,7 +262,9 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
-                .order('rank') \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -238,7 +277,9 @@ class Vessel(SerializableModel):
         if not entities:
             entities = Vessel.all() \
                 .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
-                .order('rank') \
+                .order('when_delivered') \
+                .order('when_expected_year') \
+                .order('when_expected') \
                 .order('name') \
                 .fetch(MAX_COUNT)
             memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
@@ -476,11 +517,11 @@ class AdminVessel(appengine_admin.ModelAdmin):
     model = Vessel
     listFields = ('name', 'rank', 'built', 'vessel_type', 'generic_type', 'yard',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
+        'operational_status', 'is_delivered', 'when_delivered', 'when_expected', 'when_expected_year',
         'is_construction', 'is_drilling', 'is_logistics', )
     editFields = ('name', 'rank', 'built', 'vessel_type', 'generic_type', 'yard', 'specification_url',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
-        'operational_status', 'is_delivered', 'when_delivered', 'when_expected',
+        'operational_status', 'is_delivered', 'when_delivered', 'when_expected', 'when_expected_year',
         'is_construction', 'is_drilling', 'is_logistics', )
     readonlyFields = ('when_created', 'when_modified')
     listGql = 'order by rank asc'

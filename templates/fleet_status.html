@@ -52,7 +52,7 @@
                         </tr>
                         {% for index, vessel in enumerate(operating_vessels) %}
                             <tr>
-                                <td>{{ index + len(operating_rigs+1)}}</td>
+                                <td>{{ index + len(operating_rigs)+1}}</td>
                                 <td><a href="{{ vessel.specification_url }}">{{ vessel.name }}</a></td>
                                 <td>{{ vessel.built }}</td>
                                 <td>{{ vessel.vessel_type }}</td>
