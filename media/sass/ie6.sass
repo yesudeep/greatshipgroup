@@ -1,5 +1,6 @@
 
 @import colors-and-images.sass
+@import util.sass
 
 #wrapper
     #header
@@ -7,18 +8,49 @@
             :background-color= !color_bg_nav
 
 #splash-presentation
-    #landing-qhse
+    :display none
+//    #landing-qhse
         :background= "transparent" !image_icon_qhse "no-repeat 0 0"
-    #landing-drilling
+//    #landing-drilling
         :background= "transparent" !image_icon_drilling "no-repeat 0 0"
-    #landing-fleet
+//    #landing-fleet
         :background= "transparent" !image_icon_fleet "no-repeat 0 0"
-    #landing-construction
+//    #landing-construction
         :background= "transparent" !image_icon_construction "no-repeat 0 0"
-    #landing-logistics
+//    #landing-logistics
         :background= "transparent" !image_icon_logistics "no-repeat 0 0"
 
-
+#splash-presentation-ie6
+    :width= (128px * 5)
+    :margin 0px auto
+    li
+        //+display-inline-block()
+        :float left
+        :height 128px
+        :width 128px
+        //:margin-left 40px
+        //:margin-right 40px
+    //a.icon
+        :height 128px
+        :width 128px
+        //:display block
+    //a.icon:hover
+        span
+            :font-family= !font_family_sans_serif
+            :font-size 1em
+            :display block
+            :position absolute
+            :margin-top -20px
+            :width 128px
+            :text-align center
+            :z-index 20
+            :background-color= !color_bg_nav_description
+            :border 1px solid #ccc
+            :color white
+            :padding 10px
+            +border-radius("10px")
+            +box-shadow("1px 1px 10px #000")
+            
 #footer
     :background none
 
