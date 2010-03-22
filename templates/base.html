@@ -124,10 +124,12 @@
 <script type="text/javascript">
 window.__hc_scripts = ["{{ JQUERY_URL }}"];
 </script>
+{% block tag_scripts_ie6update %}
 <!--[if lt IE 7]>
 <script type="text/javascript">window.IE6UPDATE_OPTIONS = {'icons_path': "{{ MEDIA_URL }}image/ie6update/"};
 window.__hc_scripts.push("{{ MEDIA_URL }}script/ie6update/ie6update{{ JS_MINIFIED }}.js");</script>
 <![endif]-->
+{% end %}
 {% end %}
 {% block tag_scripts_other %}
 <script src="http://www.google.com/jsapi" type="text/javascript"></script>
