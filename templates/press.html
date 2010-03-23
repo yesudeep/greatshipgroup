@@ -1,14 +1,13 @@
 {% extends "base.html" %}
 
 {% block tag_trunk_content %}
-    
     <h1><a class="icon" href="/press/feed/atom.xml"><span class="icon press"></span></a>Press Releases. <strong>What's new at Greatship?</strong></h1>
     
     <div class="article plain">
         <div class="content">
         {% for post in posts %}
             <h2><a href="/press/post{{ post.path }}">{{ post.title }}</a></h2>
-            <p class="dateline">{{ datetimeformat(post.when_published, "%B, %Y") }}&mdash;{{ post.place }}</p>
+            <p class="dateline">{{ datetimeformat(post.when_published, "%B %d, %Y") }}&mdash;{{ post.place }}</p>
             <div class="post-content">
                 {{ post.content_html }}
             </div>
@@ -16,5 +15,4 @@
             <p>More <a href="/press">press releases &raquo;</a></p>
         </div>
     </div>
-
 {% end %}
