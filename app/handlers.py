@@ -61,7 +61,7 @@ class ManagementHandler(BaseRequestHandler):
         senior_managers = SeniorManagement.get_all()
         self.render('management.html', managers=managers, board_directors=board_directors,auditors=auditors, senior_managers=senior_managers)
 
-class OverseasHandler(BaseRequestHandler):
+class SubsidiariesHandler(BaseRequestHandler):
     def get(self):
         self.render('overseas.html')
 
@@ -279,7 +279,7 @@ urls = (
     (r'/about/?', AboutHandler),
     (r'/about/mission/?', AboutHandler),
     (r'/about/management/?', ManagementHandler),
-    (r'/about/overseas/?', OverseasHandler),
+    (r'/about/subsidiaries/?', SubsidiariesHandler),
     (r'/about/financial/?', FinancialHandler),
     (r'/careers/?', CareersHandler),
     (r'/careers/tour/?', TourHandler),
