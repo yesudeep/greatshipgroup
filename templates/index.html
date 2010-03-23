@@ -25,7 +25,42 @@
     </ul>
 
     <!--[if lt IE 7]>
-    <div id="splash-presentation-ie6">
+    <table id="splash-presentation-ie6">
+        <tr>
+               <td>
+                   <a href="/services/qhse" id="landing-qhse-ie6" class="icon">
+                   <img src="{{ MEDIA_URL }}image/icon/128x128/qhse.png" width="128" height="128" title="Quality, Health, Safety, and Environment"/img>
+                   </a>
+               </td>
+               <td></td>
+               <td>
+                 <a href="/services/fleet/drilling" id="landing-drilling-ie6" class="icon">
+                     <img src="{{ MEDIA_URL }}image/icon/128x128/drilling.png" width="128" height="128" title="Offshore Drilling"/img>
+                 </a>               
+               </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <a href="/services/fleet" id="landing-fleet-ie6" class="icon">
+                <img src="{{ MEDIA_URL }}image/icon/128x128/fleet.png" width="128" height="128" title="Fleet Status"/img>
+            </a>
+          </td>        
+          <td></td>          
+        </tr>        
+        <tr>
+                <td><a href="/services/fleet/construction" id="landing-construction-ie6" class="icon">
+                    <img src="{{ MEDIA_URL }}image/icon/128x128/construction.png" width="128" height="128" title="Offshore Construction"/img>
+                </a>
+                </td>
+                <td></td>
+                <td><a href="/services/fleet/logistics" id="landing-logistics-ie6" class="icon">
+                    <img src="{{ MEDIA_URL }}image/icon/128x128/logistics.png" width="128" height="128" title="Offshore Logistics"/img>
+                </a>
+                </td>
+        </tr>
+    </table>
+    #*<div id="splash-presentation-ie6">
         <a href="/services/qhse" id="landing-qhse-ie6" class="icon">
             <img src="{{ MEDIA_URL }}image/icon/128x128/qhse.png" width="128" height="128" title="Quality, Health, Safety, and Environment"/img>
         </a>
@@ -41,7 +76,7 @@
         <a href="/services/fleet/logistics" id="landing-logistics-ie6" class="icon">
             <img src="{{ MEDIA_URL }}image/icon/128x128/logistics.png" width="128" height="128" title="Offshore Logistics"/img>
         </a>
-    </div>
+    </div>*#
     <![endif]-->
     <ul class="news-ticker">
         {% for post in posts %}                    
