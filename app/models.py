@@ -544,19 +544,9 @@ class AdminTourPicture(appengine_admin.ModelAdmin):
 class AdminPost(appengine_admin.ModelAdmin):
     model = Post
     
-    path = db.StringProperty()
-    checksum = db.StringProperty()
-
-    title = db.StringProperty()
-    place = db.StringProperty()
-    is_published = db.BooleanProperty(default=False)
-    when_published = db.DateTimeProperty()
-    content = db.TextProperty()
-    content_html = db.TextProperty()
-    
     listFields = ('path', 'title', 'place', 'is_published', 'when_published')
-    editFields = ('title', 'place', 'is_published', 'content')
-    readonlyFields = ('path', 'checksum', 'when_published', 'content_html', 'when_created', 'when_modified')
+    editFields = ('title', 'place', 'when_published', 'is_published', 'content')
+    readonlyFields = ('path', 'checksum', 'content_html', 'when_created', 'when_modified')
     listGql = 'order by when_published desc'
 
 appengine_admin.register(AdminFeedback,
