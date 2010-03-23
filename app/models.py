@@ -545,8 +545,8 @@ class AdminPost(appengine_admin.ModelAdmin):
     model = Post
     
     listFields = ('path', 'title', 'place', 'is_published', 'when_published')
-    editFields = ('title', 'place', 'when_published', 'is_published', 'content')
-    readonlyFields = ('path', 'checksum', 'content_html', 'when_created', 'when_modified')
+    editFields = ('path', 'title', 'place', 'when_published', 'is_published', 'content')
+    readonlyFields = ('checksum', 'content_html', 'when_created', 'when_modified')
     listGql = 'order by when_published desc'
 
 appengine_admin.register(AdminFeedback,
