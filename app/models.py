@@ -128,6 +128,19 @@ class TourPicture(SerializableModel):
 class VesselType(SerializableModel):
     vessel_type_name = db.StringProperty()
     vessel_type_shortname = db.StringProperty()
+    rank = db.IntegerProperty()
+
+    @classmethod
+    def get_all(cls, count=MAX_COUNT):
+        cache_key = 'VesselType.get_all()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = VesselType.all() \
+                .order('rank') \
+                .order('vessel_type_name') \
+                .fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
 
     def get_all_vessels(self, count=MAX_COUNT):
         cache_key = 'VesselType.get_all_vessels(%s,%d)' % (str(self), count)
@@ -509,8 +522,8 @@ class AdminAnnualReport(appengine_admin.ModelAdmin):
 
 class AdminVesselType(appengine_admin.ModelAdmin):
     model = VesselType
-    listFields = ('vessel_type_shortname', 'vessel_type_name',)
-    editFields = ('vessel_type_shortname', 'vessel_type_name',)
+    listFields = ('vessel_type_shortname', 'vessel_type_name', 'rank')
+    editFields = ('vessel_type_shortname', 'vessel_type_name', 'rank')
     readonlyFields = ('vessels', 'when_created', 'when_modified')
 
 class AdminVessel(appengine_admin.ModelAdmin):
