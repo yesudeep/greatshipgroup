@@ -198,6 +198,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .order('when_delivered') \
                 .order('when_expected_year') \
                 .order('when_expected') \
@@ -212,6 +213,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .filter('is_logistics = ', True) \
                 .order('when_delivered') \
                 .order('when_expected_year') \
@@ -227,6 +229,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .filter('is_construction = ', True) \
                 .order('when_delivered') \
                 .order('when_expected_year') \
@@ -242,6 +245,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .filter('is_drilling = ', True) \
                 .order('when_delivered') \
                 .order('when_expected_year') \
@@ -257,6 +261,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
                 .order('when_delivered') \
@@ -273,6 +278,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
                 .order('when_delivered') \
@@ -289,6 +295,7 @@ class Vessel(SerializableModel):
         entities = deserialize_entities(memcache.get(cache_key))
         if not entities:
             entities = Vessel.all() \
+                .filter('is_deleted = ', False) \
                 .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
                 .order('when_delivered') \
                 .order('when_expected_year') \
