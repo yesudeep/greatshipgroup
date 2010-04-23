@@ -538,11 +538,11 @@ class AdminVessel(appengine_admin.ModelAdmin):
     listFields = ('name', 'rank', 'built', 'vessel_type', 'generic_type', 'yard',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
         'operational_status', 'is_delivered', 'when_delivered', 'when_expected', 'when_expected_year',
-        'is_construction', 'is_drilling', 'is_logistics', )
+        'is_construction', 'is_drilling', 'is_logistics', 'is_deleted', )
     editFields = ('name', 'rank', 'built', 'vessel_type', 'generic_type', 'yard', 'specification_url',
         'deadweight_in_tons', 'design', 'bp_in_tons', 'dp', 'fifi', 'company', 'when_available',
         'operational_status', 'is_delivered', 'when_delivered', 'when_expected', 'when_expected_year',
-        'is_construction', 'is_drilling', 'is_logistics', )
+        'is_construction', 'is_drilling', 'is_logistics', 'is_deleted', )
     readonlyFields = ('when_created', 'when_modified')
     listGql = 'order by rank asc'
 
