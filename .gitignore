@@ -35,6 +35,7 @@ templates/*.pkl
 templates/_build
 templates/_build_min
 media/css/screen.css
+media/css/ie6.css
 
 # Confidential files that should be ignored
 app/api_preferences.py
