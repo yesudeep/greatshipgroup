@@ -125,7 +125,7 @@ PLAIN_COPIES = SCRIPT_FILES + CSS_FILES + Split("""
 """)
 
 PLAIN_COPY_DIRECTORIES = Split("""
-
+    image/uds
 """)
 
 
