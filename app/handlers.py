@@ -92,7 +92,7 @@ class FleetStatusHandler(BaseRequestHandler):
         previous_month = utils.datetimeformat(d, format="%B")
         previous_year = utils.datetimeformat(d, format="%Y")
         self.render("fleet_status.html", operating_vessels=operating_vessels,
-            operating_rigs=operating_rigs, 
+            operating_rigs=operating_rigs,
             under_construction_vessels=under_construction_vessels,
             previous_month=previous_month,
             previous_year=previous_year)
@@ -102,7 +102,7 @@ class LogisticsHandler(BaseRequestHandler):
         vessels = Vessel.get_all_logistics()
         self.render('fleet.html', vessels=vessels,
             content_title="Logistics fleet browser.")
-        
+
 class ConstructionHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
@@ -116,7 +116,7 @@ class DrillingHandler(BaseRequestHandler):
         vessels = Vessel.get_all_drilling()
         self.render('fleet.html', vessels=vessels,
             content_title='Drilling fleet browser.')
-        
+
 class QhseHandler(BaseRequestHandler):
     """Handles the home page requests."""
     def get(self):
@@ -141,7 +141,7 @@ class SuppliersHandler(BaseRequestHandler):
             )
         from models import LegalTerms
         legal_terms_list = LegalTerms.get_all()
-        
+
         self.render('suppliers.html', legal_terms_list=legal_terms_list, captcha_html=captcha_html)
 
     def post(self):
@@ -161,7 +161,7 @@ class SuppliersHandler(BaseRequestHandler):
             content = self.get_argument('content')
             designation = self.get_argument('designation')
             website_url = self.get_argument('website_url')
-            
+
             supplier_info = SupplierInformation()
             supplier_info.full_name = full_name
             supplier_info.email = email
@@ -170,7 +170,7 @@ class SuppliersHandler(BaseRequestHandler):
             supplier_info.subject = subject
             supplier_info.content = content
             supplier_info.put()
-            
+
             self.redirect('/')
         else:
             error = captcha_response.error_code
@@ -181,7 +181,7 @@ class FeedbackHandler(BaseRequestHandler):
     def get(self):
         from recaptcha.client import captcha
         captcha_error_code = self.get_argument('captcha_error', None)
-        
+
         captcha_html = captcha.displayhtml(
             public_key = configuration.RECAPTCHA_PUBLIC_KEY,
             use_ssl = False,
@@ -189,7 +189,7 @@ class FeedbackHandler(BaseRequestHandler):
             )
         self.render('feedback.html', captcha_html=captcha_html)
 
-    
+
     def post(self):
         from recaptcha.client import captcha
         captcha_challenge_field = self.get_argument('recaptcha_challenge_field')
@@ -205,14 +205,14 @@ class FeedbackHandler(BaseRequestHandler):
             email = self.get_argument('email')
             subject = self.get_argument('subject')
             content = self.get_argument('content')
-            
+
             feedback = Feedback()
             feedback.full_name = full_name
             feedback.email = email
             feedback.subject = subject
             feedback.content = content
             feedback.put()
-            
+
             self.redirect('/')
         else:
             error = captcha_response.error_code
@@ -253,7 +253,7 @@ class PolicyHandler(BaseRequestHandler):
 
 class TermsHandler(BaseRequestHandler):
     def get(self, slug):
-        legal_terms = LegalTerms.get_by_slug(slug)        
+        legal_terms = LegalTerms.get_by_slug(slug)
         self.render('terms.html', legal_terms=legal_terms)
 
 # Feeds
@@ -261,7 +261,7 @@ class PressFeedAtomHandler(BaseRequestHandler):
     def get(self):
         from datetime import datetime
         posts = Post.get_latest()
-        config = dict(host=configuration.HOST_NAME, 
+        config = dict(host=configuration.HOST_NAME,
             subtitle="Press Releases",
             title=configuration.APPLICATION_TITLE,
             developer_url=configuration.DEVELOPER_URL,
