@@ -40,9 +40,9 @@ handlers:
   script: $PYTHON_LIB/google/appengine/ext/deferred/deferred.py
   login: admin
 
-- url: /remote_api
-  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
-  login: admin
+#- url: /remote_api
+#  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+#  login: admin
 
 - url: /dl.*
   script: static.py
@@ -53,6 +53,11 @@ handlers:
 
 - url: /.*
   script: handlers.py
+
+builtins:
+- datastore_admin: on
+- remote_api: on
+- appstats: on
 
 skip_files: |
   ^(.*/)?(
