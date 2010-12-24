@@ -23,6 +23,7 @@ indexes:
   properties:
   - name: is_deleted
   - name: operational_status
+  - name: rank
   - name: when_delivered
   - name: when_expected_year
   - name: when_expected
@@ -110,6 +111,7 @@ indexes:
   - name: generic_type
   - name: is_deleted
   - name: operational_status
+  - name: rank
   - name: when_delivered
   - name: when_expected_year
   - name: when_expected

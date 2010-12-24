@@ -264,6 +264,7 @@ class Vessel(SerializableModel):
                 .filter('is_deleted = ', False) \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_VESSEL) \
+                .order('rank') \
                 .order('when_delivered') \
                 .order('when_expected_year') \
                 .order('when_expected') \
@@ -281,6 +282,7 @@ class Vessel(SerializableModel):
                 .filter('is_deleted = ', False) \
                 .filter('operational_status = ', VESSEL_STATUS_OPERATIONAL) \
                 .filter('generic_type = ', VESSEL_GENERIC_TYPE_RIG) \
+                .order('rank') \
                 .order('when_delivered') \
                 .order('when_expected_year') \
                 .order('when_expected') \
@@ -297,6 +299,7 @@ class Vessel(SerializableModel):
             entities = Vessel.all() \
                 .filter('is_deleted = ', False) \
                 .filter('operational_status = ', VESSEL_STATUS_UNDER_CONSTRUCTION) \
+                .order('rank') \
                 .order('when_delivered') \
                 .order('when_expected_year') \
                 .order('when_expected') \
