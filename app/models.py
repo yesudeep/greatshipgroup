@@ -313,6 +313,18 @@ class AnnualReport(SerializableModel):
     document_url = db.URLProperty()
     cover_image_url = db.URLProperty()
 
+    @classmethod
+    def get_all(cls, count=MAX_COUNT):
+        cache_key = 'AnnualReport.get_all()'
+        entities = deserialize_entities(memcache.get(cache_key))
+        if not entities:
+            entities = AnnualReport.all() \
+                .order('end_year') \
+                .fetch(count)
+            memcache.set(cache_key, serialize_entities(entities), CACHE_DURATION)
+        return entities
+
+
 class LegalTerms(SerializableModel):
     title = db.StringProperty()
     short_name = db.StringProperty()
