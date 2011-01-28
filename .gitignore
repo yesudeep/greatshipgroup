@@ -21,6 +21,7 @@ Desktop.ini
 
 # Eclipse preferences.
 .settings/org.eclipse.core.resources.prefs
+.idea/
 
 # Virtualenv temporary files.
 .Python
