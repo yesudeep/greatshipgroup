@@ -162,7 +162,7 @@ class SuppliersHandler(BaseRequestHandler):
             designation = self.get_argument('designation')
             website_url = self.get_argument('website_url')
 
-            if not website_url.startswith("http://")
+            if not website_url.startswith("http://"):
                 website_url = "http://" + website_url
                 
             supplier_info = SupplierInformation()
